@@ -6,10 +6,15 @@ const global = css({
     fontFamily: "Pretendard, system-ui, sans-serif",
     color: theme`colors.white`,
     backgroundColor: theme`colors.black`,
+    height: "100%",
   },
   body: {
     WebkitTapHighlightColor: theme`colors.purple.500`,
     ...tw`antialiased`,
+    height: "100%",
+  },
+  "#__next": {
+    height: "100%",
   },
 });
 
