@@ -8,7 +8,10 @@ const Sidebar = () => {
     <SidebarContainer>
       <Header>VOG</Header>
       <Profile>
-        <UserCard />
+        <DropdownWrapper>
+          <UserCard />
+          <DropdwonIcon>{getIcons("down", 24)}</DropdwonIcon>
+        </DropdownWrapper>
       </Profile>
       <SidebarMenu>
         <SidebarItem>
@@ -30,6 +33,14 @@ const SidebarContainer = tw.nav`
 
 const Profile = tw.div`
   border-b border-neutral-700
+`;
+
+const DropdownWrapper = tw.div`
+  relative cursor-pointer
+`;
+
+const DropdwonIcon = tw.div`
+  absolute align-middle top-5 right-0
 `;
 
 const SidebarMenu = tw.ul`
