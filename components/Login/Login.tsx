@@ -37,7 +37,7 @@ const Login = () => {
 export default Login;
 
 const LoginWrapper = tw.section`
-relative flex items-center justify-center h-screen text-black bg-[url("./image/valorant.jpg")]
+relative flex items-center justify-center h-full text-black bg-[url("./image/valorant.jpg")] bg-cover
 after:absolute after:inset-0 after:bg-black after:opacity-20
 `;
 
