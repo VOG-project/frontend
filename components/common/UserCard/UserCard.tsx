@@ -12,7 +12,7 @@ const UserCard = () => {
 export default UserCard;
 
 const UserCardContainer = tw.div`
-  flex p-4
+  flex items-center h-16 p-2
 `;
 
 const UserProfile = tw.img`
