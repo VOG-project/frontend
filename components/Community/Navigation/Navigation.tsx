@@ -5,7 +5,7 @@ const NAV_MENU = [
   { name: "전체", href: "/community" },
   { name: "자유게시판", query: "free" },
   { name: "유머게시판", query: "humor" },
-  { name: "대회소식", query: "dd" },
+  { name: "대회소식", query: "news" },
 ];
 
 const Nav = () => {
@@ -37,14 +37,17 @@ const Nav = () => {
 export default Nav;
 
 const NavConatiner = tw.nav`
-  w-full
+  w-full border-b border-neutral-700
 `;
 
 const NavMenu = tw.div`
-  flex items-center gap-8 h-16 border-b border-neutral-700
+  flex items-center gap-12 h-16 ml-4
 `;
 
 const NavLink = tw(Link)`
-  text-3xl font-semibold
+  relative flex items-center h-full align-middle text-3xl font-semibold
   hover:text-primary
+  after:(absolute bottom-0
+    hover:(w-full border-b-2 border-primary)
+    )
 `;
