@@ -1,5 +1,6 @@
-import { BsChat, BsCardList } from "react-icons/bs";
+import { BsChat, BsCardList, BsEyeFill } from "react-icons/bs";
 import { RxTriangleDown } from "react-icons/rx";
+import { BiTime } from "react-icons/bi";
 
 export function getIcons(name: string, size: number, color?: string) {
   switch (name) {
@@ -9,6 +10,10 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsCardList size={size} color={color} />;
     case "down":
       return <RxTriangleDown size={size} color={color} />;
+    case "eye":
+      return <BsEyeFill size={size} color={color} />;
+    case "time":
+      return <BiTime size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
