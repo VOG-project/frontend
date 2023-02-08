@@ -12,7 +12,7 @@ const NAV_MENU = [
 const Sidebar = () => {
   return (
     <SidebarContainer>
-      <Header>VOG</Header>
+      <Header title="VOG" />
       <Profile>
         <DropdownWrapper>
           <UserCard />
