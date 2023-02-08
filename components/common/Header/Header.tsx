@@ -1,28 +1,33 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import tw, { styled } from "twin.macro";
 
 interface HeaderProps {
-  singleMode: boolean;
   title: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
-const Header = ({ singleMode = true, title, children }: HeaderProps) => {
+const Header = ({ title, children }: HeaderProps) => {
+  const [hasChildren, setHasChildren] = useState(false);
+  useEffect(() => {
+    if (children) setHasChildren(true);
+  }, [children]);
   return (
-    <HeaderContainer mode={singleMode}>
+    <HeaderContainer hasChildren={hasChildren}>
       <HeaderTitle>{title}</HeaderTitle>
-      {!singleMode && children}
+      {hasChildren && children}
     </HeaderContainer>
   );
 };
 
 export default Header;
 
-const HeaderContainer = styled.header<{ mode: boolean }>(({ mode }) => [
-  mode
-    ? tw`h-16 border-b border-neutral-700`
-    : tw`flex justify-between items-center w-full h-20`,
-]);
+const HeaderContainer = styled.header<{ hasChildren: boolean }>(
+  ({ hasChildren }) => [
+    hasChildren
+      ? tw`flex justify-between items-center w-full h-20`
+      : tw`h-16 border-b border-neutral-700`,
+  ]
+);
 
 const HeaderTitle = tw.h2`
   text-4xl font-semibold
