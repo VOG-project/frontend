@@ -1,11 +1,11 @@
 import Link from "next/link";
 import tw from "twin.macro";
 
-const NAV_MENU = [
-  { name: "전체", href: "/community" },
-  { name: "자유게시판", query: "free" },
-  { name: "유머게시판", query: "humor" },
-  { name: "대회소식", query: "news" },
+export const NAV_MENU = [
+  { name: "전체", href: "all" },
+  { name: "자유게시판", href: "free" },
+  { name: "유머게시판", href: "humor" },
+  { name: "대회소식", href: "news" },
 ];
 
 const Nav = () => {
@@ -13,18 +13,9 @@ const Nav = () => {
     <NavConatiner>
       <NavMenu>
         {NAV_MENU.map((menu) => {
-          const { name, href, query } = menu;
+          const { name, href } = menu;
           return (
-            <NavLink
-              key={name}
-              href={
-                href
-                  ? { pathname: href }
-                  : {
-                      query: { mode: query },
-                    }
-              }
-            >
+            <NavLink key={name} href={`/community/${href}`}>
               {name}
             </NavLink>
           );
