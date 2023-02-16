@@ -2,7 +2,9 @@ import tw from "twin.macro";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps {
-  register: UseFormRegisterReturn<"email" | "password">;
+  register: UseFormRegisterReturn<
+    "email" | "password" | "confirmPassword" | "nickname"
+  >;
   type?: "default" | "password";
   placeholder?: string;
 }
