@@ -2,7 +2,7 @@ import Link from "next/link";
 import tw from "twin.macro";
 
 export const NAV_MENU = [
-  { name: "전체", href: "all" },
+  { name: "전체", href: "" },
   { name: "자유게시판", href: "free" },
   { name: "유머게시판", href: "humor" },
   { name: "대회소식", href: "news" },
