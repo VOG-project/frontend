@@ -1,10 +1,22 @@
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import { getIcons } from "@/components/icons";
 
-const Contents = () => {
+interface ContentsProps {
+  category: string;
+}
+
+const Contents = ({ category }: ContentsProps) => {
+  const router = useRouter();
+  const handleContentClick = () => {
+    router.push({
+      pathname: "/community/[id]",
+      query: { id: "123", category: category },
+    });
+  };
   return (
     <ContentsContainer>
-      <Content>
+      <Content onClick={handleContentClick}>
         <ContentGame>LOL</ContentGame>
         <ContentTitle>
           랭겜 <CommentCount>[0]</CommentCount>
