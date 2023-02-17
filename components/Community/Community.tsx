@@ -4,21 +4,24 @@ import Header from "../common/Header";
 import Search from "../common/Search";
 import Navigation from "./Navigation";
 import Contents from "./Contents";
+import { getTitle } from "@/utils/getTitle";
 
 interface CommunityProps {
-  title?: string;
+  category?: string;
 }
 
-const Community = ({ title }: CommunityProps) => {
+const Community = ({ category }: CommunityProps) => {
+  const title = getTitle(category || "");
+  const curCategory = category || "";
   return (
     <MainLayout>
       <CommunityWrapper>
-        <Navigation />
+        <Navigation category={curCategory} />
         <CommunityContainer>
           <Header title={title ? title : "전체"}>
             <Search />
           </Header>
-          <Contents />
+          <Contents category={curCategory} />
         </CommunityContainer>
       </CommunityWrapper>
     </MainLayout>
