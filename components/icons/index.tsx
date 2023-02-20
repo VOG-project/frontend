@@ -20,7 +20,7 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsEyeFill size={size} color={color} />;
     case "time":
       return <BiTime size={size} color={color} />;
-    case "Thumb":
+    case "thumb":
       return <BsHandThumbsUp size={size} color={color} />;
     case "list":
       return <BsList size={size} color={color} />;
