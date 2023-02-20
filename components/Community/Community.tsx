@@ -35,5 +35,5 @@ const CommunityWrapper = tw.article`
 `;
 
 const CommunityContainer = tw.section`
-  w-full px-4
+  w-full px-10
 `;
