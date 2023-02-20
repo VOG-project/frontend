@@ -3,6 +3,8 @@ import tw from "twin.macro";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
+import Button from "@/components/common/Button";
+import Post from "./Post";
 import { getTitle } from "@/utils/getTitle";
 
 const Detail = () => {
@@ -15,7 +17,10 @@ const Detail = () => {
       <DetailWrapper>
         <Navigation category={category} />
         <DetailContainer>
-          <Header title={title}></Header>
+          <Header title={title}>
+            <Button width={60}>목록</Button>
+          </Header>
+          <Post />
         </DetailContainer>
       </DetailWrapper>
     </MainLayout>
@@ -25,7 +30,9 @@ const Detail = () => {
 export default Detail;
 
 const DetailWrapper = tw.article`
-  w-full ml-64 py-4 px-4
+  w-full ml-64 p-4
 `;
 
-const DetailContainer = tw.section``;
+const DetailContainer = tw.section`
+  w-full px-10
+`;
