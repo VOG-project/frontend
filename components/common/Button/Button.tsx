@@ -24,6 +24,6 @@ const StyledButton = styled.button<{ width?: number }>(({ width }) => [
   tw`my-4 h-10 rounded bg-sky-500 text-white`,
   width &&
     css`
-      width: ${width}px;
+      width: ${width}rem;
     `,
 ]);
