@@ -12,13 +12,14 @@ const useSignUpForm = () => {
       .min(8)
       .max(15)
       .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]$/,
+        /^^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\-=])(?=\S+$).*$/,
         "대문자, 소문자, 특수문자, 숫자를 이용하여 8자이상 15자 이하 비밀번호를 입력해주세요."
       )
       .required("비밀번호를 입력해주세요"),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref("password"), null], "비밀번호가 일치하지 않습니다."),
+    sex: yup.string().required(),
   });
 
   const { register, handleSubmit } = useForm({
@@ -28,6 +29,7 @@ const useSignUpForm = () => {
       nickname: "",
       password: "",
       confirmPassword: "",
+      sex: "",
     },
     resolver: yupResolver(signUpSchema),
   });
