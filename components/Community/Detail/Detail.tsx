@@ -18,7 +18,7 @@ const Detail = () => {
         <Navigation category={category} />
         <DetailContainer>
           <Header title={title}>
-            <Button width={60}>목록</Button>
+            <Button width={4}>목록</Button>
           </Header>
           <Post />
         </DetailContainer>
