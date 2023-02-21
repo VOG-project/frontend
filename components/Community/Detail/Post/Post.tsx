@@ -1,5 +1,6 @@
 import tw from "twin.macro";
 import Comments from "../Comments";
+import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
 
 const Post = () => {
@@ -28,7 +29,17 @@ const Post = () => {
           </DetailInfo>
         </DetailInfoContainer>
       </PostAuthor>
-      <PostText>안녕하세요 랭겜할래요</PostText>
+      <PostText>
+        안녕하세요 랭겜할래요
+        <PostLike>
+          <Button width={6}>
+            <LikeButton>
+              {getIcons("thumb", 16)}
+              <LikeCount>20</LikeCount>
+            </LikeButton>
+          </Button>
+        </PostLike>
+      </PostText>
       <Comments />
     </PostContainer>
   );
@@ -58,6 +69,18 @@ const PostAuthor = tw.div`
 
 const PostText = tw.p`
   p-12
+`;
+
+const PostLike = tw.div`
+  w-full text-center
+`;
+
+const LikeButton = tw.div`
+  flex items-center justify-center
+`;
+
+const LikeCount = tw.div`
+  before:(content-["|"] m-3)
 `;
 
 const DetailInfoContainer = tw.div`
