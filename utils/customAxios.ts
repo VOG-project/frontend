@@ -2,7 +2,7 @@ import axios from "axios";
 
 const customAxios = () => {
   const instance = axios.create({
-    baseURL: process.env.ENDPOINT,
+    baseURL: process.env.NEXT_PUBLIC_ENDPOINT,
     timeout: 3000,
     headers: { "Content-Type": "application/json" },
   });
