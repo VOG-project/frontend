@@ -1,15 +1,16 @@
 import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
+import { signUpRequest } from "@/apis/user";
 import Input from "../common/Input";
 import Button from "../common/Button";
 
 const SignUp = () => {
-  const { register } = useSignUpForm();
+  const { register, handleSubmit } = useSignUpForm();
   return (
     <SignUpWrapper>
       <SignUpContainer>
         <h1>회원가입</h1>
-        <SignUpForm>
+        <SignUpForm onSubmit={handleSubmit(signUpRequest)}>
           <InputContainer>
             <Input register={register("email")} placeholder="이메일" />
           </InputContainer>
@@ -19,6 +20,22 @@ const SignUp = () => {
               placeholder="닉네임 (2~10자)"
             />
           </InputContainer>
+          <RadioContainer>
+            <Input
+              register={register("sex")}
+              type="radio"
+              value="남"
+              width={1.25}
+            />
+            남자
+            <Input
+              register={register("sex")}
+              type="radio"
+              value="여"
+              width={1.25}
+            />
+            여자
+          </RadioContainer>
           <InputContainer>
             <Input
               register={register("password")}
@@ -34,8 +51,8 @@ const SignUp = () => {
             />
           </InputContainer>
           <SignUpText>
-            비밀번호는 8~16자리의 영문 소문자, 숫자, 특수문자를 조합하여 설정해
-            주세요.
+            비밀번호는 8~16자리의 영문 대소문자, 숫자, 특수문자를 조합하여
+            설정해 주세요.
           </SignUpText>
           <Button type="submit">회원가입</Button>
         </SignUpForm>
@@ -55,6 +72,8 @@ const SignUpContainer = tw.div`py-4 w-96 rounded drop-shadow bg-white z-10`;
 
 const SignUpForm = tw.form`flex flex-col px-10`;
 
-const InputContainer = tw.div`relative flex flex-col my-4 border-b border-black`;
+const InputContainer = tw.div`relative flex my-4 border-b border-black`;
+
+const RadioContainer = tw.div`flex items-center justify-around m-auto w-40`;
 
 const SignUpText = tw.span`text-xs text-slate-400`;
