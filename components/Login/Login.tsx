@@ -1,13 +1,14 @@
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
+import { loginRequest } from "@/apis/auth";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
 
 const Login = () => {
   const router = useRouter();
-  const { register } = useLoginForm();
+  const { register, handleSubmit } = useLoginForm();
 
   const handleSignUpClick = () => {
     router.push("/sign-up");
@@ -16,7 +17,7 @@ const Login = () => {
     <LoginWrapper>
       <LoginContainer>
         <h1>VOG</h1>
-        <LoginForm>
+        <LoginForm onSubmit={handleSubmit(loginRequest)}>
           <InputContainer>
             <Input register={register("email")} placeholder="이메일" />
           </InputContainer>
@@ -46,7 +47,7 @@ export default Login;
 
 const LoginWrapper = tw.section`
 relative flex items-center justify-center h-full text-black bg-[url("./image/valorant.jpg")] bg-cover
-after:absolute after:inset-0 after:bg-black after:opacity-20
+after:(absolute inset-0 bg-black opacity-20)
 `;
 
 const LoginContainer = tw.div`py-4 w-96 rounded drop-shadow bg-white z-10`;
@@ -57,8 +58,8 @@ const InputContainer = tw.div`relative flex flex-col my-4 border-b border-black`
 
 const Or = tw.div`
   relative w-full text-center
-  before:absolute before:top-3 before:left-5 before:w-2/5 before:h-px before:bg-black
-  after:absolute after:top-3 after:right-5 after:w-2/5 after:h-px after:bg-black
+  before:(absolute top-3 left-5 w-2/5 h-px bg-black)
+  after:(absolute top-3 right-5 w-2/5 h-px bg-black)
 `;
 
 const SignUpButtonContainer = tw.div`flex m-auto w-80 items-center justify-around`;
