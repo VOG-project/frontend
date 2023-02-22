@@ -22,7 +22,7 @@ const Navigation = ({ category }: NavigationProps) => {
             <NavLink
               key={name}
               href={`/community/${href}`}
-              isCurrent={category === href}
+              isActive={category === href}
             >
               {name}
             </NavLink>
@@ -43,7 +43,7 @@ const NavMenu = tw.div`
   flex items-center gap-12 h-16 ml-4
 `;
 
-const NavLink = styled(Link)<{ isCurrent: boolean }>(({ isCurrent }) => [
+const NavLink = styled(Link)<{ isActive: boolean }>(({ isActive }) => [
   tw`
   relative flex items-center h-full align-middle text-3xl font-semibold
   hover:text-primary
@@ -51,5 +51,5 @@ const NavLink = styled(Link)<{ isCurrent: boolean }>(({ isCurrent }) => [
     hover:(w-full border-b-2 border-primary)
     )
 `,
-  isCurrent && tw`text-primary`,
+  isActive && tw`text-primary`,
 ]);
