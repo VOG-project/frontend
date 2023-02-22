@@ -14,8 +14,8 @@ const Home = () => {
             커뮤니티에서 여러 정보를 공유하세요.
           </HomeText>
           <ButtonContainer>
-            <Button>채팅</Button>
-            <Button>커뮤니티</Button>
+            <Button width={5}>채팅</Button>
+            <Button width={5}>커뮤니티</Button>
           </ButtonContainer>
         </HomeContent>
       </HomeContainer>
@@ -40,4 +40,6 @@ const HomeTitle = tw.h2`
 
 const HomeText = tw.p``;
 
-const ButtonContainer = tw.div``;
+const ButtonContainer = tw.div`
+  flex justify-around
+`;
