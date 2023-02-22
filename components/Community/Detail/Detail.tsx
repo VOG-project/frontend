@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import MainLayout from "@/components/layout/MainLayout";
@@ -8,10 +9,14 @@ import Post from "./Post";
 import { getTitle } from "@/utils/getTitle";
 
 const Detail = () => {
+  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
   const router = useRouter();
   const query = router.query;
-  const category = typeof query.category === "string" ? query.category : "";
-  const title = getTitle(category);
+  useEffect(() => {
+    if (typeof query.category === "string") setCategory(query.category);
+    setTitle(getTitle(category));
+  }, [query, category]);
   return (
     <MainLayout>
       <DetailWrapper>
