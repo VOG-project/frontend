@@ -19,12 +19,8 @@ const Navigation = ({ category }: NavigationProps) => {
         {NAV_MENU.map((menu) => {
           const { name, href } = menu;
           return (
-            <NavLink
-              key={name}
-              href={`/community/${href}`}
-              isActive={category === href}
-            >
-              {name}
+            <NavLink key={name} isActive={category === href}>
+              <Link href={`/community/${href}`}>{name}</Link>
             </NavLink>
           );
         })}
@@ -43,7 +39,7 @@ const NavMenu = tw.div`
   flex items-center gap-12 h-16 ml-4
 `;
 
-const NavLink = styled(Link)<{ isActive: boolean }>(({ isActive }) => [
+const NavLink = styled.div<{ isActive: boolean }>(({ isActive }) => [
   tw`
   relative flex items-center h-full align-middle text-3xl font-semibold
   hover:text-primary
