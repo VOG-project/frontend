@@ -34,7 +34,7 @@ const Login = () => {
         <OAuthLogin />
         <SignUpButtonContainer>
           <SignUpText>계정이 없으신가요?</SignUpText>
-          <Button width={120} onClick={handleSignUpClick}>
+          <Button width={7.5} onClick={handleSignUpClick}>
             회원가입
           </Button>
         </SignUpButtonContainer>
