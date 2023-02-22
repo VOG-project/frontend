@@ -14,23 +14,23 @@ const Post = () => {
       </PostTitle>
       <PostAuthor>
         사부로
-        <DetailInfoContainer>
-          <DetailInfo>
+        <PostInfoContainer>
+          <PostInfo>
             {getIcons("thumb", 16)}
-            <DetailText>200</DetailText>
-          </DetailInfo>
-          <DetailInfo>
+            <PostInfoText>200</PostInfoText>
+          </PostInfo>
+          <PostInfo>
             {getIcons("eye", 16)}
-            <DetailText>18992</DetailText>
-          </DetailInfo>
-          <DetailInfo>
+            <PostInfoText>18992</PostInfoText>
+          </PostInfo>
+          <PostInfo>
             {getIcons("time", 16)}
-            <DetailText>2023.01.01</DetailText>
-          </DetailInfo>
-        </DetailInfoContainer>
+            <PostInfoText>2023.01.01</PostInfoText>
+          </PostInfo>
+        </PostInfoContainer>
       </PostAuthor>
-      <PostText>
-        안녕하세요 랭겜할래요
+      <PostTextContainer>
+        <PostText>안녕하세요 랭겜할래요</PostText>
         <PostLike>
           <Button width={6}>
             <LikeButton>
@@ -39,7 +39,7 @@ const Post = () => {
             </LikeButton>
           </Button>
         </PostLike>
-      </PostText>
+      </PostTextContainer>
       <Comments />
     </PostContainer>
   );
@@ -67,6 +67,8 @@ const PostAuthor = tw.div`
   flex items-center justify-between px-4 h-8 bg-zinc-900
 `;
 
+const PostTextContainer = tw.div``;
+
 const PostText = tw.p`
   p-12
 `;
@@ -83,14 +85,14 @@ const LikeCount = tw.div`
   before:(content-["|"] m-3)
 `;
 
-const DetailInfoContainer = tw.div`
+const PostInfoContainer = tw.div`
   flex w-96 items-center justify-around text-primary
 `;
 
-const DetailInfo = tw.div`
+const PostInfo = tw.div`
   flex items-center
 `;
 
-const DetailText = tw.span`
+const PostInfoText = tw.span`
   text-white
 `;
