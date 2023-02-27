@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
-import { loginRequest } from "@/apis/auth";
+import { loginRequest, LoginRequest } from "@/apis/auth";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
@@ -9,15 +9,21 @@ import Button from "../common/Button";
 const Login = () => {
   const router = useRouter();
   const { register, handleSubmit } = useLoginForm();
-
   const handleSignUpClick = () => {
     router.push("/sign-up");
+  };
+  const handleLogin = async ({ email, password }: LoginRequest) => {
+    const res = await loginRequest({ email, password });
+    if (res.success) {
+      router.push("/");
+      console.log(res.result);
+    }
   };
   return (
     <LoginWrapper>
       <LoginContainer>
         <h1>VOG</h1>
-        <LoginForm onSubmit={handleSubmit(loginRequest)}>
+        <LoginForm onSubmit={handleSubmit(handleLogin)}>
           <InputContainer>
             <Input register={register("email")} placeholder="이메일" />
           </InputContainer>
