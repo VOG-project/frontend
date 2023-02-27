@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import tw from "twin.macro";
 import { useRecoilValue } from "recoil";
 import { selectedGameState } from "@/recoil/atoms/selectedGameState";
@@ -15,7 +16,10 @@ const NAV_MENU = [
 
 const Sidebar = () => {
   const game = useRecoilValue(selectedGameState);
-  const gameLogo = getGameLogo(game);
+  const [gameLogo, setGameLogo] = useState<StaticImageData>();
+  useEffect(() => {
+    setGameLogo(getGameLogo(game));
+  }, [game]);
 
   return (
     <SidebarContainer>
