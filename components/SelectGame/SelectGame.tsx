@@ -1,14 +1,31 @@
+import { useRouter } from "next/router";
 import tw from "twin.macro";
+import { useRecoilState } from "recoil";
+import { selectedGameState } from "@/recoil/atoms/selectedGameState";
 import GameCard from "./GameCard";
 import GAMES from "@/constants/games";
 
 const SelectGame = () => {
+  const router = useRouter();
+  const [, setSelectedGame] = useRecoilState(selectedGameState);
+  const handleGameCardClick = (game: string) => {
+    setSelectedGame(game);
+    router.push("/");
+  };
   return (
     <SelectGameWrapper>
       <SelectGameContainer>
         {GAMES.map((game) => {
           const { name, image, logo } = game;
-          return <GameCard key={name} name={name} image={image} logo={logo} />;
+          return (
+            <GameCard
+              key={name}
+              name={name}
+              image={image}
+              logo={logo}
+              onGameCardClick={handleGameCardClick}
+            />
+          );
         })}
       </SelectGameContainer>
     </SelectGameWrapper>
