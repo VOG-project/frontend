@@ -1,16 +1,34 @@
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
-import { signUpRequest } from "@/apis/user";
+import { signUpRequest, SignUpRequest } from "@/apis/user";
 import Input from "../common/Input";
 import Button from "../common/Button";
 
 const SignUp = () => {
   const { register, handleSubmit } = useSignUpForm();
+  const router = useRouter();
+  const handleSignUp = async ({
+    email,
+    password,
+    nickname,
+    sex,
+  }: SignUpRequest) => {
+    const res = await signUpRequest({
+      email,
+      password,
+      nickname,
+      sex,
+    });
+    if (res.success) {
+      router.push("/login");
+    }
+  };
   return (
     <SignUpWrapper>
       <SignUpContainer>
         <h1>회원가입</h1>
-        <SignUpForm onSubmit={handleSubmit(signUpRequest)}>
+        <SignUpForm onSubmit={handleSubmit(handleSignUp)}>
           <InputContainer>
             <Input register={register("email")} placeholder="이메일" />
           </InputContainer>
