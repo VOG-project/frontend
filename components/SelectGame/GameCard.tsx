@@ -5,9 +5,10 @@ interface GameCardProps {
   name: string;
   image: StaticImageData;
   logo: StaticImageData;
+  onGameCardClick: (game: string) => void;
 }
 
-const GameCard = ({ name, image, logo }: GameCardProps) => {
+const GameCard = ({ name, image, logo, onGameCardClick }: GameCardProps) => {
   return (
     <GameCardContainer>
       <GameImage
@@ -15,6 +16,7 @@ const GameCard = ({ name, image, logo }: GameCardProps) => {
         alt={name}
         quality={100}
         style={{ objectFit: "cover" }}
+        onClick={() => onGameCardClick(name)}
       />
       <GameLogo src={logo} alt={name} quality={100} />
     </GameCardContainer>
