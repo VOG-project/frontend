@@ -15,7 +15,7 @@ const Login = () => {
   const handleLogin = async ({ email, password }: LoginRequest) => {
     const res = await loginRequest({ email, password });
     if (res.success) {
-      router.push("/");
+      router.push("/select-game");
       console.log(res.result);
     }
   };
