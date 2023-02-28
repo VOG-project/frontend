@@ -4,8 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const useSignUpForm = () => {
   const signUpSchema = yup.object().shape({
-    email: yup.string().email().required("이메일을 입력해주세요"),
-    nickname: yup.string().trim().min(2).max(8),
+    email: yup.string().email().max(20).required("이메일을 입력해주세요"),
+    nickname: yup.string().trim().min(2).max(10),
     password: yup
       .string()
       .trim()
