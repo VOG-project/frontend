@@ -1,8 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
-
-const sessionStorage =
-  typeof window !== "undefined" ? window.sessionStorage : undefined;
+import { sessionStorage } from "@/utils/sessionStorage";
 
 const { persistAtom } = recoilPersist({
   key: "game",
