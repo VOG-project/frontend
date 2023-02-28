@@ -8,8 +8,8 @@ const customAxios = () => {
   });
 
   instance.interceptors.request.use(
-    (request) => {
-      return request;
+    (req) => {
+      return req;
     },
     (error) => {
       throw error;
@@ -17,11 +17,12 @@ const customAxios = () => {
   );
 
   instance.interceptors.response.use(
-    (response) => {
-      return response;
+    (res) => {
+      return res;
     },
     (error) => {
-      throw error;
+      const status = error.response.data.statusCode;
+      if (status === 401) return error.response;
     }
   );
 
