@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
 import { loginRequest, LoginRequest } from "@/apis/auth";
+import { setSessionStorage } from "@/utils/sessionStorage";
+import { AUTH_KEY } from "@/constants/Auth";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
@@ -15,8 +17,10 @@ const Login = () => {
   const handleLogin = async ({ email, password }: LoginRequest) => {
     const res = await loginRequest({ email, password });
     if (res.success) {
+      setSessionStorage(AUTH_KEY, res.result);
       router.push("/select-game");
-      console.log(res.result);
+    } else {
+      console.log(res.error);
     }
   };
   return (
