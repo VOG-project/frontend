@@ -86,4 +86,6 @@ const ItemIcon = tw.div`
   mr-4
 `;
 
-const SidebarGameLogo = tw.div``;
+const SidebarGameLogo = tw.div`
+  grow flex flex-col justify-end
+`;
