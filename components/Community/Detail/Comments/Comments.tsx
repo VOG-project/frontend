@@ -1,11 +1,14 @@
 import tw from "twin.macro";
 import Comment from "./Comment";
 import CommentEdit from "./CommentEdit";
+import Pagination from "@/components/Pagination";
+
 const Comments = () => {
   return (
     <CommentsContainer>
       <CommentsTitle>댓글 1</CommentsTitle>
       <Comment />
+      <Pagination />
       <CommentEdit />
     </CommentsContainer>
   );
