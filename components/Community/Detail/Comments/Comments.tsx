@@ -1,11 +1,12 @@
 import tw from "twin.macro";
 import Comment from "./Comment";
-
+import CommentEdit from "./CommentEdit";
 const Comments = () => {
   return (
     <CommentsContainer>
       <CommentsTitle>댓글 1</CommentsTitle>
       <Comment />
+      <CommentEdit />
     </CommentsContainer>
   );
 };
