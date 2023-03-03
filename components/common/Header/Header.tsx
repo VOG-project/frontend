@@ -30,5 +30,5 @@ const HeaderContainer = styled.header<{ hasChildren: boolean }>(
 );
 
 const HeaderTitle = tw.h2`
-  text-4xl font-semibold
+  px-4 text-4xl font-semibold
 `;
