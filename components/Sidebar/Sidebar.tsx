@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import tw from "twin.macro";
@@ -12,14 +13,20 @@ import { getIcons } from "../icons";
 const NAV_MENU = [
   { name: "채팅", href: "/chat", icon: getIcons("chat", 34) },
   { name: "커뮤니티", href: "/community", icon: getIcons("cardList", 34) },
+  { name: "마이페이지", href: "/mypage", icon: getIcons("avatar", 34) },
 ];
 
 const Sidebar = () => {
+  const router = useRouter();
   const game = useRecoilValue(selectedGameState);
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
     setGameLogo(getGameLogo(game));
   }, [game]);
+
+  const handleLogoClick = () => {
+    router.push("/select-game");
+  };
 
   return (
     <SidebarContainer>
@@ -44,7 +51,7 @@ const Sidebar = () => {
         })}
       </SidebarMenu>
       {gameLogo && (
-        <SidebarGameLogo>
+        <SidebarGameLogo onClick={handleLogoClick}>
           <Image src={gameLogo} alt="gameLogo" />
         </SidebarGameLogo>
       )}
@@ -87,5 +94,5 @@ const ItemIcon = tw.div`
 `;
 
 const SidebarGameLogo = tw.div`
-  grow flex flex-col justify-end
+  grow flex flex-col justify-end cursor-pointer
 `;
