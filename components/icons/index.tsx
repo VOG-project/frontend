@@ -9,7 +9,7 @@ import {
   BsChevronRight,
   BsChevronDoubleRight,
 } from "react-icons/bs";
-import { RxTriangleDown } from "react-icons/rx";
+import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime } from "react-icons/bi";
 
 export function getIcons(name: string, size: number, color?: string) {
@@ -36,6 +36,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsChevronRight size={size} color={color} />;
     case "doubleRight":
       return <BsChevronDoubleRight size={size} color={color} />;
+    case "avatar":
+      return <RxAvatar size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
