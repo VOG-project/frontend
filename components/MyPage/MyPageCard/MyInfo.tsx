@@ -43,14 +43,16 @@ const MyInfoMenu = tw.div`
 `;
 
 const MyInfoTitle = tw.h2`
-  p-6 border-b border-white text-3xl
+  py-6 border-b border-white text-3xl
 `;
 
 const MyInfoList = tw.ul`
-  mt-20 divide-y-[2rem] divide-transparent text-xl
+  w-1/2 mx-auto mt-20 text-xl list-disc
 `;
 
-const MyInfoListItem = tw.li``;
+const MyInfoListItem = tw.li`
+  mt-8 cursor-pointer
+`;
 
 const MyInfoContentContainer = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
   tw`absolute hidden w-[200%] h-full right-full overflow-hidden z-10`,
