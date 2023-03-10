@@ -8,10 +8,14 @@ const MyInfo = () => {
     <MyInfoContainer>
       <MyInfoMenu>
         <MyInfoTitle>정보 관리</MyInfoTitle>
-        <li onClick={() => setIsOpen((prev) => !prev)}>비밀번호 변경</li>
-        <li>프로필 이미지 변경</li>
-        <li>닉네임 변경</li>
-        <li>탈퇴</li>
+        <MyInfoList>
+          <MyInfoListItem onClick={() => setIsOpen((prev) => !prev)}>
+            비밀번호 변경
+          </MyInfoListItem>
+          <MyInfoListItem>프로필 이미지 변경</MyInfoListItem>
+          <MyInfoListItem>닉네임 변경</MyInfoListItem>
+          <MyInfoListItem>탈퇴</MyInfoListItem>
+        </MyInfoList>
       </MyInfoMenu>
       <MyInfoContentContainer isOpen={isOpen}>
         <MyInfoContent>
@@ -34,11 +38,19 @@ const MyInfoContainer = tw.section`
   absolute right-0 flex w-1/3 h-full border-l border-neutral-700
 `;
 
-const MyInfoMenu = tw.ul`
-  w-full h-full text-center
+const MyInfoMenu = tw.div`
+  w-full h-full p-8 text-center
 `;
 
-const MyInfoTitle = tw.h2``;
+const MyInfoTitle = tw.h2`
+  p-6 border-b border-white text-3xl
+`;
+
+const MyInfoList = tw.ul`
+  mt-20 divide-y-[2rem] divide-transparent text-xl
+`;
+
+const MyInfoListItem = tw.li``;
 
 const MyInfoContentContainer = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
   tw`absolute hidden w-[200%] h-full right-full overflow-hidden z-10`,
