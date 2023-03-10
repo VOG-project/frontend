@@ -25,7 +25,7 @@ const HeaderContainer = styled.header<{ hasChildren: boolean }>(
   ({ hasChildren }) => [
     hasChildren
       ? tw`flex justify-between items-center w-full h-20`
-      : tw`h-16 border-b border-neutral-700`,
+      : tw`flex items-center h-16 border-b border-neutral-700`,
   ]
 );
 
