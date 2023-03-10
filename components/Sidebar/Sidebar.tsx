@@ -9,12 +9,7 @@ import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
 import { getIcons } from "../icons";
-
-const NAV_MENU = [
-  { name: "채팅", href: "/chat", icon: getIcons("chat", 34) },
-  { name: "커뮤니티", href: "/community", icon: getIcons("cardList", 34) },
-  { name: "마이페이지", href: "/mypage", icon: getIcons("avatar", 34) },
-];
+import { NAV_MENU } from "@/constants/nav";
 
 const Sidebar = () => {
   const router = useRouter();
