@@ -8,6 +8,7 @@ import {
   BsChevronDoubleLeft,
   BsChevronRight,
   BsChevronDoubleRight,
+  BsPlus,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime } from "react-icons/bi";
@@ -38,6 +39,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsChevronDoubleRight size={size} color={color} />;
     case "avatar":
       return <RxAvatar size={size} color={color} />;
+    case "plus":
+      return <BsPlus size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
