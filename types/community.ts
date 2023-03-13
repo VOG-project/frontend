@@ -1,3 +1,5 @@
+import { ParsedUrlQuery } from "querystring";
+
 export interface Content {
   createdAt: string;
   id: number;
@@ -13,4 +15,8 @@ export interface CommunityProps {
     success: boolean;
     result: Content[];
   };
+}
+
+export interface CommunityQuery extends ParsedUrlQuery {
+  category: string;
 }
