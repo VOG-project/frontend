@@ -11,10 +11,17 @@ const Navigation = ({ category }: NavigationProps) => {
     <NavConatiner>
       <NavMenu>
         {COMMUNITY_NAV_MENU.map((menu) => {
-          const { name, href } = menu;
+          const { name, query } = menu;
           return (
-            <NavLink key={name} isActive={category === href}>
-              <Link href={`/community/${href}`}>{name}</Link>
+            <NavLink key={name} isActive={category === query}>
+              <Link
+                href={{
+                  pathname: "/community",
+                  query: { category: query },
+                }}
+              >
+                {name}
+              </Link>
             </NavLink>
           );
         })}
