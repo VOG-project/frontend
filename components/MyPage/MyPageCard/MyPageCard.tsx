@@ -1,13 +1,11 @@
 import tw from "twin.macro";
-import History from "./History";
 import MyInfo from "./MyInfo";
 
 const MyPageCard = () => {
   return (
     <MyPageCardContainer>
-      <History />
-      <MyProfile>망냉</MyProfile>
       <MyInfo />
+      <MyProfile>망냉</MyProfile>
     </MyPageCardContainer>
   );
 };
@@ -19,5 +17,5 @@ const MyPageCardContainer = tw.div`
 `;
 
 const MyProfile = tw.div`
-  flex flex-col w-1/3 h-full
+  flex flex-col w-2/3 h-full
 `;
