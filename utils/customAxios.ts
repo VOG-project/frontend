@@ -18,11 +18,12 @@ const customAxios = () => {
 
   instance.interceptors.response.use(
     (res) => {
+      // console.log("axios request", res);
       return res;
     },
     (error) => {
       const status = error.response.data.statusCode;
-      if (status === 401) return error.response;
+      if (status >= 400 && status <= 404) return error.response;
     }
   );
 
