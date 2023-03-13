@@ -1,14 +1,16 @@
 import customAxios from "@/utils/customAxios";
 
 interface PostData {
+  writerId: number;
   title: string;
   content: string;
   gameCategory?: string;
 }
 
 const createPostRequest = async (category: string, data: PostData) => {
-  const { title, content, gameCategory } = data;
+  const { writerId, title, content, gameCategory } = data;
   const res = await customAxios().post(`/posts/${category}`, {
+    writerId,
     title,
     content,
     gameCategory,
