@@ -20,7 +20,7 @@ const MyInfo = () => {
       <MyInfoContentContainer isOpen={isOpen}>
         <MyInfoContent>
           <CloseButton
-            position={{ type: "absolute", top: "0.5rem", left: "2rem" }}
+            position={{ type: "absolute", top: "0.5rem", right: "2rem" }}
             width={2.5}
             onClick={() => setIsOpen(false)}
           >
@@ -35,7 +35,7 @@ const MyInfo = () => {
 export default MyInfo;
 
 const MyInfoContainer = tw.section`
-  absolute right-0 flex w-1/3 h-full border-l border-neutral-700
+  flex w-1/3 h-full border-r border-neutral-700
 `;
 
 const MyInfoMenu = tw.div`
@@ -55,13 +55,13 @@ const MyInfoListItem = tw.li`
 `;
 
 const MyInfoContentContainer = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
-  tw`absolute hidden w-[200%] h-full right-full overflow-hidden z-10`,
+  tw`absolute hidden w-2/3 h-full left-1/3 overflow-hidden z-10`,
   isOpen && tw`block`,
 ]);
 
 const MyInfoContent = tw.div`
   w-full h-full bg-black
-  animate-[slideLeft_0.5s]
+  animate-[slideRight_0.5s]
 `;
 
 const CloseButton = tw(Button)``;
