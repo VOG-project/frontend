@@ -19,7 +19,7 @@ const PasswordEdit = () => {
             새 비밀번호
             <Input
               type="password"
-              height={4}
+              height={3}
               bgColor={"gray"}
               register={register("password")}
             />
@@ -30,7 +30,7 @@ const PasswordEdit = () => {
             새 비밀번호 확인
             <Input
               type="password"
-              height={4}
+              height={3}
               bgColor={"gray"}
               register={register("confirmPassword")}
             />

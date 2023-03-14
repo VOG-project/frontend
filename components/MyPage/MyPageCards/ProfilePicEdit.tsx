@@ -39,7 +39,8 @@ const ProfilePicInput = tw.input`
 `;
 
 const ProfilePicButton = tw.button`
-  flex items-center justify-center w-32 h-32 m-auto rounded-full bg-zinc-600
+  flex items-center justify-center w-32 h-32 m-auto rounded-full bg-stone-700
+  hover:bg-stone-600
 `;
 
 const ProfilePicSumbitButton = tw.div`

@@ -18,7 +18,7 @@ const NicknameEdit = () => {
           <NicknameEditLabel>
             새 닉네임
             <Input
-              height={4}
+              height={3}
               bgColor={"gray"}
               register={register("nickname")}
             />
