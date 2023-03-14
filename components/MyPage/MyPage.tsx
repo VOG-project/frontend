@@ -1,7 +1,10 @@
 import tw from "twin.macro";
 import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
-import MyPageCard from "./MyPageCard";
+import Profile from "./Profile";
+import ProfilePicEdit from "./MyPageCards/ProfilePicEdit";
+import NicknameEdit from "./MyPageCards/NicknameEdit";
+import PasswordEdit from "./MyPageCards/PasswordEdit";
 
 const MyPage = () => {
   return (
@@ -9,7 +12,10 @@ const MyPage = () => {
       <MyPageWrapper>
         <Header title="마이페이지" />
         <MyPageContainer>
-          <MyPageCard />
+          <Profile />
+          <ProfilePicEdit />
+          <NicknameEdit />
+          <PasswordEdit />
         </MyPageContainer>
       </MyPageWrapper>
     </MainLayout>
@@ -23,5 +29,5 @@ const MyPageWrapper = tw.article`
 `;
 
 const MyPageContainer = tw.div`
-  flex items-center justify-center w-full h-[calc(100% - 4rem)]
+  flex flex-col items-center gap-4 w-full h-[calc(100% - 4rem)] m-auto py-16 px-64 overflow-auto
 `;
