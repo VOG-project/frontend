@@ -17,11 +17,13 @@ const Left = ({ title, description }: LeftProps) => {
 export default Left;
 
 const LeftContainer = tw.div`
-  shrink-0 w-64 p-8 bg-zinc-900
+  shrink-0 w-72 p-8 bg-zinc-900
 `;
 
 const Title = tw.h2`
   text-xl
 `;
 
-const Description = tw.p``;
+const Description = tw.p`
+  text-zinc-400
+`;
