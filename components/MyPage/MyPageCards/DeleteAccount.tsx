@@ -20,6 +20,11 @@ const DeleteAccount = () => {
   };
 
   const handleDeleteAccount = async () => {
+    if (!password) {
+      toast.alert("비밀번호를 입력하세요.");
+      return;
+    }
+
     const res = await withdrawalRequest({ userId: 6, password });
     if (res.success) {
       console.log(res);
