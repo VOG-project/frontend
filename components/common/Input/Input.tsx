@@ -32,16 +32,27 @@ const Input = ({
 }: InputProps) => {
   return (
     <>
-      <StyledInput
-        {...register}
-        placeholder={placeholder}
-        value={value}
-        width={width}
-        height={height}
-        bgColor={bgColor}
-        type={type}
-        onChange={onChange}
-      />
+      {onChange ? (
+        <StyledInput
+          placeholder={placeholder}
+          value={value}
+          width={width}
+          height={height}
+          bgColor={bgColor}
+          type={type}
+          onChange={onChange}
+        />
+      ) : (
+        <StyledInput
+          {...register}
+          placeholder={placeholder}
+          value={value}
+          width={width}
+          height={height}
+          bgColor={bgColor}
+          type={type}
+        />
+      )}
     </>
   );
 };
