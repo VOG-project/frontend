@@ -12,6 +12,7 @@ import {
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime } from "react-icons/bi";
+import { IoClose } from "react-icons/io5";
 
 export function getIcons(name: string, size: number, color?: string) {
   switch (name) {
@@ -41,6 +42,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <RxAvatar size={size} color={color} />;
     case "plus":
       return <BsPlus size={size} color={color} />;
+    case "close":
+      return <IoClose size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
