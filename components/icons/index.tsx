@@ -9,6 +9,8 @@ import {
   BsChevronRight,
   BsChevronDoubleRight,
   BsPlus,
+  BsCheck2,
+  BsExclamationTriangle,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime } from "react-icons/bi";
@@ -44,6 +46,10 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsPlus size={size} color={color} />;
     case "close":
       return <IoClose size={size} color={color} />;
+    case "success":
+      return <BsCheck2 size={size} color={color} />;
+    case "alert":
+      return <BsExclamationTriangle size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
