@@ -59,12 +59,13 @@ const Modal = ({
 export default Modal;
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
-  tw`hidden fixed flex items-center justify-center inset-0 bg-black/60 z-50 `,
-  isOpen && tw`block`,
+  tw`hidden`,
+  isOpen &&
+    tw`block fixed flex items-center justify-center inset-0 bg-black/60 z-50 `,
 ]);
 
 const ModalContainer = tw.div`
-  relative shadow bg-zinc-800 rounded-lg
+  relative min-w-[20rem] shadow bg-zinc-800 rounded-lg
 `;
 
 const ModalTitle = tw.h3`
@@ -82,8 +83,10 @@ const ModalCloseButton = tw.button`
   hover:bg-neutral-600
 `;
 
-const ModalBody = tw.div`p-6`;
+const ModalBody = tw.div`
+  flex flex-col items-center justify-center p-6
+`;
 
 const ModalFooter = tw.div`
-  flex justify-end space-x-4 border-t border-neutral-700
+  flex justify-end px-8 space-x-4 border-t border-neutral-700
 `;
