@@ -12,7 +12,11 @@ const useNicknameEditForm = () => {
       .required("새 닉네임을 입력해주세요."),
   });
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isDirty, isValid },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       nickname: "",
@@ -20,7 +24,15 @@ const useNicknameEditForm = () => {
     resolver: yupResolver(nicknameEditSchema),
   });
 
-  return { register, handleSubmit };
+  const errorsNickname = errors.nickname;
+
+  return {
+    errorsNickname,
+    isDirty,
+    isValid,
+    register,
+    handleSubmit,
+  };
 };
 
 export default useNicknameEditForm;
