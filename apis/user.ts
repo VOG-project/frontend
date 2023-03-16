@@ -20,6 +20,7 @@ export interface ChangePasswordRequest {
 
 export interface WithdrawalRequest {
   userId: number;
+  password: string;
 }
 
 const signUpRequest = async ({
@@ -62,8 +63,12 @@ const changePasswordRequest = async ({
   return res.data;
 };
 
-const withdrawalRequest = async ({ userId }: WithdrawalRequest) => {
-  const res = await customAxios().delete(`/users/${userId}/withdrawal`);
+const withdrawalRequest = async ({ userId, password }: WithdrawalRequest) => {
+  const res = await customAxios().delete(`/users/${userId}/withdrawal`, {
+    data: {
+      password,
+    },
+  });
 
   return res.data;
 };
