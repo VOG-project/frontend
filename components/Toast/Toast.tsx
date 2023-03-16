@@ -8,7 +8,17 @@ const Toast = () => {
 
   return (
     <ToastContainer>
-      {toast.type && <ToastText type={toast.type} text={toast.text} />}
+      {toast.map(
+        (item) =>
+          item.type && (
+            <ToastText
+              key={item.key}
+              type={item.type}
+              text={item.text}
+              uuid={item.key}
+            />
+          )
+      )}
     </ToastContainer>
   );
 };
@@ -16,5 +26,5 @@ const Toast = () => {
 export default Toast;
 
 const ToastContainer = tw.div`
-  fixed w-full h-auto z-50
+  fixed w-full h-auto z-[100]
 `;
