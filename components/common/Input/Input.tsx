@@ -1,9 +1,15 @@
+import { ChangeEventHandler } from "react";
 import tw, { styled, css } from "twin.macro";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps {
   register?: UseFormRegisterReturn<
-    "email" | "password" | "confirmPassword" | "nickname" | "sex"
+    | "email"
+    | "password"
+    | "confirmPassword"
+    | "nickname"
+    | "sex"
+    | "currentPassword"
   >;
   placeholder?: string;
   value?: string;
@@ -11,6 +17,7 @@ interface InputProps {
   height?: number;
   bgColor?: "gray";
   type?: "default" | "password" | "radio";
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 const Input = ({
@@ -21,6 +28,7 @@ const Input = ({
   height,
   bgColor,
   type = "default",
+  onChange,
 }: InputProps) => {
   return (
     <>
@@ -32,6 +40,7 @@ const Input = ({
         height={height}
         bgColor={bgColor}
         type={type}
+        onChange={onChange}
       />
     </>
   );
@@ -56,5 +65,5 @@ const StyledInput = styled.input<{
     `,
   bgColor &&
     bgColor === "gray" &&
-    tw`m-4 bg-stone-700 rounded hover:bg-stone-600`,
+    tw`m-4 bg-stone-700 rounded hover:bg-stone-600 placeholder:text-stone-300`,
 ]);
