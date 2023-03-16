@@ -19,7 +19,12 @@ const usePasswordEditForm = () => {
       .oneOf([yup.ref("password"), null], "비밀번호가 일치하지 않습니다."),
   });
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isDirty, isValid },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       password: "",
@@ -28,7 +33,24 @@ const usePasswordEditForm = () => {
     resolver: yupResolver(passwordEditSchema),
   });
 
-  return { register, handleSubmit };
+  const watchPassword = watch("password");
+
+  const watchConfirmPassword = watch("confirmPassword");
+
+  const passwordError = errors.password;
+
+  const confirmPasswordError = errors.confirmPassword;
+
+  return {
+    watchPassword,
+    watchConfirmPassword,
+    passwordError,
+    confirmPasswordError,
+    isDirty,
+    isValid,
+    register,
+    handleSubmit,
+  };
 };
 
 export default usePasswordEditForm;
