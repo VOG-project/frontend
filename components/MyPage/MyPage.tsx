@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import ProfilePicEdit from "./MyPageCards/ProfilePicEdit";
 import NicknameEdit from "./MyPageCards/NicknameEdit";
 import PasswordEdit from "./MyPageCards/PasswordEdit";
+import DeleteAccount from "./MyPageCards/DeleteAccount";
 
 const MyPage = () => {
   return (
@@ -16,6 +17,7 @@ const MyPage = () => {
           <ProfilePicEdit />
           <NicknameEdit />
           <PasswordEdit />
+          <DeleteAccount />
         </MyPageContainer>
       </MyPageWrapper>
     </MainLayout>
