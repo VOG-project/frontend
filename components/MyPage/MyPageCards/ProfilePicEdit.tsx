@@ -13,6 +13,11 @@ const ProfilePicEdit = () => {
 
   useEffect(() => {
     const image = watch("profilePic").item(0);
+
+    if (!image) {
+      return setPreview("");
+    }
+
     (async () => {
       if (image) {
         const compressImage = await imageResize(image);
@@ -52,7 +57,7 @@ const ProfilePicEdit = () => {
               취소하기
             </Button>
             <Button
-              type="submit"
+              type="button"
               width={8}
               bgColor="primary"
               disabled={!isDirty || !isValid}
