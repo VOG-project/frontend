@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 interface ButtonProps {
   type?: "button" | "submit";
   width?: number;
-  transparent?: boolean;
+  bgColor: "primary" | "secondary" | "transparent";
   position?: {
     type: "relative" | "absolute";
     top?: string;
@@ -12,6 +12,7 @@ interface ButtonProps {
     left?: string;
     right?: string;
   };
+  disabled?: boolean;
   children: ReactNode;
   onClick?: () => void;
 }
@@ -19,8 +20,9 @@ interface ButtonProps {
 const Button = ({
   type = "button",
   width,
-  transparent,
+  bgColor = "primary",
   position,
+  disabled,
   children,
   onClick,
 }: ButtonProps) => {
@@ -29,8 +31,9 @@ const Button = ({
       <StyledButton
         type={type}
         width={width}
-        transparent={transparent}
+        bgColor={bgColor}
         position={position}
+        disabled={disabled}
         onClick={onClick}
       >
         {children}
@@ -43,7 +46,7 @@ export default Button;
 
 const StyledButton = styled.button<{
   width?: number;
-  transparent?: boolean;
+  bgColor: "primary" | "secondary" | "transparent";
   position?: {
     type: "relative" | "absolute";
     top?: string;
@@ -51,16 +54,20 @@ const StyledButton = styled.button<{
     left?: string;
     right?: string;
   };
-}>(({ width, transparent, position }) => [
-  tw`my-4 h-10 rounded bg-primary text-white`,
+}>(({ width, bgColor, position }) => [
+  tw`my-4 h-10 rounded text-white
+    disabled:(bg-stone-500 text-stone-400)
+  `,
   width &&
     css`
       width: ${width}rem;
     `,
-  transparent &&
-    css`
-      background-color: transparent;
-    `,
+  bgColor &&
+    (bgColor === "primary"
+      ? tw`bg-primary enabled:hover:bg-[#c3a888]`
+      : bgColor === "secondary"
+      ? tw`bg-secondary enabled:hover:bg-[#ff1d53]`
+      : tw`bg-transparent enabled:hover:bg-neutral-600`),
   position &&
     css`
       position: ${position.type};

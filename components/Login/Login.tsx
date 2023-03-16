@@ -14,6 +14,7 @@ const Login = () => {
   const handleSignUpClick = () => {
     router.push("/sign-up");
   };
+
   const handleLogin = async ({ email, password }: LoginRequest) => {
     const res = await loginRequest({ email, password });
     if (res.success) {
@@ -38,13 +39,15 @@ const Login = () => {
               placeholder="비밀번호"
             />
           </InputContainer>
-          <Button type="submit">로그인</Button>
+          <Button type="submit" bgColor="primary">
+            로그인
+          </Button>
         </LoginForm>
         <Or>or</Or>
         <OAuthLogin />
         <SignUpButtonContainer>
           <SignUpText>계정이 없으신가요?</SignUpText>
-          <Button width={7.5} onClick={handleSignUpClick}>
+          <Button width={7.5} bgColor="primary" onClick={handleSignUpClick}>
             회원가입
           </Button>
         </SignUpButtonContainer>
