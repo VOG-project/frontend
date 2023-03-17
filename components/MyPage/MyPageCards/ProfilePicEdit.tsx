@@ -9,10 +9,11 @@ import imageResize from "@/utils/imageResize";
 
 const ProfilePicEdit = () => {
   const [preview, setPreview] = useState("");
-  const { isDirty, isValid, watch, reset, register } = useProfilePicEditForm();
+  const { isDirty, isValid, watchProfilePic, reset, register } =
+    useProfilePicEditForm();
 
   useEffect(() => {
-    const image = watch("profilePic").item(0);
+    const image = watchProfilePic && watchProfilePic.item(0);
 
     if (!image) {
       return setPreview("");
@@ -24,12 +25,12 @@ const ProfilePicEdit = () => {
         compressImage && setPreview(URL.createObjectURL(compressImage));
       }
     })();
-  }, [watch("profilePic")]);
+  }, [watchProfilePic]);
 
-  const removeImage = () => {
+  function removeImage(): void {
     setPreview("");
     reset();
-  };
+  }
 
   return (
     <ProfilePicEditContainer>
