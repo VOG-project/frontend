@@ -20,10 +20,12 @@ const useProfilePicEditForm = () => {
     resolver: yupResolver(profilePicEditSchema),
   });
 
+  const watchProfilePic = watch("profilePic");
+
   return {
     isDirty,
     isValid,
-    watch,
+    watchProfilePic,
     reset,
     register,
     handleSubmit,
