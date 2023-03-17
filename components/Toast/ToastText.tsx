@@ -15,7 +15,7 @@ const ToastText = ({ type, text, uuid }: ToastTextProps) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       closeToast(uuid);
-    }, 2000);
+    }, 2500);
     return () => {
       clearTimeout(timeout);
     };
@@ -34,7 +34,7 @@ const ToastText = ({ type, text, uuid }: ToastTextProps) => {
 export default ToastText;
 
 const StyledToastText = styled.p<{ type: string }>(({ type }) => [
-  tw`absolute flex items-center justify-center top-24 left-1/2 h-8 px-2 min-w-[10rem] rounded shadow animate-[slideInOut_2s_forwards]`,
+  tw`absolute flex items-center justify-center top-24 left-1/2 h-8 px-2 min-w-[10rem] rounded shadow animate-[slideInOut_2.5s_forwards]`,
   type === "success" && tw` bg-green-600`,
   type === "alert" && tw`bg-red-600`,
 ]);
