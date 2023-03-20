@@ -16,9 +16,9 @@ const UserCardContainer = tw.div`
 `;
 
 const UserProfile = tw.img`
-  w-10 h-10 rounded-full bg-white
+  w-12 h-12 rounded-full bg-white
 `;
 
 const UserName = tw.div`
-flex-1 h-10 px-4
+  flex-1 flex items-center h-10 px-4
 `;
