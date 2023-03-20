@@ -23,6 +23,7 @@ export default Header;
 
 const HeaderContainer = styled.header<{ hasChildren: boolean }>(
   ({ hasChildren }) => [
+    tw`shrink-0`,
     hasChildren
       ? tw`flex justify-between items-center w-full h-20`
       : tw`flex items-center h-16 border-b border-neutral-700`,
