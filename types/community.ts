@@ -7,7 +7,10 @@ export interface Content {
   title: string;
   likeCount: number;
   gameCategory: string;
-  user: [Object];
+  user: {
+    id: number;
+    nickname: string;
+  };
 }
 
 export interface CommunityProps {
