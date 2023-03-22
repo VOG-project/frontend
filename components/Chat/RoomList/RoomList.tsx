@@ -1,15 +1,15 @@
 import { useRouter } from "next/router";
-import { useSetRecoilState } from "recoil";
 import tw from "twin.macro";
+import useChatState from "@/hooks/useChatState";
 import useToast from "@/hooks/useToast";
-import { chatState } from "@/recoil/atoms/chatState";
 import { joinChatRoomRequest } from "@/apis/chat";
 import { RoomListProps } from "@/types/chat";
 
 const RoomList = ({ roomList }: RoomListProps) => {
   const router = useRouter();
   const { toast } = useToast();
-  const setChat = useSetRecoilState(chatState);
+  const { setChat } = useChatState();
+
   const handleRoomClick = async (roomId: string) => {
     const res = await joinChatRoomRequest({ roomId, userId: 11 });
     if (res.success) {
@@ -20,9 +20,10 @@ const RoomList = ({ roomList }: RoomListProps) => {
         router.push(`/chat/${roomId}`);
       }
     } else {
-      toast.alert(res.data.error);
+      toast.alert(res.error);
     }
   };
+
   return (
     <RoomListContainer>
       {roomList.map((room) => {
