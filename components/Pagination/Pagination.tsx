@@ -19,16 +19,15 @@ const Pagination = () => {
   return (
     <PaginationContainer>
       <PrevPage onClick={handlePrevPageClick}>{getIcons("left", 20)}</PrevPage>
-      {pageList.map((page) => {
+      {pageList.map((page, index) => {
         return (
-          <>
-            <PageButton
-              isActive={curPage === page}
-              onClick={() => handlePageClick(page)}
-            >
-              {page}
-            </PageButton>
-          </>
+          <PageButton
+            key={index}
+            isActive={curPage === page}
+            onClick={() => handlePageClick(page)}
+          >
+            {page}
+          </PageButton>
         );
       })}
       <NextPage onClick={handleNextPageClick}>{getIcons("right", 20)}</NextPage>
