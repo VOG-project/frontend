@@ -55,7 +55,7 @@ const StyledButton = styled.button<{
     right?: string;
   };
 }>(({ width, bgColor, position }) => [
-  tw`my-4 h-10 rounded text-white
+  tw`my-4 h-10 w-full rounded text-white
     disabled:(bg-stone-500 text-stone-400)
   `,
   width &&
