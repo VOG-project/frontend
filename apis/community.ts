@@ -29,6 +29,12 @@ const getPostsRequest = async (category: string, page: number) => {
   return res.data;
 };
 
+const getPostRequest = async (category: string, postId: number) => {
+  const res = await customAxios().get(`/posts/${category}/${postId}`);
+
+  return res.data;
+};
+
 const updatePostRequest = async (postId: number, data: PostData) => {};
 
 const deletePostRequest = async (postId: number) => {};
@@ -36,6 +42,7 @@ const deletePostRequest = async (postId: number) => {};
 export {
   createPostRequest,
   getPostsRequest,
+  getPostRequest,
   updatePostRequest,
   deletePostRequest,
 };
