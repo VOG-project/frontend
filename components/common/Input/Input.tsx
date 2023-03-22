@@ -18,7 +18,7 @@ interface InputProps {
   width?: number;
   height?: number;
   bgColor?: "gray";
-  type?: "default" | "password" | "radio";
+  type?: "default" | "password" | "radio" | "number";
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
