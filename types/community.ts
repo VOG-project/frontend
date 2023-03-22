@@ -19,4 +19,26 @@ export interface CommunityProps {
 
 export interface CommunityQuery extends ParsedUrlQuery {
   category: string;
+  id: string;
+}
+
+export interface ContentDetail {
+  content: string;
+  gameCategory: string;
+  id: number;
+  likeCount: number;
+  title: string;
+  updatedAt: string;
+  user: {
+    updatedAt: string;
+    id: number;
+    email: string;
+    nickname: string;
+    sex: number;
+    wirterId: number;
+  };
+}
+
+export interface PostProps {
+  content?: ContentDetail;
 }
