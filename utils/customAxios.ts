@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const customAxios = () => {
   const instance = axios.create({
@@ -22,8 +22,15 @@ const customAxios = () => {
       return res;
     },
     (error) => {
-      const status = error.response.data.statusCode;
-      if (status >= 400 && status <= 404) return error.response;
+      const axiosError = error as AxiosError;
+      if (axiosError.code === "ERR_NETWORK") {
+        console.error("서버 에러");
+        throw new Error("서버에러");
+      } else {
+        console.log(error);
+        const status = error.response.data.statusCode;
+        if (status >= 400 && status <= 404) return error.response;
+      }
     }
   );
 
