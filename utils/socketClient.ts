@@ -5,7 +5,7 @@ export const socketClient = io(`${process.env.NEXT_PUBLIC_SOCKET}/chat`, {
   autoConnect: false,
 });
 
-export const handleMessageSend = (
+export const sendMessageEmit = (
   content: string,
   roomId: string,
   nickname: string
@@ -17,9 +17,21 @@ export const handleMessageSend = (
   });
 };
 
-export const handleRoomLeave = (userId: number, roomId: string) => {
+export const leaveRoomEmit = (userId: number, roomId: string) => {
   socketClient.emit("leaveChatRoom", {
     userId,
     roomId,
+  });
+};
+
+export const enterRoomEmit = (
+  userId: number,
+  nickname: string,
+  roomId: string
+) => {
+  socketClient.emit("enterChatRoom", {
+    userId: 11,
+    nickname: "test",
+    roomId: roomId,
   });
 };
