@@ -1,60 +1,62 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
+import { useState, useRef } from "react";
 import tw from "twin.macro";
+import useChatState from "@/hooks/useChatState";
 import MainLayout from "@/components/layout/MainLayout";
-import ChatMember from "./ChatMember";
 import Header from "@/components/common/Header";
-import { chatState } from "@/recoil/atoms/chatState";
-import { ChatQuery } from "@/types/chat";
-import { handleMessageSend, handleRoomLeave } from "@/utils/socketClient";
+import ChatMember from "./ChatMember";
+import ChatMessage from "./ChatMessage";
+import { sendMessageEmit } from "@/utils/socketClient";
 
 const ChatRoom = () => {
-  const router = useRouter();
   const [message, setMessage] = useState("");
-  const { id: roomId } = router.query as ChatQuery;
-  const [chat, setChat] = useRecoilState(chatState);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const { chat } = useChatState();
+  const { members, roomId } = chat;
 
   return (
     <MainLayout>
       <ChatRoomContainer>
-        <ChatMember />
+        <ChatMember members={members} roomId={roomId} />
         <ChatText>
           <Header title="#text" />
           <ChatLogs>
             <FlexBox />
             <ChatLog>
-              <ChatMessage>
-                <ChatProfile>123</ChatProfile>
-              </ChatMessage>
+              <ChatMessage />
             </ChatLog>
           </ChatLogs>
-          <ChatForm>
+          <ChatTextAreaContainer>
             <ChatTextArea
               placeholder="메시지를 입력하세요"
               onChange={(e) => {
-                setMessage(e.target.value);
+                e.target.style.height = "auto";
+                const message = e.target.value.trim();
+                if (message) {
+                  setMessage(message);
+                }
+                const scrollHeight = e.target.scrollHeight;
+                e.target.style.height = scrollHeight + "px";
               }}
+              onKeyDown={(e) => {
+                if (!e.shiftKey && e.key === "Enter") {
+                  e.preventDefault();
+                  buttonRef.current?.click();
+                }
+              }}
+              rows={1}
             ></ChatTextArea>
             <ChatBntContainer>
               <ChatSubmitBtn
+                type="button"
+                ref={buttonRef}
                 onClick={() => {
-                  console.log(message);
-                  handleMessageSend(message, chat.roomId, "test");
+                  sendMessageEmit(message, chat.roomId, "test");
                 }}
               >
                 SEND
               </ChatSubmitBtn>
-              <button
-                style={{ height: "500px" }}
-                onClick={() => {
-                  handleRoomLeave(11, chat.roomId);
-                }}
-              >
-                나가기
-              </button>
             </ChatBntContainer>
-          </ChatForm>
+          </ChatTextAreaContainer>
         </ChatText>
       </ChatRoomContainer>
     </MainLayout>
@@ -79,20 +81,16 @@ const ChatLog = tw.div`
   w-full p-8
 `;
 
-const ChatProfile = tw.div``;
-
-const ChatMessage = tw.div``;
-
 const FlexBox = tw.div`
   flex-1 w-full
 `;
 
-const ChatForm = tw.div`
+const ChatTextAreaContainer = tw.div`
   flex p-4 border-t border-neutral-700
 `;
 
 const ChatTextArea = tw.textarea`
-  shrink grow p-4 w-full h-16 bg-transparent overflow-hidden resize-none
+  shrink grow p-4 w-full bg-transparent overflow-hidden resize-none bg-gray-800
   focus:(outline-none placeholder-transparent)
 `;
 
@@ -100,5 +98,5 @@ const ChatBntContainer = tw.div`
 `;
 
 const ChatSubmitBtn = tw.button`
-  float-right w-20 h-16 bg-primary
+  float-right w-20 h-full bg-primary
 `;
