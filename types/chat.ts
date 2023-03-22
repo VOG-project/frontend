@@ -4,6 +4,11 @@ export interface ChatQuery extends ParsedUrlQuery {
   id: string;
 }
 
+export interface ChatMemberProps {
+  members: string | null;
+  roomId: string;
+}
+
 export interface ChatRoom {
   createdAt: string;
   updatedAt: string;
