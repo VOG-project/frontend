@@ -50,6 +50,7 @@ const Community = ({ data }: CommunityProps) => {
           <Pagination />
           <Button
             width={6}
+            bgColor="primary"
             position={{ type: "absolute", top: "0", right: "8rem" }}
             onClick={handleEditButton}
           >
