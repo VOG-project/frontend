@@ -2,22 +2,25 @@ import tw from "twin.macro";
 import Comments from "../Comments";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
+import { PostProps } from "@/types/community";
+import timeDifference from "@/utils/timeDifference";
 
-const Post = () => {
+const Post = ({ content }: PostProps) => {
+  if (!content) return null;
   return (
     <PostContainer>
       <PostTitle>
         <PostSubject>
-          <PostGame>[LOL]</PostGame>
-          랭겜
+          <PostGame>[{content.gameCategory}]</PostGame>
+          {content.title}
         </PostSubject>
       </PostTitle>
       <PostAuthor>
-        사부로
+        {content.user.nickname}
         <PostInfoContainer>
           <PostInfo>
             {getIcons("thumb", 16)}
-            <PostInfoText>200</PostInfoText>
+            <PostInfoText>{content.likeCount}</PostInfoText>
           </PostInfo>
           <PostInfo>
             {getIcons("eye", 16)}
@@ -25,17 +28,17 @@ const Post = () => {
           </PostInfo>
           <PostInfo>
             {getIcons("time", 16)}
-            <PostInfoText>2023.01.01</PostInfoText>
+            <PostInfoText>{timeDifference(content.updatedAt)}</PostInfoText>
           </PostInfo>
         </PostInfoContainer>
       </PostAuthor>
       <PostTextContainer>
-        <PostText>안녕하세요 랭겜할래요</PostText>
+        <PostText>{content.content}</PostText>
         <PostLike>
-          <Button width={6}>
+          <Button bgColor="primary" width={6}>
             <LikeButton>
               {getIcons("thumb", 16)}
-              <LikeCount>20</LikeCount>
+              <LikeCount>{content.likeCount}</LikeCount>
             </LikeButton>
           </Button>
         </PostLike>

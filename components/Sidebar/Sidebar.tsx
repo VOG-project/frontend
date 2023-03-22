@@ -8,7 +8,6 @@ import { selectedGameState } from "@/recoil/atoms/selectedGameState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
-import { getIcons } from "../icons";
 import { NAV_MENU } from "@/constants/nav";
 
 const Sidebar = () => {
@@ -27,10 +26,7 @@ const Sidebar = () => {
     <SidebarContainer>
       <Header title="VOG" />
       <Profile>
-        <DropdownWrapper>
-          <UserCard />
-          <DropdwonIcon>{getIcons("down", 24)}</DropdwonIcon>
-        </DropdownWrapper>
+        <UserCard />
       </Profile>
       <SidebarMenu>
         {NAV_MENU.map((menu) => {
@@ -66,10 +62,6 @@ const Profile = tw.div`
 
 const DropdownWrapper = tw.div`
   relative cursor-pointer
-`;
-
-const DropdwonIcon = tw.div`
-  absolute align-middle top-5 right-0
 `;
 
 const SidebarMenu = tw.ul`

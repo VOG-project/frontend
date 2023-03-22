@@ -14,7 +14,7 @@ interface ButtonProps {
   };
   disabled?: boolean;
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: () => void | Promise<void>;
 }
 
 const Button = ({
