@@ -5,15 +5,17 @@ import { getIcons } from "@/components/icons";
 
 interface ModalProps {
   isOpen: boolean;
+  hasFooter?: boolean;
   title: string;
   content?: string;
   children?: ReactNode;
   handleClose: () => void;
-  handleConfirm: () => void;
+  handleConfirm?: () => void;
 }
 
 const Modal = ({
   isOpen,
+  hasFooter = true,
   title,
   content,
   children,
@@ -33,24 +35,26 @@ const Modal = ({
           <ModalText>{content}</ModalText>
           {children}
         </ModalBody>
-        <ModalFooter>
-          <Button
-            type="button"
-            bgColor="secondary"
-            width={4}
-            onClick={handleClose}
-          >
-            취소
-          </Button>
-          <Button
-            type="button"
-            bgColor="primary"
-            width={4}
-            onClick={handleConfirm}
-          >
-            확인
-          </Button>
-        </ModalFooter>
+        {hasFooter && (
+          <ModalFooter>
+            <Button
+              type="button"
+              bgColor="secondary"
+              width={4}
+              onClick={handleClose}
+            >
+              취소
+            </Button>
+            <Button
+              type="button"
+              bgColor="primary"
+              width={4}
+              onClick={handleConfirm}
+            >
+              확인
+            </Button>
+          </ModalFooter>
+        )}
       </ModalContainer>
     </ModalWrapper>
   );
