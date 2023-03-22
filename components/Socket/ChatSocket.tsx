@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
 import tw from "twin.macro";
-import { socketClient } from "@/utils/socketClient";
-import { chatState } from "@/recoil/atoms/chatState";
+import useChatState from "@/hooks/useChatState";
 import Button from "../common/Button";
+import { socketClient } from "@/utils/socketClient";
 import { enterRoomEmit } from "@/utils/socketClient";
 
 const ChatSocket = () => {
-  const [chat, setChat] = useRecoilState(chatState);
+  const { chat } = useChatState();
   // const constraints = {
   //   audio: true,
   // };
@@ -26,10 +25,7 @@ const ChatSocket = () => {
     socketClient.on("leaveChat", (data) => {
       const { exit } = data;
       if (exit) {
-        setChat((prev) => {
-          return { ...prev, roomId: "" };
-        });
-        socketClient.disconnect();
+        console.log(data);
       }
     });
 
