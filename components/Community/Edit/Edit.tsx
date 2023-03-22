@@ -5,6 +5,8 @@ import tw from "twin.macro";
 import MainLayout from "@/components/layout/MainLayout";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
+import { createPostRequest } from "@/apis/community";
+import { CommunityQuery } from "@/types/community";
 import "react-quill/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
@@ -21,11 +23,22 @@ const Edit = () => {
   const [text, setText] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const { category } = router.query as CommunityQuery;
 
   const handleImageInputClick = () => {
     if (inputRef.current) {
       inputRef.current.click();
     }
+  };
+
+  const handleSumbit = async () => {
+    const res = await createPostRequest(category, {
+      writerId: 3,
+      title: "테스트",
+      content: text,
+      gameCategory: "LOL",
+    });
+    console.log(res);
   };
 
   return (
@@ -50,10 +63,15 @@ const Edit = () => {
           </EditInputButton>
           <EditImageInput type={"file"} ref={inputRef}></EditImageInput>
           <EditButtonContainer>
-            <Button type="button" width={8}>
+            <Button
+              type="button"
+              width={8}
+              bgColor="primary"
+              onClick={handleSumbit}
+            >
               글쓰기
             </Button>
-            <Button type="button" width={8}>
+            <Button type="button" width={8} bgColor="secondary">
               취소
             </Button>
           </EditButtonContainer>
