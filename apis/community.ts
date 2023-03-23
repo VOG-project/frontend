@@ -35,6 +35,16 @@ const getPostRequest = async (category: string, postId: number) => {
   return res.data;
 };
 
+const getPostCount = async (category: string) => {
+  const res = await customAxios().get(`/posts/count`, {
+    params: {
+      board: category,
+    },
+  });
+
+  return res.data;
+};
+
 const updatePostRequest = async (postId: number, data: PostData) => {};
 
 const deletePostRequest = async (postId: number) => {};
@@ -43,6 +53,7 @@ export {
   createPostRequest,
   getPostsRequest,
   getPostRequest,
+  getPostCount,
   updatePostRequest,
   deletePostRequest,
 };
