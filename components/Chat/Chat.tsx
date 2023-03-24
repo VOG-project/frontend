@@ -8,12 +8,12 @@ import Header from "../common/Header";
 import Search from "../common/Search";
 import Pagination from "../Pagination";
 import Button from "../common/Button";
-import { getChatRoomsRequest } from "@/apis/chat";
+import { getChatRoomsRequest, getChatRoomCountRequest } from "@/apis/chat";
 import { ChatProps } from "@/types/chat";
 
 const Chat = ({ data }: ChatProps) => {
+  const { result: roomList, chatRoomCount } = data;
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
-  const roomList = data.result;
 
   return (
     <MainLayout>
@@ -21,20 +21,15 @@ const Chat = ({ data }: ChatProps) => {
         <Header title="채팅" />
         <ChatContainer>
           <SearchContainer>
+            <Button width={6} bgColor="primary" onClick={handleModalOpen}>
+              방생성
+            </Button>
             <Search />
           </SearchContainer>
           <RoomList roomList={roomList} />
         </ChatContainer>
         <ChatButtonContainer>
-          <Pagination />
-          <Button
-            width={6}
-            bgColor="primary"
-            position={{ type: "absolute", top: "0", right: "8rem" }}
-            onClick={handleModalOpen}
-          >
-            방생성
-          </Button>
+          <Pagination count={chatRoomCount} />
         </ChatButtonContainer>
       </ChatWrapper>
       <ChatEdit isOpen={isOpen} handleModalClose={handleModalClose} />
@@ -45,9 +40,14 @@ const Chat = ({ data }: ChatProps) => {
 export default Chat;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await getChatRoomsRequest({ page: 1 });
-
-  return { props: { data: res } };
+  const res = await getChatRoomsRequest(1);
+  const chatRoomCountRes = await getChatRoomCountRequest();
+  console.log(chatRoomCountRes);
+  return {
+    props: {
+      data: { ...res, chatRoomCount: 20 },
+    },
+  };
 };
 
 const ChatWrapper = tw.article`
@@ -59,9 +59,9 @@ const ChatContainer = tw.div`
 `;
 
 const SearchContainer = tw.div`
-  flex justify-end py-4
+  flex items-center justify-between py-4
 `;
 
 const ChatButtonContainer = tw.div`
-  relative p-4
+  relative p-4 clear-both
 `;
