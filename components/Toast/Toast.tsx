@@ -26,5 +26,5 @@ const Toast = () => {
 export default Toast;
 
 const ToastContainer = tw.div`
-  fixed w-full h-auto z-[100]
+  flex items-center justify-center h-auto z-[100]
 `;
