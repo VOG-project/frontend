@@ -13,7 +13,8 @@ import { getPostsRequest } from "@/apis/community";
 import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 
-const Community = ({ data }: CommunityProps) => {
+const Community = ({ data, postCount }: CommunityProps) => {
+  console.log(data);
   const [contents, setContents] = useState(data.result);
   const router = useRouter();
   const query = router.query as CommunityQuery;
@@ -41,13 +42,13 @@ const Community = ({ data }: CommunityProps) => {
       <CommunityWrapper>
         <Navigation category={category} />
         <CommunityContainer>
-          <Header title={title ? title : "전체"}>
+          <Header title={title ? title : ""}>
             <Search />
           </Header>
           <Contents contents={contents} category={category} />
         </CommunityContainer>
         <CommunityButtonContainer>
-          <Pagination />
+          <Pagination count={postCount} />
           <Button
             width={6}
             bgColor="primary"
@@ -67,6 +68,7 @@ export default Community;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const query = context.query as CommunityQuery;
   const category = query.category;
+
   const res = await getPostsRequest(category, 1);
 
   return { props: { data: res } };
