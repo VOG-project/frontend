@@ -4,7 +4,7 @@ export const chatState = atom({
   key: "Chat",
   default: {
     members: null,
-    message: "",
+    messages: "",
     roomId: "",
   },
 });
