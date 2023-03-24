@@ -3,7 +3,11 @@ import tw, { styled } from "twin.macro";
 import usePagination from "@/hooks/usePagination";
 import { getIcons } from "../icons";
 
-const Pagination = () => {
+interface PaginationProps {
+  count: number;
+}
+
+const Pagination = ({ count }: PaginationProps) => {
   const [curPage, setCurPage] = useState(1);
   const {
     pageList,
@@ -11,7 +15,7 @@ const Pagination = () => {
     handlePrevPageClick,
     handlePageClick,
   } = usePagination({
-    totalPage: 30,
+    totalPage: Math.ceil(count / 10),
     pageRange: 10,
     curPage,
     setCurPage,
