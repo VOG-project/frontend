@@ -15,8 +15,8 @@ const createChatRoomRequest = async (
 };
 
 const joinChatRoomRequest = async (roomId: string, userId: number) => {
-  const res = await customAxios().post(`/chats/rooms/${roomId}`, {
-    userId,
+  const res = await customAxios().get(`/chats/rooms/${roomId}`, {
+    params: { userId: userId },
   });
 
   return res.data;
