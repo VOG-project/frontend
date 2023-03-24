@@ -4,6 +4,7 @@ import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
 import { loginRequest, LoginRequest } from "@/apis/auth";
 import { loginState } from "@/recoil/atoms/loginState";
+import { userState } from "@/recoil/atoms/userState";
 import useToast from "@/hooks/useToast";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
@@ -11,6 +12,7 @@ import Button from "../common/Button";
 
 const Login = () => {
   const setIsLogin = useSetRecoilState(loginState);
+  const setUser = useSetRecoilState(userState);
   const router = useRouter();
   const { toast } = useToast();
   const { register, handleSubmit } = useLoginForm();
@@ -22,6 +24,12 @@ const Login = () => {
     const res = await loginRequest({ email, password });
     if (res.success) {
       console.log(res.result);
+      setUser((prev) => {
+        return {
+          ...prev,
+          userId: res.result.userId,
+        };
+      });
       setIsLogin(true);
       router.push("/select-game");
     } else {
