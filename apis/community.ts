@@ -1,19 +1,17 @@
 import customAxios from "@/utils/customAxios";
 
 interface PostData {
-  writerId: number;
   title: string;
   content: string;
-  gameCategory?: string;
+  postCategory?: string;
 }
 
 const createPostRequest = async (category: string, data: PostData) => {
-  const { writerId, title, content, gameCategory } = data;
+  const { title, content, postCategory } = data;
   const res = await customAxios().post(`/posts/${category}`, {
-    writerId,
     title,
     content,
-    gameCategory,
+    postCategory,
   });
 
   return res.data;
@@ -46,9 +44,21 @@ const getPostCount = async (category: string) => {
   return res.data;
 };
 
-const updatePostRequest = async (postId: number, data: PostData) => {};
+const updatePostRequest = async (postId: number, data: PostData) => {
+  const { title, content } = data;
+  const res = await customAxios().patch(`/posts/${postId}`, {
+    title,
+    content,
+  });
 
-const deletePostRequest = async (postId: number) => {};
+  return res.data;
+};
+
+const deletePostRequest = async (postId: number) => {
+  const res = await customAxios().delete(`/posts/${postId}`, {});
+
+  return res.data;
+};
 
 export {
   createPostRequest,
