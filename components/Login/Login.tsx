@@ -1,15 +1,18 @@
+import { useSetRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
 import { loginRequest, LoginRequest } from "@/apis/auth";
-import { setSessionStorage } from "@/utils/sessionStorage";
-import { AUTH_KEY } from "@/constants/Auth";
+import { loginState } from "@/recoil/atoms/loginState";
+import useToast from "@/hooks/useToast";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
 
 const Login = () => {
+  const setIsLogin = useSetRecoilState(loginState);
   const router = useRouter();
+  const { toast } = useToast();
   const { register, handleSubmit } = useLoginForm();
   const handleSignUpClick = () => {
     router.push("/sign-up");
@@ -18,10 +21,11 @@ const Login = () => {
   const handleLogin = async ({ email, password }: LoginRequest) => {
     const res = await loginRequest({ email, password });
     if (res.success) {
-      setSessionStorage(AUTH_KEY, res.result);
+      console.log(res.result);
+      setIsLogin(true);
       router.push("/select-game");
     } else {
-      console.log(res.error);
+      toast.alert(res.error);
     }
   };
   return (
