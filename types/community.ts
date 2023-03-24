@@ -18,6 +18,7 @@ export interface CommunityProps {
     success: boolean;
     result: Content[];
   };
+  postCount: number;
 }
 
 export interface CommunityQuery extends ParsedUrlQuery {
