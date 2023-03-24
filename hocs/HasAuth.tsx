@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { getSessionStorage } from "@/utils/sessionStorage";
-import { AUTH_KEY } from "@/constants/Auth";
+import { useRecoilValue } from "recoil";
+import { loginState } from "@/recoil/atoms/loginState";
 
 const hasAuth =
   (Component: React.FC | NextPage): React.FC =>
   <T extends {}>(props: T) => {
+    const isLogin = useRecoilValue(loginState);
     const router = useRouter();
     useEffect(() => {
-      if (!getSessionStorage(AUTH_KEY)) {
+      if (!isLogin) {
         router.push("/login");
       }
     });
