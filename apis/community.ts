@@ -20,8 +20,9 @@ const createPostRequest = async (category: string, data: PostData) => {
 };
 
 const getPostsRequest = async (category: string, page: number) => {
-  const res = await customAxios().get(`/posts/${category}`, {
+  const res = await customAxios().get("/posts", {
     params: {
+      board: category,
       page,
     },
   });
