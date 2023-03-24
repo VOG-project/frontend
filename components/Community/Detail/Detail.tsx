@@ -6,17 +6,28 @@ import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import Post from "./Post";
+import { getPostRequest } from "@/apis/community";
 import { getTitle } from "@/utils/getTitle";
 import { getIcons } from "@/components/icons";
+import { CommunityQuery, ContentDetail } from "@/types/community";
 
 const Detail = () => {
+  const [content, setContent] = useState<ContentDetail>();
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const router = useRouter();
-  const query = router.query;
+  const query = router.query as CommunityQuery;
+
   useEffect(() => {
-    if (typeof query.category === "string") setCategory(query.category);
+    setCategory(query.category);
     setTitle(getTitle(category));
+    (async () => {
+      const res = await getPostRequest(query.category, Number(query.id));
+
+      if (res.success) {
+        setContent(res.result);
+      }
+    })();
   }, [query, category]);
 
   const handleListButton = () => {
@@ -28,11 +39,11 @@ const Detail = () => {
         <Navigation category={category} />
         <DetailContainer>
           <Header title={title}>
-            <Button width={5} transparent={true} onClick={handleListButton}>
+            <Button width={5} bgColor="transparent" onClick={handleListButton}>
               <ListButton>{getIcons("list", 24)}목록</ListButton>
             </Button>
           </Header>
-          <Post />
+          <Post content={content} />
         </DetailContainer>
       </DetailWrapper>
     </MainLayout>
