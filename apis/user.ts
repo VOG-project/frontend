@@ -63,6 +63,10 @@ const changePasswordRequest = async ({
   return res.data;
 };
 
+const uploadProfilePicRequest = async (userId, profilePic) => {
+  const res = await customAxios().patch(`/uploads/users/${userId}`);
+};
+
 const withdrawalRequest = async ({ userId, password }: WithdrawalRequest) => {
   const res = await customAxios().delete(`/users/${userId}/withdrawal`, {
     data: {
