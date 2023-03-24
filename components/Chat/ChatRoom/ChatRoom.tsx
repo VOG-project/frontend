@@ -25,11 +25,9 @@ const ChatRoom = () => {
     e.target.style.height = "auto";
     const scrollHeight = e.target.scrollHeight;
     const message = e.target.value.trim();
-
     if (message) {
       setMessage(message);
     }
-
     e.target.style.height = scrollHeight + "px";
   };
 
@@ -74,11 +72,11 @@ const ChatRoom = () => {
 export default ChatRoom;
 
 const ChatRoomContainer = tw.article`
-  flex w-full ml-64 p-4
+  flex w-full ml-64 p-4 gap-2
 `;
 
 const ChatText = tw.div`
-  flex flex-col w-full h-full rounded-r 
+  flex flex-col w-full h-full px-2 bg-white/5
 `;
 
 const ChatLogs = tw.div`
