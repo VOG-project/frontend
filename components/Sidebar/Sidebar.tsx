@@ -3,28 +3,45 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import tw from "twin.macro";
-import { useRecoilValue } from "recoil";
-import { selectedGameState } from "@/recoil/atoms/selectedGameState";
+import { useRecoilValue, useRecoilState } from "recoil";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
+import { getIcons } from "../icons";
+import { logoutRequest } from "@/apis/auth";
+import { selectedGameState } from "@/recoil/atoms/selectedGameState";
+import { loginState } from "@/recoil/atoms/loginState";
 import { NAV_MENU } from "@/constants/nav";
 
 const Sidebar = () => {
   const router = useRouter();
   const game = useRecoilValue(selectedGameState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
     setGameLogo(getGameLogo(game));
   }, [game]);
 
+  const handleVogClick = () => {
+    router.push("/");
+  };
+
   const handleLogoClick = () => {
     router.push("/select-game");
   };
 
+  const handleLogout = async () => {
+    const res = await logoutRequest();
+    if (res.success) {
+      setIsLogin(false);
+      router.push("/");
+    }
+  };
   return (
     <SidebarContainer>
-      <Header title="VOG" />
+      <VogLogo onClick={handleVogClick}>
+        <Header title="VOG" />
+      </VogLogo>
       <Profile>
         <UserCard />
       </Profile>
@@ -40,6 +57,14 @@ const Sidebar = () => {
             </SidebarItem>
           );
         })}
+        {isLogin && (
+          <SidebarItem>
+            <Logout onClick={handleLogout}>
+              <ItemIcon>{getIcons("exit", 34)}</ItemIcon>
+              로그아웃
+            </Logout>
+          </SidebarItem>
+        )}
       </SidebarMenu>
       {gameLogo && (
         <SidebarGameLogo onClick={handleLogoClick}>
@@ -57,19 +82,23 @@ const SidebarContainer = tw.nav`
 `;
 
 const Profile = tw.div`
-  border-b border-neutral-700
+  relative border-b border-neutral-700
 `;
 
-const DropdownWrapper = tw.div`
-  relative cursor-pointer
+const VogLogo = tw.div`
+  cursor-pointer
 `;
 
 const SidebarMenu = tw.ul`
-  p-4 font-semibold
+  h-full p-4 font-semibold
 `;
 
 const SidebarItem = tw.li`
   w-full my-2
+`;
+
+const Logout = tw.div`
+  flex items-center
 `;
 
 const SidebarLink = tw(Link)`
@@ -81,5 +110,5 @@ const ItemIcon = tw.div`
 `;
 
 const SidebarGameLogo = tw.div`
-  grow flex flex-col justify-end cursor-pointer
+  flex flex-col justify-end cursor-pointer
 `;
