@@ -43,11 +43,11 @@ const ChatMember = ({ members, roomId }: ChatMemberProps) => {
 export default ChatMember;
 
 const ChatMemberContainer = tw.div`
-  relative shrink-0 w-80 bg-zinc-900 rounded-l
+  flex flex-col shrink-0 w-80 px-2 bg-zinc-900
 `;
 
 const ChatMemberList = tw.div`
-  flex flex-col
+  flex flex-col h-full
 `;
 
 const MemberInfo = tw.div`
@@ -67,5 +67,5 @@ const ExitIcon = tw.div`
 `;
 
 const ChatButtonContainer = tw.div`
-  absolute w-full px-4 bottom-0
+  justify-end w-full
 `;
