@@ -1,17 +1,23 @@
 import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
 import tw from "twin.macro";
 import useChatState from "@/hooks/useChatState";
 import useToast from "@/hooks/useToast";
+import { userState } from "@/recoil/atoms/userState";
 import { joinChatRoomRequest } from "@/apis/chat";
 import { RoomListProps } from "@/types/chat";
 
 const RoomList = ({ roomList }: RoomListProps) => {
   const router = useRouter();
+  const user = useRecoilValue(userState);
+  const userId = user.userId;
   const { toast } = useToast();
   const { setChat } = useChatState();
 
   const handleRoomClick = async (roomId: string) => {
-    const res = await joinChatRoomRequest(roomId, 11);
+    if (!userId) return;
+
+    const res = await joinChatRoomRequest(roomId, userId);
     if (res.success) {
       if (res.result.canParticipant) {
         setChat((prev) => {
@@ -69,10 +75,6 @@ const RoomGame = tw.span`
 
 const RoomTitle = tw.span`
   pt-4 h-full text-3xl
-`;
-
-const RoomOwner = tw.span`
-
 `;
 
 const RoomMemberCount = tw.div`
