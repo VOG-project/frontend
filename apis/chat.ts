@@ -1,14 +1,5 @@
 import customAxios from "@/utils/customAxios";
 
-interface JoinChatRoomRequest {
-  roomId: string;
-  userId: number;
-}
-
-interface GetChatRoomsRequest {
-  page: number;
-}
-
 const createChatRoomRequest = async (
   userId: number,
   title: string,
@@ -23,7 +14,7 @@ const createChatRoomRequest = async (
   return res.data;
 };
 
-const joinChatRoomRequest = async ({ roomId, userId }: JoinChatRoomRequest) => {
+const joinChatRoomRequest = async (roomId: string, userId: number) => {
   const res = await customAxios().post(`/chats/rooms/${roomId}`, {
     userId,
   });
@@ -31,8 +22,8 @@ const joinChatRoomRequest = async ({ roomId, userId }: JoinChatRoomRequest) => {
   return res.data;
 };
 
-const getChatRoomsRequest = async ({ page }: GetChatRoomsRequest) => {
-  const res = await customAxios().get(`/chats/rooms/`, {
+const getChatRoomsRequest = async (page: number) => {
+  const res = await customAxios().get("/chats/rooms", {
     params: {
       page,
     },
@@ -40,4 +31,16 @@ const getChatRoomsRequest = async ({ page }: GetChatRoomsRequest) => {
 
   return res.data;
 };
-export { createChatRoomRequest, joinChatRoomRequest, getChatRoomsRequest };
+
+const getChatRoomCountRequest = async () => {
+  const res = await customAxios().get("/chats/rooms/count");
+
+  return res.data;
+};
+
+export {
+  createChatRoomRequest,
+  joinChatRoomRequest,
+  getChatRoomsRequest,
+  getChatRoomCountRequest,
+};
