@@ -34,7 +34,7 @@ const ChatProfilePic = tw.div`
 `;
 
 const ProfilePic = tw(Image)`
-  w-16 h-16 rounded-full
+  w-20 h-20 rounded-full
 `;
 
 const ChatContent = tw.div``;
@@ -44,5 +44,5 @@ const Nickname = tw.div`
 `;
 
 const Content = tw.p`
-  w-auto p-4 rounded-lg bg-zinc-800 break-all whitespace-pre-wrap
+  w-auto p-4 border border-primary rounded-lg bg-zinc-800 break-all whitespace-pre-wrap
 `;
