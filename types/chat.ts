@@ -27,5 +27,6 @@ export interface ChatProps {
   data: {
     success: boolean;
     result: ChatRoom[];
+    chatRoomCount: number;
   };
 }
