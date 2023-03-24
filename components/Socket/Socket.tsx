@@ -11,5 +11,5 @@ const Socket = () => {
 export default Socket;
 
 const SocketContainer = tw.div`
-  fixed pl-64 bottom-0 w-full z-[100]
+  fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 pl-64 w-full max-w-[120rem] z-[100]
 `;
