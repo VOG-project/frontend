@@ -1,12 +1,16 @@
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useChatState from "@/hooks/useChatState";
 import Button from "../common/Button";
 import { socketClient } from "@/utils/socketClient";
-import { enterRoomEmit } from "@/utils/socketClient";
+import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
+import { getIcons } from "../icons";
 
 const ChatSocket = () => {
   const { chat } = useChatState();
+  const router = useRouter();
+  console.log(router.pathname);
   // const constraints = {
   //   audio: true,
   // };
@@ -47,8 +51,14 @@ const ChatSocket = () => {
 
   return (
     <ChatSocketContainer>
-      <Button bgColor="primary" onClick={() => {}}>
-        소켓
+      <Button
+        width={6}
+        bgColor="secondary"
+        onClick={() => {
+          leaveRoomEmit;
+        }}
+      >
+        <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
       </Button>
     </ChatSocketContainer>
   );
@@ -57,5 +67,9 @@ const ChatSocket = () => {
 export default ChatSocket;
 
 const ChatSocketContainer = tw.div`
-  w-full h-16 bg-white/70
+  w-full h-16 bg-black/80
+`;
+
+const LeaveChatButtonIcon = tw.div`
+  flex justify-center
 `;
