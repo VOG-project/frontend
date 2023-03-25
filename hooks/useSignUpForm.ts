@@ -19,22 +19,51 @@ const useSignUpForm = () => {
     confirmPassword: yup
       .string()
       .oneOf([yup.ref("password"), null], "비밀번호가 일치하지 않습니다."),
-    sex: yup.string().required(),
+    gender: yup.string().required(),
   });
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       email: "",
       nickname: "",
       password: "",
       confirmPassword: "",
-      sex: "",
+      gender: "",
     },
     resolver: yupResolver(signUpSchema),
   });
 
-  return { register, handleSubmit };
+  const watchEmail = watch("email");
+  const watchNickname = watch("nickname");
+  const watchPassword = watch("password");
+  const watchConfirmPassword = watch("confirmPassword");
+  const watchGender = watch("gender");
+  const emailError = errors.email;
+  const nicknameError = errors.nickname;
+  const passwordError = errors.password;
+  const confirmPasswordError = errors.confirmPassword;
+  const genderError = errors.gender;
+
+  return {
+    watchEmail,
+    watchNickname,
+    watchPassword,
+    watchConfirmPassword,
+    watchGender,
+    emailError,
+    nicknameError,
+    passwordError,
+    confirmPasswordError,
+    genderError,
+    register,
+    handleSubmit,
+  };
 };
 
 export default useSignUpForm;
