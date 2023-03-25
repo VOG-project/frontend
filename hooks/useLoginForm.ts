@@ -17,7 +17,12 @@ const useLoginForm = () => {
       .required("비밀번호를 입력해주세요"),
   });
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -26,7 +31,22 @@ const useLoginForm = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  return { register, handleSubmit };
+  const watchEmail = watch("email");
+
+  const watchPassword = watch("password");
+
+  const emailError = errors.email;
+
+  const passwordError = errors.password;
+
+  return {
+    watchEmail,
+    watchPassword,
+    emailError,
+    passwordError,
+    register,
+    handleSubmit,
+  };
 };
 
 export default useLoginForm;
