@@ -4,12 +4,16 @@ import Button from "../common/Button";
 const OAuthLogin = () => {
   return (
     <OAuthContainer>
-      <Button>Google</Button>
-      <Button>Naver</Button>
+      <Button bgColor="secondary" width={18}>
+        Google
+      </Button>
+      <Button bgColor="secondary" width={18}>
+        Naver
+      </Button>
     </OAuthContainer>
   );
 };
 
 export default OAuthLogin;
 
-const OAuthContainer = tw.div`flex flex-col px-10`;
+const OAuthContainer = tw.div`flex flex-col items-center px-10`;
