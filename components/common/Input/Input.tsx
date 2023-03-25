@@ -8,7 +8,7 @@ interface InputProps {
     | "password"
     | "confirmPassword"
     | "nickname"
-    | "sex"
+    | "gender"
     | "currentPassword"
     | "title"
     | "maximumMember"
