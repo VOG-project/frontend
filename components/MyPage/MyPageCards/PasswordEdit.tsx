@@ -43,7 +43,7 @@ const PasswordEdit = () => {
     <PasswordEditContainer>
       <Left
         title="비밀번호 변경"
-        description="비밀번호 변경 후 로그아웃 됩니다. 비밀번호는 8~16자리의 영문 대소문자, 숫자, 특수문자를 조합하여 설정해 주세요."
+        description="비밀번호 변경 후 로그아웃 됩니다. 비밀번호는 8~15자리의 영문 대소문자, 숫자, 특수문자를 조합하여 설정해 주세요."
       />
       <Right>
         <PasswordEditForm onSubmit={handleSubmit(handlePasswordEditSubmit)}>
