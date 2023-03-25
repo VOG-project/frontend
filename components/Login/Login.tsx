@@ -9,13 +9,21 @@ import useToast from "@/hooks/useToast";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
+import ErrorMessage from "../common/ErrorMessage";
 
 const Login = () => {
   const setIsLogin = useSetRecoilState(loginState);
   const setUser = useSetRecoilState(userState);
   const router = useRouter();
   const { toast } = useToast();
-  const { register, handleSubmit } = useLoginForm();
+  const {
+    watchEmail,
+    watchPassword,
+    emailError,
+    passwordError,
+    register,
+    handleSubmit,
+  } = useLoginForm();
   const handleSignUpClick = () => {
     router.push("/sign-up");
   };
@@ -39,18 +47,34 @@ const Login = () => {
   return (
     <LoginWrapper>
       <LoginContainer>
-        <h1>VOG</h1>
         <LoginForm onSubmit={handleSubmit(handleLogin)}>
-          <InputContainer>
-            <Input register={register("email")} placeholder="이메일" />
-          </InputContainer>
-          <InputContainer>
+          <LoginTitle>VOG 로그인</LoginTitle>
+          <LoginInputContainer>
+            <Input
+              register={register("email")}
+              placeholder="이메일"
+              height={3}
+              bgColor="gray"
+            />
+            {watchEmail && emailError && (
+              <ErrorMessage>유효한 이메일을 입력해주세요.</ErrorMessage>
+            )}
+          </LoginInputContainer>
+          <LoginInputContainer>
             <Input
               register={register("password")}
               type="password"
+              height={3}
               placeholder="비밀번호"
+              bgColor="gray"
             />
-          </InputContainer>
+            {watchPassword && passwordError && (
+              <ErrorMessage>
+                비밀번호는 8~15자리의 영문 대소문자, 특수문자, 숫자로
+                구성되어야합니다.
+              </ErrorMessage>
+            )}
+          </LoginInputContainer>
           <Button type="submit" bgColor="primary">
             로그인
           </Button>
@@ -71,20 +95,24 @@ const Login = () => {
 export default Login;
 
 const LoginWrapper = tw.section`
-relative flex items-center justify-center h-full text-black bg-[url("./image/valorant.jpg")] bg-cover
-after:(absolute inset-0 bg-black opacity-20)
+relative flex items-center justify-center h-full bg-[url("./image/valorant.jpg")] bg-cover
+after:(absolute inset-0 bg-black/50)
 `;
 
-const LoginContainer = tw.div`py-4 w-96 rounded drop-shadow bg-white z-10`;
+const LoginContainer = tw.div`py-10 w-[28rem] rounded drop-shadow bg-black/80 z-10`;
 
-const LoginForm = tw.form`flex flex-col px-10`;
+const LoginTitle = tw.h2`
+  text-3xl font-bold
+`;
 
-const InputContainer = tw.div`relative flex flex-col my-4 border-b border-black`;
+const LoginInputContainer = tw.div`w-full`;
+
+const LoginForm = tw.form`flex flex-col px-16 gap-4`;
 
 const Or = tw.div`
   relative w-full text-center
-  before:(absolute top-3 left-5 w-2/5 h-px bg-black)
-  after:(absolute top-3 right-5 w-2/5 h-px bg-black)
+  before:(absolute top-3 left-5 w-2/5 h-px bg-white)
+  after:(absolute top-3 right-5 w-2/5 h-px bg-white)
 `;
 
 const SignUpButtonContainer = tw.div`flex m-auto w-80 items-center justify-around`;
