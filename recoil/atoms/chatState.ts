@@ -1,10 +1,12 @@
 import { atom } from "recoil";
+import { ChatState } from "@/types/chat";
 
-export const chatState = atom({
+export const chatState = atom<ChatState>({
   key: "Chat",
   default: {
-    members: null,
-    messages: "",
+    chatParticipant: [],
+    messages: [],
+    title: "",
     roomId: "",
   },
 });
