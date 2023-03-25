@@ -16,5 +16,5 @@ const ErrorMessage = ({ children }: ErrorMessageProps) => {
 export default ErrorMessage;
 
 const StyledErrorMessage = tw.p`
-  px-4 text-red-700 mb-2
+  px-2 text-red-600 mb-2
 `;
