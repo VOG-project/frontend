@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useModal from "@/hooks/useModal";
+import useUserState from "@/hooks/useUserState";
+import useChatState from "@/hooks/useChatState";
+import useToast from "@/hooks/useToast";
 import MainLayout from "../layout/MainLayout";
 import RoomList from "./RoomList";
 import ChatEdit from "./ChatEdit";
@@ -8,12 +13,68 @@ import Header from "../common/Header";
 import Search from "../common/Search";
 import Pagination from "../Pagination";
 import Button from "../common/Button";
-import { getChatRoomsRequest, getChatRoomCountRequest } from "@/apis/chat";
-import { ChatProps } from "@/types/chat";
+import {
+  createChatRoomRequest,
+  joinChatRoomRequest,
+  getChatRoomsRequest,
+  getChatRoomCountRequest,
+} from "@/apis/chat";
+import { ChatProps, ChatEditValue } from "@/types/chat";
 
 const Chat = ({ data }: ChatProps) => {
-  const { result: roomList, chatRoomCount } = data;
+  const router = useRouter();
+  const { result, chatRoomCount } = data;
+  const [roomList, setRoomList] = useState(result);
+  const { userId } = useUserState();
+  const { setChat } = useChatState();
+  const { toast } = useToast();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
+
+  useEffect(() => {
+    (async () => {
+      const res = await getChatRoomsRequest(1);
+      console.log(res);
+      setRoomList(res.result);
+    })();
+  }, []);
+
+  const handleChatRoomCreate = async (data: ChatEditValue) => {
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+
+    const { title, maximumMember } = data;
+    const res = await createChatRoomRequest(userId, title, maximumMember);
+    if (res.success) {
+      const { roomId } = res.result;
+      setChat((prev) => {
+        return { ...prev, roomId: roomId };
+      });
+      router.push(`/chat/${roomId}`);
+    } else {
+      console.log(res);
+    }
+  };
+
+  const handleRoomClick = async (roomId: string) => {
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+
+    const res = await joinChatRoomRequest(roomId, userId);
+    if (res.success) {
+      if (res.result.canParticipant) {
+        setChat((prev) => {
+          return { ...prev, roomId: roomId };
+        });
+        router.push(`/chat/${roomId}`);
+      }
+    } else {
+      toast.alert(res.error);
+    }
+  };
 
   return (
     <MainLayout>
@@ -26,13 +87,17 @@ const Chat = ({ data }: ChatProps) => {
             </Button>
             <Search />
           </SearchContainer>
-          <RoomList roomList={roomList} />
+          <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
         </ChatContainer>
         <ChatButtonContainer>
           <Pagination count={chatRoomCount} />
         </ChatButtonContainer>
       </ChatWrapper>
-      <ChatEdit isOpen={isOpen} handleModalClose={handleModalClose} />
+      <ChatEdit
+        isOpen={isOpen}
+        handleModalClose={handleModalClose}
+        handleChatRoomCreate={handleChatRoomCreate}
+      />
     </MainLayout>
   );
 };
