@@ -1,11 +1,54 @@
-import { useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import ChatSocket from "./ChatSocket";
-import { chatState } from "@/recoil/atoms/chatState";
+import useChatState from "@/hooks/useChatState";
+import useUserState from "@/hooks/useUserState";
+import { socketClient } from "@/utils/socketClient";
+import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
 
 const Socket = () => {
-  const chat = useRecoilValue(chatState);
-  return <SocketContainer>{chat.roomId && <ChatSocket />}</SocketContainer>;
+  const [isChatRoom, setChatRoom] = useState(false);
+  const router = useRouter();
+  const {
+    chat: { roomId },
+    setChat,
+    resetChat,
+  } = useChatState();
+  const { userId } = useUserState();
+
+  useEffect(() => {
+    if (router.asPath.split("/").includes("chat") && router.query.id) {
+      setChatRoom(true);
+    } else setChatRoom(false);
+  }, [router]);
+
+  const socketConnect = () => {
+    if (!userId) return;
+
+    socketClient.connect();
+    enterRoomEmit(userId, "test", roomId);
+  };
+
+  const handleChatRoomLeave = () => {
+    if (!userId) return;
+
+    leaveRoomEmit(userId, roomId);
+    resetChat();
+  };
+
+  return (
+    <SocketContainer>
+      {roomId && (
+        <ChatSocket
+          isChatRoom={isChatRoom}
+          setChat={setChat}
+          socketConnect={socketConnect}
+          handleChatRoomLeave={handleChatRoomLeave}
+        />
+      )}
+    </SocketContainer>
+  );
 };
 
 export default Socket;
