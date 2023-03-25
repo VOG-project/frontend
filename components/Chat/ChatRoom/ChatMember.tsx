@@ -1,38 +1,31 @@
-import { useRouter } from "next/router";
 import Image from "next/image";
 import tw from "twin.macro";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
-import { leaveRoomEmit } from "@/utils/socketClient";
 import { ChatMemberProps } from "@/types/chat";
 
-const ChatMember = ({ members, roomId }: ChatMemberProps) => {
-  const router = useRouter();
-
+const ChatMember = ({ members, handleChatRoomLeave }: ChatMemberProps) => {
   return (
     <ChatMemberContainer>
       <Header title="Member" />
       <ChatMemberList>
-        <MemberInfo>
-          <MemberProfilePic
-            src="/image/valorant_jett.jpg"
-            alt="profile pic"
-            width={1280}
-            height={720}
-          />
-          <MemberNickname>Test</MemberNickname>
-        </MemberInfo>
+        {members.map((member) => {
+          return (
+            <MemberInfo key={member.userId}>
+              <MemberProfilePic
+                src="/image/valorant_jett.jpg"
+                alt="profile pic"
+                width={1280}
+                height={720}
+              />
+              <MemberNickname>{member.nickname}</MemberNickname>
+            </MemberInfo>
+          );
+        })}
       </ChatMemberList>
       <ChatButtonContainer>
-        <Button
-          type="button"
-          bgColor="secondary"
-          onClick={() => {
-            leaveRoomEmit(11, roomId);
-            router.push("/");
-          }}
-        >
+        <Button type="button" bgColor="secondary" onClick={handleChatRoomLeave}>
           <ExitIcon>{getIcons("exit", 32)}나가기</ExitIcon>
         </Button>
       </ChatButtonContainer>

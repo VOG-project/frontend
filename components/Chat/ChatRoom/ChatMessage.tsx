@@ -1,22 +1,29 @@
 import Image from "next/image";
 import tw, { styled } from "twin.macro";
+import { ChatMessageProps } from "@/types/chat";
 
-const ChatMessage = ({ isSender }) => {
+const ChatMessage = ({ messages }: ChatMessageProps) => {
   return (
-    <ChatMessageContainer isSender={true}>
-      <ChatProfilePic>
-        <ProfilePic
-          src="/image/valorant_jett.jpg"
-          alt="profilePic"
-          width={64}
-          height={64}
-        />
-      </ChatProfilePic>
-      <ChatContent>
-        <Nickname>test</Nickname>
-        <Content>안녕하세요</Content>
-      </ChatContent>
-    </ChatMessageContainer>
+    <>
+      {messages.map((message, index) => {
+        return (
+          <ChatMessageContainer key={index} isSender={message.isSender}>
+            <ChatProfilePic>
+              <ProfilePic
+                src="/image/valorant_jett.jpg"
+                alt="profilePic"
+                width={64}
+                height={64}
+              />
+            </ChatProfilePic>
+            <ChatContent>
+              <Nickname>{message.nickname}</Nickname>
+              <Content>{message.content}</Content>
+            </ChatContent>
+          </ChatMessageContainer>
+        );
+      })}
+    </>
   );
 };
 
