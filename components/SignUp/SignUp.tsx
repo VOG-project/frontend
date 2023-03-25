@@ -27,17 +27,22 @@ const SignUp = () => {
   return (
     <SignUpWrapper>
       <SignUpContainer>
-        <h1>회원가입</h1>
         <SignUpForm onSubmit={handleSubmit(handleSignUp)}>
-          <InputContainer>
-            <Input register={register("email")} placeholder="이메일" />
-          </InputContainer>
-          <InputContainer>
+          <SignUpTitle>회원가입</SignUpTitle>
+          <SignUpInputContainer>
+            <Input
+              register={register("email")}
+              placeholder="이메일"
+              bgColor="gray"
+            />
+          </SignUpInputContainer>
+          <SignUpInputContainer>
             <Input
               register={register("nickname")}
               placeholder="닉네임 (2~10자)"
+              bgColor="gray"
             />
-          </InputContainer>
+          </SignUpInputContainer>
           <RadioContainer>
             <Input
               register={register("sex")}
@@ -54,20 +59,22 @@ const SignUp = () => {
             />
             여자
           </RadioContainer>
-          <InputContainer>
+          <SignUpInputContainer>
             <Input
               register={register("password")}
               type="password"
               placeholder="비밀번호 입력"
+              bgColor="gray"
             />
-          </InputContainer>
-          <InputContainer>
+          </SignUpInputContainer>
+          <SignUpInputContainer>
             <Input
               register={register("confirmPassword")}
               type="password"
               placeholder="비밀번호 재입력"
+              bgColor="gray"
             />
-          </InputContainer>
+          </SignUpInputContainer>
           <SignUpText>
             비밀번호는 8~16자리의 영문 대소문자, 숫자, 특수문자를 조합하여
             설정해 주세요.
@@ -82,15 +89,19 @@ const SignUp = () => {
 export default SignUp;
 
 const SignUpWrapper = tw.section`
-relative flex items-center justify-center h-full text-black bg-[url("./image/valorant.jpg")] bg-cover
-after:absolute after:inset-0 after:bg-black after:opacity-20
+relative flex items-center justify-center h-full bg-[url("./image/valorant.jpg")] bg-cover
+after:(absolute inset-0 bg-black/50)
 `;
 
-const SignUpContainer = tw.div`py-4 w-96 rounded drop-shadow bg-white z-10`;
+const SignUpContainer = tw.div`py-10 w-[28rem] rounded drop-shadow bg-black/80 z-10`;
 
 const SignUpForm = tw.form`flex flex-col px-10`;
 
-const InputContainer = tw.div`relative flex my-4 border-b border-black`;
+const SignUpTitle = tw.h2`
+  text-3xl font-bold
+`;
+
+const SignUpInputContainer = tw.div`relative flex my-4 border-b border-black`;
 
 const RadioContainer = tw.div`flex items-center justify-around m-auto w-40`;
 
