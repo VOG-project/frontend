@@ -1,16 +1,12 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-export interface ChatEditValue {
-  title: string;
-  maximumMember: number;
-}
+import { ChatEditValue } from "@/types/chat";
 
 const useChatEditForm = () => {
   const chatSchema = yup.object().shape({
     title: yup.string().required(),
-    maximumMember: yup.number().min(2).max(5).required(),
+    maximumMember: yup.number().min(2).max(20).required(),
   });
 
   const { register, handleSubmit } = useForm<ChatEditValue>({
