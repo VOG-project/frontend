@@ -32,11 +32,8 @@ const useLoginForm = () => {
   });
 
   const watchEmail = watch("email");
-
   const watchPassword = watch("password");
-
   const emailError = errors.email;
-
   const passwordError = errors.password;
 
   return {
