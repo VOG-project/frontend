@@ -1,23 +1,17 @@
 import tw from "twin.macro";
-import useChatEditForm, { ChatEditValue } from "@/hooks/useChatEditForm";
+import useChatEditForm from "@/hooks/useChatEditForm";
 import Input from "@/components/common/Input";
 import Modal from "@/components/common/Modal";
 import Button from "@/components/common/Button";
-import { createChatRoomRequest } from "@/apis/chat";
+import { ChatEditProps } from "@/types/chat";
 
-interface ChatEditProps {
-  isOpen: boolean;
-  handleModalClose: () => void;
-}
-
-const ChatEdit = ({ isOpen, handleModalClose }: ChatEditProps) => {
+const ChatEdit = ({
+  isOpen,
+  handleModalClose,
+  handleChatRoomCreate,
+}: ChatEditProps) => {
   const { register, handleSubmit } = useChatEditForm();
-  const handleChatRoomCreate = async (data: ChatEditValue) => {
-    const { title, maximumMember } = data;
-    const res = await createChatRoomRequest(11, title, maximumMember);
 
-    console.log(res);
-  };
   return (
     <Modal
       title="방생성"
