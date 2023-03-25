@@ -4,7 +4,7 @@ export interface SignUpRequest {
   email: string;
   password: string;
   nickname: string;
-  sex: string;
+  gender: string;
 }
 
 export interface ChangeNicknameRequest {
@@ -27,13 +27,13 @@ const signUpRequest = async ({
   email,
   password,
   nickname,
-  sex,
+  gender,
 }: SignUpRequest) => {
   const res = await customAxios().post("/users/register", {
     email,
     password,
     nickname,
-    sex,
+    sex: gender,
   });
 
   return res.data;
@@ -65,6 +65,8 @@ const changePasswordRequest = async ({
 
 const uploadProfilePicRequest = async (userId, profilePic) => {
   const res = await customAxios().patch(`/uploads/users/${userId}`);
+
+  return res.data;
 };
 
 const withdrawalRequest = async ({ userId, password }: WithdrawalRequest) => {
