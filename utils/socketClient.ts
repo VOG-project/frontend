@@ -30,8 +30,8 @@ export const enterRoomEmit = (
   roomId: string
 ) => {
   socketClient.emit("enterChatRoom", {
-    userId: 11,
-    nickname: "test",
-    roomId: roomId,
+    userId,
+    nickname,
+    roomId,
   });
 };
