@@ -46,15 +46,10 @@ const usePasswordEditForm = () => {
   });
 
   const watchPassword = watch("password");
-
   const watchConfirmPassword = watch("confirmPassword");
-
   const watchCurrentPassword = watch("currentPassword");
-
   const passwordError = errors.password;
-
   const confirmPasswordError = errors.confirmPassword;
-
   const currentPasswordError = errors.currentPassword;
 
   return {
