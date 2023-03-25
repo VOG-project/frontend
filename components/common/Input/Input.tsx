@@ -78,5 +78,5 @@ const StyledInput = styled.input<{
     `,
   bgColor &&
     bgColor === "gray" &&
-    tw`m-4 bg-stone-700 rounded hover:bg-stone-600 placeholder:text-stone-300`,
+    tw`bg-stone-700 rounded hover:bg-stone-600 placeholder:text-stone-300`,
 ]);
