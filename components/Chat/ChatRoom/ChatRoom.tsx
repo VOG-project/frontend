@@ -1,17 +1,35 @@
-import { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
+import { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useChatState from "@/hooks/useChatState";
+import useUser from "@/hooks/useUserState";
 import MainLayout from "@/components/layout/MainLayout";
 import Header from "@/components/common/Header";
 import ChatMember from "./ChatMember";
 import ChatMessage from "./ChatMessage";
-import { sendMessageEmit } from "@/utils/socketClient";
+import { sendMessageEmit, leaveRoomEmit } from "@/utils/socketClient";
 
 const ChatRoom = () => {
+  const router = useRouter();
   const [message, setMessage] = useState("");
+  const {
+    user: { userId },
+  } = useUser();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { chat } = useChatState();
-  const { members, roomId } = chat;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const {
+    setChat,
+    chat: { chatParticipant, roomId, title, messages },
+    resetChat,
+  } = useChatState();
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, [messages]);
 
   const handleTextAreaKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (!e.shiftKey && e.key === "Enter") {
@@ -31,16 +49,47 @@ const ChatRoom = () => {
     e.target.style.height = scrollHeight + "px";
   };
 
+  const handleMessageSend = () => {
+    if (!message) return;
+    setChat((prev) => {
+      return {
+        ...prev,
+        messages: [
+          ...prev.messages,
+          {
+            content: message,
+            roomId: roomId,
+            nickname: "test",
+            isSender: true,
+          },
+        ],
+      };
+    });
+    sendMessageEmit(message, roomId, "test");
+    setMessage("");
+  };
+
+  const handleChatRoomLeave = () => {
+    if (!userId) return;
+    console.log(userId);
+    leaveRoomEmit(userId, roomId);
+    resetChat();
+    router.push("/chat");
+  };
+
   return (
     <MainLayout>
       <ChatRoomContainer>
-        <ChatMember members={members} roomId={roomId} />
+        <ChatMember
+          members={chatParticipant}
+          handleChatRoomLeave={handleChatRoomLeave}
+        />
         <ChatText>
-          <Header title="#text" />
+          <Header title={title} />
           <ChatLogs>
             <FlexBox />
-            <ChatLog>
-              <ChatMessage />
+            <ChatLog ref={scrollRef}>
+              <ChatMessage messages={messages} />
             </ChatLog>
           </ChatLogs>
           <ChatTextAreaContainer>
@@ -54,10 +103,7 @@ const ChatRoom = () => {
               <ChatSubmitBtn
                 type="button"
                 ref={buttonRef}
-                onClick={() => {
-                  sendMessageEmit(message, chat.roomId, "test");
-                  setMessage("");
-                }}
+                onClick={handleMessageSend}
               >
                 SEND
               </ChatSubmitBtn>
