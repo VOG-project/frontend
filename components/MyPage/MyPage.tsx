@@ -1,13 +1,75 @@
+import { useState, ChangeEvent } from "react";
+import { useRouter } from "next/router";
 import tw from "twin.macro";
+import useToast from "@/hooks/useToast";
+import useUserState from "@/hooks/useUserState";
+import useModal from "@/hooks/useModal";
 import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
 import Profile from "./Profile";
+import Modal from "../common/Modal";
+import Input from "../common/Input";
 import ProfilePicEdit from "./MyPageCards/ProfilePicEdit";
 import NicknameEdit from "./MyPageCards/NicknameEdit";
 import PasswordEdit from "./MyPageCards/PasswordEdit";
 import DeleteAccount from "./MyPageCards/DeleteAccount";
+import {
+  changeNicknameRequest,
+  changePasswordRequest,
+  withdrawalRequest,
+} from "@/apis/user";
+import { PasswordEditValue, NicknameEditValue } from "@/types/myPage";
 
 const MyPage = () => {
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+  const { toast } = useToast();
+  const { userId, resetUser } = useUserState();
+  const { isOpen, handleModalClose, handleModalOpen } = useModal();
+
+  const handleNicknameChangeSubmit = async (data: NicknameEditValue) => {
+    if (!userId) return;
+
+    const { nickname } = data;
+    const res = await changeNicknameRequest(userId, nickname);
+
+    console.log(res);
+  };
+
+  const handlePasswordChangeSubmit = async (data: PasswordEditValue) => {
+    if (!userId) return;
+
+    const { currentPassword, password } = data;
+    const res = await changePasswordRequest(userId, currentPassword, password);
+    if (res.success) {
+      resetUser();
+      router.replace("/");
+    } else {
+      toast.alert(res.error);
+    }
+  };
+
+  const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    setPassword(password);
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!userId) return;
+    if (!password) {
+      toast.alert("비밀번호를 입력하세요.");
+      return;
+    }
+
+    const res = await withdrawalRequest(userId, password);
+    if (res.success) {
+      resetUser();
+      router.replace("/");
+    } else {
+      toast.alert(res.error);
+    }
+  };
+
   return (
     <MainLayout>
       <MyPageWrapper>
@@ -15,11 +77,25 @@ const MyPage = () => {
         <MyPageContainer>
           <Profile />
           <ProfilePicEdit />
-          <NicknameEdit />
-          <PasswordEdit />
-          <DeleteAccount />
+          <NicknameEdit handleNicknameEditSubmit={handleNicknameChangeSubmit} />
+          <PasswordEdit handlePasswordEditSubmit={handlePasswordChangeSubmit} />
+          <DeleteAccount handleModalOpen={handleModalOpen} />
         </MyPageContainer>
       </MyPageWrapper>
+      <Modal
+        isOpen={isOpen}
+        title="회원탈퇴"
+        content="정말로 탈퇴하시겠습까?"
+        handleClose={handleModalClose}
+        handleConfirm={handleDeleteAccount}
+      >
+        <Input
+          type="password"
+          bgColor="gray"
+          placeholder="비밀번호를 입력하세요."
+          onChange={handlePasswordInputChange}
+        ></Input>
+      </Modal>
     </MainLayout>
   );
 };
