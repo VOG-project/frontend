@@ -11,6 +11,9 @@ import {
   BsPlus,
   BsCheck2,
   BsExclamationTriangle,
+  BsToggleOff,
+  BsToggleOn,
+  BsArrowReturnRight,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime, BiExit } from "react-icons/bi";
@@ -52,6 +55,12 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsExclamationTriangle size={size} color={color} />;
     case "exit":
       return <BiExit size={size} color={color} />;
+    case "off":
+      return <BsToggleOff size={size} color={color} />;
+    case "on":
+      return <BsToggleOn size={size} color={color} />;
+    case "return":
+      return <BsArrowReturnRight size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
