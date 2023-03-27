@@ -1,16 +1,13 @@
 import tw from "twin.macro";
 import usePasswordEditForm from "@/hooks/usePasswordEditForm";
-import useToast from "@/hooks/useToast";
 import Left from "@/components/common/MyPageCard/Left";
 import Right from "@/components/common/MyPageCard/Right";
 import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { PasswordEditValue } from "@/types/myPage";
-import { changePasswordRequest } from "@/apis/user";
+import { PasswordEditProps } from "@/types/myPage";
 
-const PasswordEdit = () => {
-  const { toast } = useToast();
+const PasswordEdit = ({ handlePasswordEditSubmit }: PasswordEditProps) => {
   const {
     watchPassword,
     watchConfirmPassword,
@@ -23,21 +20,6 @@ const PasswordEdit = () => {
     register,
     handleSubmit,
   } = usePasswordEditForm();
-
-  const handlePasswordEditSubmit = async (data: PasswordEditValue) => {
-    const { currentPassword, password } = data;
-    const res = await changePasswordRequest({
-      userId: 6,
-      currentPassword,
-      newPassword: password,
-    });
-    console.log(res);
-    if (res.success) {
-      console.log(res);
-    } else {
-      toast.alert(res.error);
-    }
-  };
 
   return (
     <PasswordEditContainer>
