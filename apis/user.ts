@@ -1,34 +1,11 @@
 import customAxios from "@/utils/customAxios";
 
-export interface SignUpRequest {
-  email: string;
-  password: string;
-  nickname: string;
-  gender: string;
-}
-
-export interface ChangeNicknameRequest {
-  userId: number;
-  newNickname: string;
-}
-
-export interface ChangePasswordRequest {
-  userId: number;
-  currentPassword: string;
-  newPassword: string;
-}
-
-export interface WithdrawalRequest {
-  userId: number;
-  password: string;
-}
-
-const signUpRequest = async ({
-  email,
-  password,
-  nickname,
-  gender,
-}: SignUpRequest) => {
+const signUpRequest = async (
+  email: string,
+  password: string,
+  nickname: string,
+  gender: string
+) => {
   const res = await customAxios().post("/users/register", {
     email,
     password,
@@ -39,10 +16,7 @@ const signUpRequest = async ({
   return res.data;
 };
 
-const changeNicknameRequest = async ({
-  userId,
-  newNickname,
-}: ChangeNicknameRequest) => {
+const changeNicknameRequest = async (userId: number, newNickname: string) => {
   const res = await customAxios().patch(`/users/${userId}/nickname`, {
     newNickname,
   });
@@ -50,11 +24,11 @@ const changeNicknameRequest = async ({
   return res.data;
 };
 
-const changePasswordRequest = async ({
-  userId,
-  currentPassword,
-  newPassword,
-}: ChangePasswordRequest) => {
+const changePasswordRequest = async (
+  userId: number,
+  currentPassword: string,
+  newPassword: string
+) => {
   const res = await customAxios().patch(`/users/${userId}/password`, {
     currentPassword,
     newPassword,
@@ -69,12 +43,13 @@ const uploadProfilePicRequest = async (userId, profilePic) => {
   return res.data;
 };
 
-const withdrawalRequest = async ({ userId, password }: WithdrawalRequest) => {
+const withdrawalRequest = async (userId: number, password: string) => {
   const res = await customAxios().delete(`/users/${userId}/withdrawal`, {
     data: {
       password,
     },
   });
+  console.log(res);
 
   return res.data;
 };
