@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
+import { useRecoilValue } from "recoil";
 import tw from "twin.macro";
-import { useRecoilValue, useRecoilState } from "recoil";
+import useUserState from "@/hooks/useUserState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
 import { getIcons } from "../icons";
 import { logoutRequest } from "@/apis/auth";
 import { selectedGameState } from "@/recoil/atoms/selectedGameState";
-import { loginState } from "@/recoil/atoms/loginState";
 import { NAV_MENU } from "@/constants/nav";
 
 const Sidebar = () => {
   const router = useRouter();
   const game = useRecoilValue(selectedGameState);
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const { resetUser } = useUserState();
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
     setGameLogo(getGameLogo(game));
@@ -33,7 +33,7 @@ const Sidebar = () => {
   const handleLogout = async () => {
     const res = await logoutRequest();
     if (res.success) {
-      setIsLogin(false);
+      resetUser();
       router.push("/");
     }
   };
@@ -57,14 +57,12 @@ const Sidebar = () => {
             </SidebarItem>
           );
         })}
-        {isLogin && (
-          <SidebarItem>
-            <Logout onClick={handleLogout}>
-              <ItemIcon>{getIcons("exit", 34)}</ItemIcon>
-              로그아웃
-            </Logout>
-          </SidebarItem>
-        )}
+        <SidebarItem>
+          <Logout onClick={handleLogout}>
+            <ItemIcon>{getIcons("exit", 34)}</ItemIcon>
+            로그아웃
+          </Logout>
+        </SidebarItem>
       </SidebarMenu>
       {gameLogo && (
         <SidebarGameLogo onClick={handleLogoClick}>
