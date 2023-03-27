@@ -14,14 +14,20 @@ import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 
 const Community = ({ data, postCount }: CommunityProps) => {
-  console.log(data);
   const [contents, setContents] = useState(data.result);
   const router = useRouter();
   const query = router.query as CommunityQuery;
   const category = query.category;
   const title = getTitle(category || "");
 
-  const handleEditButton = () => {
+  useEffect(() => {
+    (async () => {
+      const res = await getPostsRequest(category, 1);
+      setContents(res.result);
+    })();
+  }, [category]);
+
+  const handleEditButtonClick = () => {
     router.push({
       pathname: "/community/edit",
       query: {
@@ -30,12 +36,12 @@ const Community = ({ data, postCount }: CommunityProps) => {
     });
   };
 
-  useEffect(() => {
-    (async () => {
-      const res = await getPostsRequest(category, 1);
-      setContents(res.result);
-    })();
-  }, [category]);
+  const handleContentClick = (postId: number) => {
+    router.push({
+      pathname: "/community/[id]",
+      query: { id: postId, category: category },
+    });
+  };
 
   return (
     <MainLayout>
@@ -45,7 +51,10 @@ const Community = ({ data, postCount }: CommunityProps) => {
           <Header title={title ? title : ""}>
             <Search />
           </Header>
-          <Contents contents={contents} category={category} />
+          <Contents
+            contents={contents}
+            handleContentClick={handleContentClick}
+          />
         </CommunityContainer>
         <CommunityButtonContainer>
           <Pagination count={postCount} />
@@ -53,7 +62,7 @@ const Community = ({ data, postCount }: CommunityProps) => {
             width={6}
             bgColor="primary"
             position={{ type: "absolute", top: "0", right: "8rem" }}
-            onClick={handleEditButton}
+            onClick={handleEditButtonClick}
           >
             글쓰기
           </Button>
