@@ -5,15 +5,17 @@ import Right from "@/components/common/MyPageCard/Right";
 import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import { NicknameEditProps } from "@/types/myPage";
 
-const NicknameEdit = () => {
-  const { errorsNickname, isDirty, isValid, register } = useNicknameEditForm();
+const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
+  const { errorsNickname, isDirty, isValid, register, handleSubmit } =
+    useNicknameEditForm();
 
   return (
     <NicknameEditContainer>
       <Left title="닉네임 변경" />
       <Right>
-        <NicknameEditForm>
+        <NicknameEditForm onSubmit={handleSubmit(handleNicknameEditSubmit)}>
           <NicknameEditInput>
             <NicknameEditLabel>
               새 닉네임
