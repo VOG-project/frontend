@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
-import { loginState } from "@/recoil/atoms/loginState";
+import { loginState } from "@/recoil/selectors/loginState";
 
 const hasAuth =
   (Component: React.FC | NextPage): React.FC =>
