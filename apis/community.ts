@@ -1,14 +1,16 @@
 import customAxios from "@/utils/customAxios";
 
 interface PostData {
+  writerId: number;
   title: string;
   content: string;
   postCategory?: string;
 }
 
-const createPostRequest = async (category: string, data: PostData) => {
-  const { title, content, postCategory } = data;
-  const res = await customAxios().post(`/posts/${category}`, {
+const createPostRequest = async (data: PostData) => {
+  const { writerId, title, content, postCategory } = data;
+  const res = await customAxios().post(`/posts`, {
+    writerId,
     title,
     content,
     postCategory,
@@ -28,8 +30,8 @@ const getPostsRequest = async (category: string, page: number) => {
   return res.data;
 };
 
-const getPostRequest = async (category: string, postId: number) => {
-  const res = await customAxios().get(`/posts/${category}/${postId}`);
+const getPostRequest = async (postId: number) => {
+  const res = await customAxios().get(`/posts/${postId}`);
 
   return res.data;
 };
@@ -55,7 +57,7 @@ const updatePostRequest = async (postId: number, data: PostData) => {
 };
 
 const deletePostRequest = async (postId: number) => {
-  const res = await customAxios().delete(`/posts/${postId}`, {});
+  const res = await customAxios().delete(`/posts/${postId}`);
 
   return res.data;
 };
