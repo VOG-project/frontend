@@ -5,13 +5,13 @@ import { getIcons } from "@/components/icons";
 import { PostProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 
-const Post = ({ content }: PostProps) => {
+const Post = ({ content, comments, handleCommentSubmit }: PostProps) => {
   if (!content) return null;
   return (
     <PostContainer>
       <PostTitle>
         <PostSubject>
-          <PostGame>[{content.gameCategory}]</PostGame>
+          <PostGame>[리그오브레전드]</PostGame>
           {content.title}
         </PostSubject>
       </PostTitle>
@@ -43,7 +43,7 @@ const Post = ({ content }: PostProps) => {
           </Button>
         </PostLike>
       </PostTextContainer>
-      <Comments />
+      <Comments comments={comments} handleCommentSubmit={handleCommentSubmit} />
     </PostContainer>
   );
 };
