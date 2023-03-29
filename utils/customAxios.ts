@@ -5,6 +5,7 @@ const customAxios = () => {
     baseURL: process.env.NEXT_PUBLIC_ENDPOINT,
     timeout: 3000,
     headers: { "Content-Type": "application/json" },
+    withCredentials: true,
   });
 
   instance.interceptors.request.use(
