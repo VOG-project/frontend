@@ -2,10 +2,11 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
 import useToast from "@/hooks/useToast";
-import { signUpRequest, SignUpRequest } from "@/apis/user";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
+import { signUpRequest } from "@/apis/user";
+import { SignUpValue } from "@/types/auth";
 
 const SignUp = () => {
   const {
@@ -27,13 +28,8 @@ const SignUp = () => {
     password,
     nickname,
     gender,
-  }: SignUpRequest) => {
-    const res = await signUpRequest({
-      email,
-      password,
-      nickname,
-      gender,
-    });
+  }: SignUpValue) => {
+    const res = await signUpRequest(email, password, nickname, gender);
     if (res.success) {
       router.push("/login");
     } else {
