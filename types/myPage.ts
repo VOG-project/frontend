@@ -1,3 +1,9 @@
+import { UserState } from "@/recoil/atoms/userState";
+
+export interface ProfilePicEditValue {
+  profilePic: FileList;
+}
+
 export interface PasswordEditValue {
   password: string;
   confirmPassword: string;
@@ -6,6 +12,10 @@ export interface PasswordEditValue {
 
 export interface NicknameEditValue {
   nickname: string;
+}
+
+export interface ProfilePicEditProps {
+  handleProfilePicUpload: (data: ProfilePicEditValue) => Promise<void>;
 }
 
 export interface PasswordEditProps {
@@ -18,4 +28,8 @@ export interface NicknameEditProps {
 
 export interface DeleteAccountProps {
   handleModalOpen: () => void;
+}
+
+export interface ProfileProps {
+  user: UserState;
 }
