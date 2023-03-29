@@ -14,18 +14,43 @@ import NicknameEdit from "./MyPageCards/NicknameEdit";
 import PasswordEdit from "./MyPageCards/PasswordEdit";
 import DeleteAccount from "./MyPageCards/DeleteAccount";
 import {
+  uploadProfilePicRequest,
   changeNicknameRequest,
   changePasswordRequest,
   withdrawalRequest,
 } from "@/apis/user";
-import { PasswordEditValue, NicknameEditValue } from "@/types/myPage";
+import {
+  PasswordEditValue,
+  NicknameEditValue,
+  ProfilePicEditValue,
+} from "@/types/myPage";
+import imageResize from "@/utils/imageResize";
 
 const MyPage = () => {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const { toast } = useToast();
-  const { userId, resetUser } = useUserState();
+  const { user, userId, resetUser } = useUserState();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
+
+  const handleProfilePicUpload = async (data: ProfilePicEditValue) => {
+    if (!userId) return;
+
+    const { profilePic } = data;
+    const image = profilePic.item(0);
+    image &&
+      (await imageResize(image)
+        .then(async (image) => {
+          const res = image && (await uploadProfilePicRequest(userId, image));
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.alert("이미지 압축에 실패하였습니다.");
+        }));
+    // const res = image && (await uploadProfilePicRequest(userId, image));
+    // console.log(res);
+  };
 
   const handleNicknameChangeSubmit = async (data: NicknameEditValue) => {
     if (!userId) return;
@@ -75,8 +100,8 @@ const MyPage = () => {
       <MyPageWrapper>
         <Header title="마이페이지" />
         <MyPageContainer>
-          <Profile />
-          <ProfilePicEdit />
+          <Profile user={user} />
+          <ProfilePicEdit handleProfilePicUpload={handleProfilePicUpload} />
           <NicknameEdit handleNicknameEditSubmit={handleNicknameChangeSubmit} />
           <PasswordEdit handlePasswordEditSubmit={handlePasswordChangeSubmit} />
           <DeleteAccount handleModalOpen={handleModalOpen} />
