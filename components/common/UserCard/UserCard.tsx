@@ -1,10 +1,15 @@
 import tw from "twin.macro";
 
-const UserCard = () => {
+interface UserCardProps {
+  nickname: string;
+  profilePic: string;
+}
+
+const UserCard = ({ nickname, profilePic }: UserCardProps) => {
   return (
     <UserCardContainer>
-      <UserProfile />
-      <UserName>Test</UserName>
+      <UserProfile src={profilePic} />
+      <UserName>{nickname}</UserName>
     </UserCardContainer>
   );
 };
