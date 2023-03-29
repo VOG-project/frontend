@@ -6,10 +6,11 @@ import Right from "@/components/common/MyPageCard/Right";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
 import imageResize from "@/utils/imageResize";
+import { ProfilePicEditProps } from "@/types/myPage";
 
-const ProfilePicEdit = () => {
+const ProfilePicEdit = ({ handleProfilePicUpload }: ProfilePicEditProps) => {
   const [preview, setPreview] = useState("");
-  const { isDirty, isValid, watchProfilePic, reset, register } =
+  const { isDirty, isValid, watchProfilePic, reset, register, handleSubmit } =
     useProfilePicEditForm();
 
   useEffect(() => {
@@ -22,7 +23,9 @@ const ProfilePicEdit = () => {
     (async () => {
       if (image) {
         const compressImage = await imageResize(image);
-        compressImage && setPreview(URL.createObjectURL(compressImage));
+        if (compressImage) {
+          setPreview(URL.createObjectURL(compressImage));
+        }
       }
     })();
   }, [watchProfilePic]);
@@ -36,7 +39,10 @@ const ProfilePicEdit = () => {
     <ProfilePicEditContainer>
       <Left title="프로필이미지 변경" />
       <Right>
-        <ProfilePicEditForm>
+        <ProfilePicEditForm
+          acceptCharset="UTF-8"
+          onSubmit={handleSubmit(handleProfilePicUpload)}
+        >
           <ProfilePicUpload preview={preview}>
             <ProfilePicInput
               {...register("profilePic")}
@@ -58,7 +64,7 @@ const ProfilePicEdit = () => {
               취소하기
             </Button>
             <Button
-              type="button"
+              type="submit"
               width={8}
               bgColor="primary"
               disabled={!isDirty || !isValid}
