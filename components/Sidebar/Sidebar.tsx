@@ -16,7 +16,7 @@ import { NAV_MENU } from "@/constants/nav";
 const Sidebar = () => {
   const router = useRouter();
   const game = useRecoilValue(selectedGameState);
-  const { resetUser } = useUserState();
+  const { user, resetUser } = useUserState();
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
     setGameLogo(getGameLogo(game));
@@ -43,7 +43,7 @@ const Sidebar = () => {
         <Header title="VOG" />
       </VogLogo>
       <Profile>
-        <UserCard />
+        <UserCard nickname={user.nickname} profilePic={user.profileUrl} />
       </Profile>
       <SidebarMenu>
         {NAV_MENU.map((menu) => {
