@@ -1,18 +1,19 @@
 import Image from "next/image";
 import tw from "twin.macro";
+import { ProfileProps } from "@/types/myPage";
 
-const Profile = () => {
+const Profile = ({ user }: ProfileProps) => {
   return (
     <ProfileContainer>
       <ProfilePic
-        src="/image/valorant_jett.jpg"
-        alt="profile"
+        src={user.profileUrl}
+        alt="profilePic"
         width={1280}
         height={800}
       />
       <ProfileInfo>
-        <Email>test@test.com</Email>
-        <Nickname>test</Nickname>
+        <Email>{user.email}</Email>
+        <Nickname>{user.nickname}</Nickname>
       </ProfileInfo>
     </ProfileContainer>
   );
