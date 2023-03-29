@@ -1,20 +1,26 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
+import useUserState from "@/hooks/useUserState";
+import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import Post from "./Post";
 import { getPostRequest } from "@/apis/community";
+import { getCommentsRequest, createCommentRequest } from "@/apis/comment";
 import { getTitle } from "@/utils/getTitle";
 import { getIcons } from "@/components/icons";
-import { CommunityQuery, ContentDetail } from "@/types/community";
+import { CommunityQuery, ContentDetail, Comment } from "@/types/community";
 
 const Detail = () => {
   const [content, setContent] = useState<ContentDetail>();
+  const [comments, setComments] = useState<Comment[]>();
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
+  const { userId } = useUserState();
+  const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
 
@@ -22,28 +28,68 @@ const Detail = () => {
     setCategory(query.category);
     setTitle(getTitle(category));
     (async () => {
-      const res = await getPostRequest(query.category, Number(query.id));
+      const postRes = await getPostRequest(Number(query.id));
+      const commentsRes = await getCommentsRequest(Number(query.id));
 
-      if (res.success) {
-        setContent(res.result);
+      if (postRes.success) {
+        console.log(postRes);
+        setContent(postRes.result);
+      }
+
+      if (commentsRes.success) {
+        console.log(commentsRes);
+        setComments(commentsRes.result);
       }
     })();
   }, [query, category]);
 
-  const handleListButton = () => {
+  const handleListButtonClick = () => {
     category ? router.push(`${category}`) : router.push("/community");
   };
+
+  const handleCommentSubmit = async (
+    content: string | undefined,
+    group: number,
+    sequence: number
+  ) => {
+    if (!userId) return;
+
+    if (!content) {
+      toast.alert("댓글을 입력해주세요.");
+      return;
+    }
+
+    const postId = query.id;
+    const res = await createCommentRequest(
+      userId,
+      Number(postId),
+      content,
+      group,
+      sequence
+    );
+    console.log(res);
+    //댓글이라면 그룹번호가 ..?
+  };
+
   return (
     <MainLayout>
       <DetailWrapper>
         <Navigation category={category} />
         <DetailContainer>
           <Header title={title}>
-            <Button width={5} bgColor="transparent" onClick={handleListButton}>
+            <Button
+              width={5}
+              bgColor="transparent"
+              onClick={handleListButtonClick}
+            >
               <ListButton>{getIcons("list", 24)}목록</ListButton>
             </Button>
           </Header>
-          <Post content={content} />
+          <Post
+            content={content}
+            comments={comments}
+            handleCommentSubmit={handleCommentSubmit}
+          />
         </DetailContainer>
       </DetailWrapper>
     </MainLayout>
