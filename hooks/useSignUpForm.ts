@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { SignUpValue } from "@/types/auth";
 
 const useSignUpForm = () => {
   const signUpSchema = yup.object().shape({
@@ -27,7 +28,7 @@ const useSignUpForm = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm({
+  } = useForm<SignUpValue>({
     mode: "onChange",
     defaultValues: {
       email: "",
