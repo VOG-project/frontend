@@ -2,12 +2,14 @@ import React, { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
+import useUserState from "@/hooks/useUserState";
 import MainLayout from "@/components/layout/MainLayout";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
 import { createPostRequest } from "@/apis/community";
 import { CommunityQuery } from "@/types/community";
 import "react-quill/dist/quill.snow.css";
+import { GetServerSideProps } from "next";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -20,10 +22,11 @@ const CATEGORY = [
 ];
 
 const Edit = () => {
-  const [text, setText] = useState("");
+  const [post, setPost] = useState({ title: "", content: "" });
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { category } = router.query as CommunityQuery;
+  const { userId } = useUserState();
 
   const handleImageInputClick = () => {
     if (inputRef.current) {
@@ -32,11 +35,12 @@ const Edit = () => {
   };
 
   const handleSumbit = async () => {
-    const res = await createPostRequest(category, {
-      writerId: 3,
-      title: "테스트",
-      content: text,
-      gameCategory: "LOL",
+    if (!userId) return;
+    const res = await createPostRequest({
+      writerId: userId,
+      title: post.title,
+      content: post.content,
+      postCategory: category,
     });
     console.log(res);
   };
@@ -54,9 +58,25 @@ const Edit = () => {
               );
             })}
           </EditCategory>
-          <EditTitle width={32} placeholder="제목을 입력하세요"></EditTitle>
+          <EditTitle
+            width={32}
+            placeholder="제목을 입력하세요"
+            onChange={(e) => {
+              return setPost((prev) => {
+                return { ...prev, title: e.target.value };
+              });
+            }}
+          ></EditTitle>
           <Editor>
-            <ReactQuill theme="snow" value={text} onChange={setText} />
+            <ReactQuill
+              theme="snow"
+              value={post.content}
+              onChange={(value) => {
+                setPost((prev) => {
+                  return { ...prev, content: value };
+                });
+              }}
+            />
           </Editor>
           <EditInputButton onClick={handleImageInputClick}>
             {getIcons("plus", 128, "gray")}
@@ -82,6 +102,10 @@ const Edit = () => {
 };
 
 export default Edit;
+
+export const getServerSideProps: GetServerSideProps = (context) => {
+  const query = context.query;
+};
 
 const EditWrapper = tw.section`
   w-full h-full ml-64
