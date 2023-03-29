@@ -1,13 +1,61 @@
+import { useState } from "react";
 import tw from "twin.macro";
+import CommentEdit from "./CommentEdit";
+import { CommentProps } from "@/types/community";
+import timeDifference from "@/utils/timeDifference";
+import { getIcons } from "@/components/icons";
 
-const Comment = () => {
+const Comment = ({
+  author,
+  createdAt,
+  content,
+  group,
+  sequence,
+  reply,
+  handleCommentSubmit,
+}: CommentProps) => {
+  const [replyToggle, setReplyToggle] = useState(false);
+
   return (
     <CommentContainer>
       <CommentAuthor>
-        사부로
-        <CommentTime>2023.01.01 PM 09:45</CommentTime>
+        {author}
+        <CommentTime>{timeDifference(createdAt)}</CommentTime>
       </CommentAuthor>
-      <CommentText>저랑 해요</CommentText>
+      <CommentText>{content}</CommentText>
+      <CommentEdit
+        isReply={true}
+        group={group}
+        sequence={sequence}
+        handleCommentSubmit={handleCommentSubmit}
+      />
+      {reply.length > 1 && (
+        <ReplyToggle onClick={() => setReplyToggle((prev) => !prev)}>
+          {replyToggle ? getIcons("on", 24) : getIcons("off", 24)}답글
+          {reply.length - 1}개
+        </ReplyToggle>
+      )}
+      {replyToggle &&
+        reply
+          .filter((reply) => reply.sequence > 0)
+          .map((reply) => {
+            return (
+              <CommentReply key={reply.id}>
+                <ReturnIcon>{getIcons("return", 24)}</ReturnIcon>
+                <CommentAuthor>
+                  {reply.user.nickname}
+                  <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
+                </CommentAuthor>
+                <CommentText>{reply.content}</CommentText>
+                <CommentEdit
+                  isReply={true}
+                  group={reply.group}
+                  sequence={reply.sequence}
+                  handleCommentSubmit={handleCommentSubmit}
+                />
+              </CommentReply>
+            );
+          })}
     </CommentContainer>
   );
 };
@@ -23,9 +71,21 @@ const CommentAuthor = tw.div`
 `;
 
 const CommentTime = tw.div`
-  ml-2 text-zinc-400
+  ml-2 px-2 rounded-full text-zinc-400 bg-zinc-600/40
 `;
 
 const CommentText = tw.p`
-  mt-2
+  my-2 px-2
+`;
+
+const CommentReply = tw.div`
+  relative px-8
+`;
+
+const ReplyToggle = tw.div`
+  flex gap-1 text-primary cursor-pointer
+`;
+
+const ReturnIcon = tw.div`
+  absolute left-0 top-8
 `;

@@ -1,15 +1,32 @@
 import tw from "twin.macro";
 import Comment from "./Comment";
 import CommentEdit from "./CommentEdit";
-import Pagination from "@/components/Pagination";
+import { CommentsProps } from "@/types/community";
 
-const Comments = () => {
+const Comments = ({ comments, handleCommentSubmit }: CommentsProps) => {
   return (
     <CommentsContainer>
-      <CommentsTitle>댓글 1</CommentsTitle>
-      <Comment />
-      <Pagination />
-      <CommentEdit />
+      <CommentsTitle>댓글 {comments.length}</CommentsTitle>
+      {comments.map((comment) => {
+        return (
+          <Comment
+            key={comment.id}
+            author={comment.user.nickname}
+            createdAt={comment.createdAt}
+            content={comment.content}
+            group={comment.group}
+            sequence={comment.sequence}
+            reply={comment.reply}
+            handleCommentSubmit={handleCommentSubmit}
+          />
+        );
+      })}
+      <CommentEdit
+        isReply={false}
+        group={0}
+        sequence={0}
+        handleCommentSubmit={handleCommentSubmit}
+      />
     </CommentsContainer>
   );
 };
