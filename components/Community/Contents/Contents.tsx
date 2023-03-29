@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import tw from "twin.macro";
 import { getIcons } from "@/components/icons";
 import { Content } from "@/types/community";
@@ -6,17 +5,10 @@ import timeDifference from "@/utils/timeDifference";
 
 interface ContentsProps {
   contents: Content[];
-  category: string;
+  handleContentClick: (postId: number) => void;
 }
 
-const Contents = ({ contents, category }: ContentsProps) => {
-  const router = useRouter();
-  const handleContentClick = (postId: number) => {
-    router.push({
-      pathname: "/community/[id]",
-      query: { id: postId, category: category },
-    });
-  };
+const Contents = ({ contents, handleContentClick }: ContentsProps) => {
   return (
     <ContentsContainer>
       {contents.map((content) => {
