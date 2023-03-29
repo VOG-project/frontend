@@ -1,5 +1,11 @@
 import { ParsedUrlQuery } from "querystring";
 
+type HandleCommentSubmit = (
+  content: string,
+  group: number,
+  sequence: number
+) => Promise<void>;
+
 export interface Content {
   createdAt: string;
   id: number;
@@ -21,7 +27,6 @@ export interface ContentDetail {
   postCategory: string;
   title: string;
   updatedAt: string;
-  comments: Comment[];
   user: {
     id: number;
     nickname: string;
@@ -53,17 +58,30 @@ export interface CommunityProps {
 
 export interface PostProps {
   content?: ContentDetail;
+  comments: Comment[];
+  handleCommentSubmit: HandleCommentSubmit;
 }
 
 export interface CommentsProps {
   comments: Comment[];
+  handleCommentSubmit: HandleCommentSubmit;
 }
 
 export interface CommentProps {
   author: string;
   createdAt: string;
   content: string;
+  group: number;
+  sequence: number;
   reply: Comment[];
+  handleCommentSubmit: HandleCommentSubmit;
+}
+
+export interface CommentEditProps {
+  isReply: boolean;
+  group: number;
+  sequence: number;
+  handleCommentSubmit: HandleCommentSubmit;
 }
 
 export interface CommunityQuery extends ParsedUrlQuery {
