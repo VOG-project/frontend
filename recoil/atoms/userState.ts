@@ -2,9 +2,12 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { sessionStorage } from "@/utils/sessionStorage";
 
-interface UserState {
+export interface UserState {
   userId: number | null;
   nickname: string;
+  email: string;
+  profileUrl: string;
+  sex: string;
 }
 
 const { persistAtom } = recoilPersist({
@@ -17,6 +20,9 @@ export const userState = atom<UserState>({
   default: {
     userId: null,
     nickname: "",
+    email: "",
+    profileUrl: "",
+    sex: "",
   },
   effects_UNSTABLE: [persistAtom],
 });
