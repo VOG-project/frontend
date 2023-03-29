@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ProfilePicEditValue } from "@/types/myPage";
 
 const useProfilePicEditForm = () => {
   const profilePicEditSchema = yup.object().shape({
@@ -14,8 +15,9 @@ const useProfilePicEditForm = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { isDirty, isValid },
-  } = useForm<{ profilePic: FileList }>({
+  } = useForm<ProfilePicEditValue>({
     mode: "onChange",
     resolver: yupResolver(profilePicEditSchema),
   });
@@ -27,6 +29,7 @@ const useProfilePicEditForm = () => {
     isValid,
     watchProfilePic,
     reset,
+    setValue,
     register,
     handleSubmit,
   };
