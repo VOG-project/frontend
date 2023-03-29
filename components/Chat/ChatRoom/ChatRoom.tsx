@@ -71,7 +71,6 @@ const ChatRoom = () => {
 
   const handleChatRoomLeave = () => {
     if (!userId) return;
-    console.log(userId);
     leaveRoomEmit(userId, roomId);
     resetChat();
     router.push("/chat");
