@@ -16,7 +16,7 @@ import { CommunityQuery, ContentDetail, Comment } from "@/types/community";
 
 const Detail = () => {
   const [content, setContent] = useState<ContentDetail>();
-  const [comments, setComments] = useState<Comment[]>();
+  const [comments, setComments] = useState<Comment[]>([]);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const { userId } = useUserState();
@@ -68,7 +68,6 @@ const Detail = () => {
       sequence
     );
     console.log(res);
-    //댓글이라면 그룹번호가 ..?
   };
 
   return (
