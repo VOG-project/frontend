@@ -11,7 +11,7 @@ export const userProfileState = atom<UserProfileState>({
     isOpen: false,
     nickname: "",
     email: "",
-    profileUrl: "",
+    profileUrl: "/image/blank_profile.png",
     id: null,
     sex: "",
   },

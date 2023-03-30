@@ -21,7 +21,7 @@ export const userState = atom<UserState>({
     id: null,
     nickname: "",
     email: "",
-    profileUrl: "",
+    profileUrl: "/image/blank_profile.png",
     sex: "",
   },
   effects_UNSTABLE: [persistAtom],
