@@ -5,7 +5,7 @@ export const loginState = selector({
   key: "IsLogin",
   get: ({ get }) => {
     const user = get(userState);
-    const userId = user.userId;
+    const userId = user.id;
 
     if (userId) {
       return true;
