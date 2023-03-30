@@ -3,7 +3,7 @@ import { recoilPersist } from "recoil-persist";
 import { sessionStorage } from "@/utils/sessionStorage";
 
 export interface UserState {
-  userId: number | null;
+  id: number | null;
   nickname: string;
   email: string;
   profileUrl: string;
@@ -18,7 +18,7 @@ const { persistAtom } = recoilPersist({
 export const userState = atom<UserState>({
   key: "User",
   default: {
-    userId: null,
+    id: null,
     nickname: "",
     email: "",
     profileUrl: "",
