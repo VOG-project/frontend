@@ -16,8 +16,8 @@ const ChatMember = ({ members, handleChatRoomLeave }: ChatMemberProps) => {
               <MemberProfilePic
                 src="/image/valorant_jett.jpg"
                 alt="profile pic"
-                width={1280}
-                height={720}
+                width={128}
+                height={128}
               />
               <MemberNickname>{member.nickname}</MemberNickname>
             </MemberInfo>
