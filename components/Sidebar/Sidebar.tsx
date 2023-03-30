@@ -5,6 +5,7 @@ import Image, { StaticImageData } from "next/image";
 import { useRecoilValue } from "recoil";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
+import useFriendToggle from "@/hooks/useFriendState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
@@ -17,6 +18,7 @@ const Sidebar = () => {
   const router = useRouter();
   const game = useRecoilValue(selectedGameState);
   const { user, resetUser } = useUserState();
+  const { handleFriendToggle } = useFriendToggle();
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
     setGameLogo(getGameLogo(game));
@@ -58,15 +60,21 @@ const Sidebar = () => {
           );
         })}
         <SidebarItem>
-          <Logout onClick={handleLogout}>
+          <SidebarBtn onClick={handleFriendToggle}>
+            <ItemIcon>{getIcons("friends", 34)}</ItemIcon>
+            친구목록
+          </SidebarBtn>
+        </SidebarItem>
+        <SidebarItem>
+          <SidebarBtn onClick={handleLogout}>
             <ItemIcon>{getIcons("exit", 34)}</ItemIcon>
             로그아웃
-          </Logout>
+          </SidebarBtn>
         </SidebarItem>
       </SidebarMenu>
       {gameLogo && (
         <SidebarGameLogo onClick={handleLogoClick}>
-          <Image src={gameLogo} alt="gameLogo" />
+          <Image width={256} height={128} src={gameLogo} alt="gameLogo" />
         </SidebarGameLogo>
       )}
     </SidebarContainer>
@@ -95,7 +103,7 @@ const SidebarItem = tw.li`
   w-full my-2
 `;
 
-const Logout = tw.div`
+const SidebarBtn = tw.button`
   flex items-center
 `;
 
