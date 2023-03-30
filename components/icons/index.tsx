@@ -14,9 +14,10 @@ import {
   BsToggleOff,
   BsToggleOn,
   BsArrowReturnRight,
+  BsPeople,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
-import { BiTime, BiExit } from "react-icons/bi";
+import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 
 export function getIcons(name: string, size: number, color?: string) {
@@ -61,6 +62,12 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsToggleOn size={size} color={color} />;
     case "return":
       return <BsArrowReturnRight size={size} color={color} />;
+    case "addFriend":
+      return <BiUserPlus size={size} color={color} />;
+    case "removeFriend":
+      return <BiUserMinus size={size} color={color} />;
+    case "friends":
+      return <BsPeople size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
