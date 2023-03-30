@@ -25,6 +25,7 @@ const Chat = ({ data }: ChatProps) => {
   const router = useRouter();
   const { result, chatRoomCount } = data;
   const [roomList, setRoomList] = useState(result);
+  const [curPage, setCurPage] = useState(1);
   const { userId } = useUserState();
   const { setChat } = useChatState();
   const { toast } = useToast();
@@ -32,11 +33,11 @@ const Chat = ({ data }: ChatProps) => {
 
   useEffect(() => {
     (async () => {
-      const res = await getChatRoomsRequest(1);
+      const res = await getChatRoomsRequest(curPage);
       console.log(res);
       setRoomList(res.result);
     })();
-  }, []);
+  }, [curPage]);
 
   const handleChatRoomCreate = async (data: ChatEditValue) => {
     if (!userId) {
@@ -90,7 +91,11 @@ const Chat = ({ data }: ChatProps) => {
           <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
         </ChatContainer>
         <ChatButtonContainer>
-          <Pagination count={chatRoomCount} />
+          <Pagination
+            curPage={curPage}
+            count={chatRoomCount}
+            setCurPage={setCurPage}
+          />
         </ChatButtonContainer>
       </ChatWrapper>
       <ChatEdit

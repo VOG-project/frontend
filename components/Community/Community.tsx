@@ -14,6 +14,7 @@ import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 
 const Community = ({ data, postCount }: CommunityProps) => {
+  const [curPage, setCurPage] = useState(1);
   const [contents, setContents] = useState(data.result);
   const router = useRouter();
   const query = router.query as CommunityQuery;
@@ -57,7 +58,11 @@ const Community = ({ data, postCount }: CommunityProps) => {
           />
         </CommunityContainer>
         <CommunityButtonContainer>
-          <Pagination count={postCount} />
+          <Pagination
+            curPage={curPage}
+            count={postCount}
+            setCurPage={setCurPage}
+          />
           <Button
             width={6}
             bgColor="primary"

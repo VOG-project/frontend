@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import tw, { styled } from "twin.macro";
 import usePagination from "@/hooks/usePagination";
 import { getIcons } from "../icons";
 
 interface PaginationProps {
   count: number;
+  curPage: number;
+  setCurPage: Dispatch<SetStateAction<number>>;
 }
 
-const Pagination = ({ count }: PaginationProps) => {
-  const [curPage, setCurPage] = useState(1);
+const Pagination = ({ count, curPage, setCurPage }: PaginationProps) => {
   const {
     pageList,
     handleNextPageClick,
