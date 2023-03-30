@@ -14,7 +14,7 @@ const Friend = () => {
       <FriendList>
         {friends.map((friend) => {
           return (
-            <FriendProfile key={friend.userId}>
+            <FriendProfile key={friend.following.id}>
               <UserCard
                 nickname={friend.following.nickname}
                 profilePic={friend.following.profileUrl}
