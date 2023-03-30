@@ -60,6 +60,7 @@ export interface PostProps {
   content?: ContentDetail;
   comments: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
+  handleUserProfileOpen: (userId: number | null) => Promise<void>;
 }
 
 export interface CommentsProps {
