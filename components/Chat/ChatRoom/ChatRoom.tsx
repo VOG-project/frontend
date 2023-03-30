@@ -12,9 +12,7 @@ import { sendMessageEmit, leaveRoomEmit } from "@/utils/socketClient";
 const ChatRoom = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
-  const {
-    user: { userId },
-  } = useUser();
+  const { userId } = useUser();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const {
