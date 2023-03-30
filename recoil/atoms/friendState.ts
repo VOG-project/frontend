@@ -1,4 +1,11 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
+import { sessionStorage } from "@/utils/sessionStorage";
+
+const { persistAtom } = recoilPersist({
+  key: "FRIENDS",
+  storage: sessionStorage,
+});
 
 interface FriendState {
   isShow: boolean;
@@ -22,4 +29,5 @@ export const friendState = atom<FriendState>({
     isShow: false,
     friends: [],
   },
+  effects_UNSTABLE: [persistAtom],
 });
