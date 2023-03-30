@@ -9,11 +9,10 @@ import Input from "../common/Input";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
 import { loginRequest, LoginRequest } from "@/apis/auth";
-import { getFriendsRequest } from "@/apis/friend";
 
 const Login = () => {
   const { setUser } = useUserState();
-  const { setFriend } = useFriendState();
+  const { updateFriendList } = useFriendState();
   const router = useRouter();
   const { toast } = useToast();
   const {
@@ -34,7 +33,7 @@ const Login = () => {
       setUser((prev) => {
         return {
           ...prev,
-          userId: res.result.id,
+          id: res.result.id,
           email: res.result.email,
           nickname: res.result.nickname,
           profileUrl: res.result.profileUrl,
@@ -42,13 +41,7 @@ const Login = () => {
         };
       });
       router.push("/select-game");
-      const friendsRes = await getFriendsRequest(res.result.id);
-      if (friendsRes.success) {
-        setFriend((prev) => {
-          return { ...prev, friends: friendsRes.result };
-        });
-        console.log(friendsRes);
-      }
+      await updateFriendList(res.result.id);
     } else {
       toast.alert(res.error);
     }
