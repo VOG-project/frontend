@@ -3,7 +3,11 @@ import Comment from "./Comment";
 import CommentEdit from "./CommentEdit";
 import { CommentsProps } from "@/types/community";
 
-const Comments = ({ comments, handleCommentSubmit }: CommentsProps) => {
+const Comments = ({
+  comments,
+  handleCommentSubmit,
+  handleUserProfileOpen,
+}: CommentsProps) => {
   return (
     <CommentsContainer>
       <CommentsTitle>댓글 {comments.length}</CommentsTitle>
@@ -11,6 +15,7 @@ const Comments = ({ comments, handleCommentSubmit }: CommentsProps) => {
         return (
           <Comment
             key={comment.id}
+            id={comment.id}
             author={comment.user.nickname}
             createdAt={comment.createdAt}
             content={comment.content}
@@ -18,6 +23,7 @@ const Comments = ({ comments, handleCommentSubmit }: CommentsProps) => {
             sequence={comment.sequence}
             reply={comment.reply}
             handleCommentSubmit={handleCommentSubmit}
+            handleUserProfileOpen={handleUserProfileOpen}
           />
         );
       })}

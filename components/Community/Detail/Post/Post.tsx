@@ -50,7 +50,11 @@ const Post = ({
           </Button>
         </PostLike>
       </PostTextContainer>
-      <Comments comments={comments} handleCommentSubmit={handleCommentSubmit} />
+      <Comments
+        comments={comments}
+        handleCommentSubmit={handleCommentSubmit}
+        handleUserProfileOpen={handleUserProfileOpen}
+      />
     </PostContainer>
   );
 };

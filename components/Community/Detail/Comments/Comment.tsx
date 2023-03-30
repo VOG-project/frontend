@@ -6,6 +6,7 @@ import timeDifference from "@/utils/timeDifference";
 import { getIcons } from "@/components/icons";
 
 const Comment = ({
+  id,
   author,
   createdAt,
   content,
@@ -13,13 +14,16 @@ const Comment = ({
   sequence,
   reply,
   handleCommentSubmit,
+  handleUserProfileOpen,
 }: CommentProps) => {
   const [replyToggle, setReplyToggle] = useState(false);
 
   return (
     <CommentContainer>
       <CommentAuthor>
-        {author}
+        <CommentNickname onClick={() => handleUserProfileOpen(id)}>
+          {author}
+        </CommentNickname>
         <CommentTime>{timeDifference(createdAt)}</CommentTime>
       </CommentAuthor>
       <CommentText>{content}</CommentText>
@@ -43,7 +47,11 @@ const Comment = ({
               <CommentReply key={reply.id}>
                 <ReturnIcon>{getIcons("return", 24)}</ReturnIcon>
                 <CommentAuthor>
-                  {reply.user.nickname}
+                  <CommentNickname
+                    onClick={() => handleUserProfileOpen(reply.user.id)}
+                  >
+                    {reply.user.nickname}
+                  </CommentNickname>
                   <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
                 </CommentAuthor>
                 <CommentText>{reply.content}</CommentText>
@@ -68,6 +76,10 @@ const CommentContainer = tw.div`
 
 const CommentAuthor = tw.div`
   flex
+`;
+
+const CommentNickname = tw.span`
+  cursor-pointer
 `;
 
 const CommentTime = tw.div`
