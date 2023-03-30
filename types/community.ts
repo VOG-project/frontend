@@ -66,9 +66,11 @@ export interface PostProps {
 export interface CommentsProps {
   comments: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
+  handleUserProfileOpen: (userId: number | null) => Promise<void>;
 }
 
 export interface CommentProps {
+  id: number;
   author: string;
   createdAt: string;
   content: string;
@@ -76,6 +78,7 @@ export interface CommentProps {
   sequence: number;
   reply: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
+  handleUserProfileOpen: (userId: number | null) => Promise<void>;
 }
 
 export interface CommentEditProps {
