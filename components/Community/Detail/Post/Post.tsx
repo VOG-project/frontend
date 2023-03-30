@@ -5,7 +5,12 @@ import { getIcons } from "@/components/icons";
 import { PostProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 
-const Post = ({ content, comments, handleCommentSubmit }: PostProps) => {
+const Post = ({
+  content,
+  comments,
+  handleCommentSubmit,
+  handleUserProfileOpen,
+}: PostProps) => {
   if (!content) return null;
   return (
     <PostContainer>
@@ -16,7 +21,9 @@ const Post = ({ content, comments, handleCommentSubmit }: PostProps) => {
         </PostSubject>
       </PostTitle>
       <PostAuthor>
-        {content.user.nickname}
+        <PostNickname onClick={() => handleUserProfileOpen(content.user.id)}>
+          {content.user.nickname}
+        </PostNickname>
         <PostInfoContainer>
           <PostInfo>
             {getIcons("thumb", 16)}
@@ -69,6 +76,8 @@ const PostSubject = tw.h3`
 const PostAuthor = tw.div`
   flex items-center justify-between px-4 h-8 bg-zinc-900
 `;
+
+const PostNickname = tw.span``;
 
 const PostTextContainer = tw.div``;
 
