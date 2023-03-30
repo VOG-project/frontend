@@ -5,7 +5,7 @@ const useUserState = () => {
   const [user, setUser] = useRecoilState(userState);
   const resetUser = useResetRecoilState(userState);
 
-  const userId = user.userId;
+  const userId = user.id;
 
   return {
     user,
