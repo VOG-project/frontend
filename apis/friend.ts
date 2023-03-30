@@ -14,7 +14,7 @@ const getFriendsRequest = async (userId: number) => {
   return res.data;
 };
 
-const deleteFriendRequest = async (userId: number, targetId: number) => {
+const removeFriendRequest = async (userId: number, targetId: number) => {
   const res = await customAxios().patch(`/friend/${userId}`, {
     targetId: targetId,
   });
@@ -22,4 +22,4 @@ const deleteFriendRequest = async (userId: number, targetId: number) => {
   return res.data;
 };
 
-export { addFriendRequest, getFriendsRequest, deleteFriendRequest };
+export { addFriendRequest, getFriendsRequest, removeFriendRequest };
