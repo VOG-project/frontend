@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import dynamic from "next/dynamic";
 import tw from "twin.macro";
 import Friend from "../Friend";
+import UserProfileModal from "../UserProfileModal";
 
 const DynamicSidebar = dynamic(() => import("../Sidebar"), {
   ssr: false,
@@ -17,6 +18,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <DynamicSidebar />
       {children}
       <Friend />
+      <UserProfileModal />
     </MainLayoutContainer>
   );
 };
