@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useFriendToggle from "@/hooks/useFriendState";
+import useUserProfileState from "@/hooks/useUserProfileState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const game = useRecoilValue(selectedGameState);
   const { user, resetUser } = useUserState();
   const { handleFriendToggle } = useFriendToggle();
+  const { handleUserProfileOpen } = useUserProfileState();
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
     setGameLogo(getGameLogo(game));
@@ -44,7 +46,7 @@ const Sidebar = () => {
       <VogLogo onClick={handleVogClick}>
         <Header title="VOG" />
       </VogLogo>
-      <Profile>
+      <Profile onClick={() => handleUserProfileOpen(user.id)}>
         <UserCard nickname={user.nickname} profilePic={user.profileUrl} />
       </Profile>
       <SidebarMenu>
