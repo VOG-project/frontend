@@ -2,18 +2,11 @@ import tw, { styled } from "twin.macro";
 import useFriendState from "@/hooks/useFriendState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
-import { deleteFriendRequest } from "@/apis/friend";
 import { getIcons } from "../icons";
 
 const Friend = () => {
-  const { friends, isShow, handleFriendToggle } = useFriendState();
-  const handleRemoveFriendClick = async (userId: number, targetId: number) => {
-    const res = await deleteFriendRequest(userId, targetId);
-
-    if (res.success) {
-      console.log("성공!");
-    }
-  };
+  const { friends, isShow, handleFriendToggle, handleRemoveFriendClick } =
+    useFriendState();
 
   return (
     <FriendContainer isShow={isShow}>
