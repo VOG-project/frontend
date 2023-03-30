@@ -15,7 +15,7 @@ const Socket = () => {
     setChat,
     resetChat,
   } = useChatState();
-  const { userId } = useUserState();
+  const { userId, user } = useUserState();
 
   useEffect(() => {
     if (router.asPath.split("/").includes("chat") && router.query.id) {
@@ -27,7 +27,7 @@ const Socket = () => {
     if (!userId) return;
 
     socketClient.connect();
-    enterRoomEmit(userId, "test", roomId);
+    enterRoomEmit(userId, user.nickname, roomId);
   };
 
   const handleChatRoomLeave = () => {
