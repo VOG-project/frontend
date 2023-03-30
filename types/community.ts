@@ -1,7 +1,7 @@
 import { ParsedUrlQuery } from "querystring";
 
 type HandleCommentSubmit = (
-  content: string,
+  content: string | undefined,
   group: number,
   sequence: number
 ) => Promise<void>;
