@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
+import useUserProfileState from "@/hooks/useUserProfileState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
@@ -20,6 +21,7 @@ const Detail = () => {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const { userId } = useUserState();
+  const { handleUserProfileOpen } = useUserProfileState();
   const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
@@ -88,6 +90,7 @@ const Detail = () => {
             content={content}
             comments={comments}
             handleCommentSubmit={handleCommentSubmit}
+            handleUserProfileOpen={handleUserProfileOpen}
           />
         </DetailContainer>
       </DetailWrapper>
