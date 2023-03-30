@@ -29,10 +29,14 @@ const CommentEdit = ({
             textareaRef={textareaRef}
             buttonRef={buttonRef}
           />
+
           <CommentBntContainer>
-            <CommentCancelBtn onClick={handleIsEditingToggle}>
-              취소
-            </CommentCancelBtn>
+            {isReply && (
+              <CommentCancelBtn onClick={handleIsEditingToggle}>
+                취소
+              </CommentCancelBtn>
+            )}
+
             <CommentSubmitBtn
               ref={buttonRef}
               onClick={() =>
