@@ -16,6 +16,12 @@ const signUpRequest = async (
   return res.data;
 };
 
+const getUserInfoRequest = async (userId: number) => {
+  const res = await customAxios().get(`/users/${userId}`);
+
+  return res.data;
+};
+
 const uploadProfilePicRequest = async (userId: number, profilePic: File) => {
   const formData = new FormData();
   formData.append("image", profilePic, profilePic.name);
@@ -62,6 +68,7 @@ const withdrawalRequest = async (userId: number, password: string) => {
 
 export {
   signUpRequest,
+  getUserInfoRequest,
   uploadProfilePicRequest,
   changeNicknameRequest,
   changePasswordRequest,
