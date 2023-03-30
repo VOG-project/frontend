@@ -2,15 +2,18 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
 import useUserState from "@/hooks/useUserState";
+import useFriendState from "@/hooks/useFriendState";
 import useToast from "@/hooks/useToast";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
 import { loginRequest, LoginRequest } from "@/apis/auth";
+import { getFriendsRequest } from "@/apis/friend";
 
 const Login = () => {
   const { setUser } = useUserState();
+  const { setFriend } = useFriendState();
   const router = useRouter();
   const { toast } = useToast();
   const {
@@ -39,6 +42,13 @@ const Login = () => {
         };
       });
       router.push("/select-game");
+      const friendsRes = await getFriendsRequest(res.result.id);
+      if (friendsRes.success) {
+        setFriend((prev) => {
+          return { ...prev, friends: friendsRes.result };
+        });
+        console.log(friendsRes);
+      }
     } else {
       toast.alert(res.error);
     }
