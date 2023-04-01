@@ -40,11 +40,11 @@ const ChatSocket = ({
             roomId,
           });
         }
-        peerConnection.ontrack = (e) => {
-          if (peerStreamRef.current) {
-            peerStreamRef.current.srcObject = e.streams[0];
-          }
-        };
+      };
+      peerConnection.ontrack = (e) => {
+        if (peerStreamRef.current) {
+          peerStreamRef.current.srcObject = e.streams[0];
+        }
       };
     }
 
