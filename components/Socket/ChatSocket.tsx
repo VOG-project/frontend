@@ -125,7 +125,7 @@ const ChatSocket = ({
       <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
         <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
         <audio ref={myStreamRef}></audio>
-        <audio ref={peerStreamRef}></audio>
+        <audio ref={peerStreamRef} autoPlay></audio>
       </Button>
     </ChatSocketContainer>
   );
@@ -136,7 +136,7 @@ export default ChatSocket;
 const ChatSocketContainer = styled.div<{ isChatRoom: boolean }>(
   ({ isChatRoom }) => [
     tw`block w-full h-16 bg-black/80`,
-    isChatRoom && tw`hidden`,
+    isChatRoom && tw`invisible`,
   ]
 );
 
