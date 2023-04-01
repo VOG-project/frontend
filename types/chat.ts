@@ -62,6 +62,7 @@ export interface ChatProps {
 
 export interface ChatSocketProps {
   isChatRoom: boolean;
+  roomId: string;
   setChat: SetterOrUpdater<ChatState>;
   socketConnect: () => void;
   handleChatRoomLeave: () => void;
