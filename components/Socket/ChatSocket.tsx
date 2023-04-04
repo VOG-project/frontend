@@ -5,6 +5,7 @@ import Button from "../common/Button";
 import { socketClient } from "@/utils/socketClient";
 import { getIcons } from "../icons";
 import { ChatSocketProps } from "@/types/chat";
+import { ChatState } from "@/types/chat";
 
 const ChatSocket = ({
   isChatRoom,
@@ -24,7 +25,7 @@ const ChatSocket = ({
   useEffect(() => {
     socketConnect();
 
-    socketClient.on("setChat", async (data) => {
+    socketClient.on("setChat", async (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant, title };
@@ -32,7 +33,7 @@ const ChatSocket = ({
     });
 
     socketClient.on("welcome", async (socketId) => {
-      createPeerConnection(socketId);
+      await createPeerConnection(socketId);
       sendOffer(socketId);
     });
 
@@ -58,13 +59,12 @@ const ChatSocket = ({
 
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
-      // console.log("recieve offer", data);
+      await createPeerConnection(socketId);
       getOffer(socketId, offer);
     });
 
     socketClient.on("answer", (data) => {
       const { socketId, answer } = data;
-      // console.log("recieve answer", data);
       getAnswer(socketId, answer);
     });
 
