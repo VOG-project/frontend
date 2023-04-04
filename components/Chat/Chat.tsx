@@ -26,6 +26,7 @@ const Chat = ({ data }: ChatProps) => {
   const { result, chatRoomCount } = data;
   const [roomList, setRoomList] = useState(result);
   const [curPage, setCurPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(chatRoomCount);
   const { userId } = useUserState();
   const { setChat } = useChatState();
   const { toast } = useToast();
@@ -34,8 +35,11 @@ const Chat = ({ data }: ChatProps) => {
   useEffect(() => {
     (async () => {
       const res = await getChatRoomsRequest(curPage);
-      console.log(res);
       setRoomList(res.result);
+      await getChatRoomCountRequest().then((res) => {
+        const chatRoomCount = res.result.chatRoomCount;
+        setTotalCount(chatRoomCount);
+      });
     })();
   }, [curPage]);
 
@@ -54,7 +58,7 @@ const Chat = ({ data }: ChatProps) => {
       });
       router.push(`/chat/${roomId}`);
     } else {
-      console.log(res);
+      toast.alert(res.error);
     }
   };
 
@@ -93,7 +97,7 @@ const Chat = ({ data }: ChatProps) => {
         <ChatButtonContainer>
           <Pagination
             curPage={curPage}
-            count={chatRoomCount}
+            count={totalCount}
             setCurPage={setCurPage}
           />
         </ChatButtonContainer>
@@ -112,10 +116,10 @@ export default Chat;
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await getChatRoomsRequest(1);
   const chatRoomCountRes = await getChatRoomCountRequest();
-  console.log(chatRoomCountRes);
+  console.log(chatRoomCountRes.result);
   return {
     props: {
-      data: { ...res, chatRoomCount: 20 },
+      data: { ...res, chatRoomCount: chatRoomCountRes.result.chatRoomCount },
     },
   };
 };
