@@ -12,7 +12,7 @@ import { sendMessageEmit, leaveRoomEmit } from "@/utils/socketClient";
 const ChatRoom = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
-  const { userId } = useUser();
+  const { user, userId } = useUser();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const {
@@ -57,13 +57,13 @@ const ChatRoom = () => {
           {
             content: message,
             roomId: roomId,
-            nickname: "test",
+            nickname: user.nickname,
             isSender: true,
           },
         ],
       };
     });
-    sendMessageEmit(message, roomId, "test");
+    sendMessageEmit(message, roomId, user.nickname);
     setMessage("");
   };
 
