@@ -39,7 +39,7 @@ const getPostRequest = async (postId: number) => {
 const getPostCount = async (category: string) => {
   const res = await customAxios().get(`/posts/count`, {
     params: {
-      board: category,
+      category: category,
     },
   });
 
