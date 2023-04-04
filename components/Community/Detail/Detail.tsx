@@ -11,6 +11,11 @@ import Button from "@/components/common/Button";
 import Post from "./Post";
 import { getPostRequest } from "@/apis/community";
 import { getCommentsRequest, createCommentRequest } from "@/apis/comment";
+import {
+  getLikeListRequest,
+  addLikePostRequest,
+  cancelLikePostRequset,
+} from "@/apis/like";
 import { getTitle } from "@/utils/getTitle";
 import { getIcons } from "@/components/icons";
 import { CommunityQuery, ContentDetail, Comment } from "@/types/community";
@@ -20,6 +25,7 @@ const Detail = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
+  const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
   const { toast } = useToast();
@@ -32,15 +38,18 @@ const Detail = () => {
     (async () => {
       const postRes = await getPostRequest(Number(query.id));
       const commentsRes = await getCommentsRequest(Number(query.id));
+      const likesRes = await getLikeListRequest(Number(query.id));
 
       if (postRes.success) {
-        console.log(postRes);
         setContent(postRes.result);
       }
 
       if (commentsRes.success) {
-        console.log(commentsRes);
         setComments(commentsRes.result);
+      }
+
+      if (likesRes.success) {
+        setLikes(likesRes.result.userIds);
       }
     })();
   }, [query, category]);
@@ -72,6 +81,19 @@ const Detail = () => {
     console.log(res);
   };
 
+  const handleLikeButtonClick = async () => {
+    if (!userId) return;
+    const postId = query.id;
+
+    if (userId in likes) {
+      const res = await cancelLikePostRequset(Number(postId));
+      console.log(res);
+    } else {
+      const res = await addLikePostRequest(Number(postId));
+      console.log(res);
+    }
+  };
+
   return (
     <MainLayout>
       <DetailWrapper>
@@ -89,7 +111,9 @@ const Detail = () => {
           <Post
             content={content}
             comments={comments}
+            likes={likes}
             handleCommentSubmit={handleCommentSubmit}
+            handleLikeButtonClick={handleLikeButtonClick}
             handleUserProfileOpen={handleUserProfileOpen}
           />
         </DetailContainer>
