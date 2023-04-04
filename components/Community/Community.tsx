@@ -9,13 +9,14 @@ import Navigation from "./Navigation";
 import Contents from "./Contents";
 import Pagination from "../Pagination";
 import Button from "../common/Button";
-import { getPostsRequest } from "@/apis/community";
+import { getPostsRequest, getPostCount } from "@/apis/community";
 import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 
-const Community = ({ data, postCount }: CommunityProps) => {
+const Community = ({ data }: CommunityProps) => {
   const [curPage, setCurPage] = useState(1);
   const [contents, setContents] = useState(data.result);
+  const [totalCount, setTotalCount] = useState(data.postCount);
   const router = useRouter();
   const query = router.query as CommunityQuery;
   const category = query.category;
@@ -25,6 +26,7 @@ const Community = ({ data, postCount }: CommunityProps) => {
     (async () => {
       const res = await getPostsRequest(category, 1);
       setContents(res.result);
+      await getPostCount(category).then((res) => setTotalCount(res.result));
     })();
   }, [category]);
 
@@ -60,7 +62,7 @@ const Community = ({ data, postCount }: CommunityProps) => {
         <CommunityButtonContainer>
           <Pagination
             curPage={curPage}
-            count={postCount}
+            count={totalCount}
             setCurPage={setCurPage}
           />
           <Button
@@ -84,8 +86,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const category = query.category;
 
   const res = await getPostsRequest(category, 1);
+  const postCountRes = await getPostCount(category);
 
-  return { props: { data: res } };
+  return { props: { data: { ...res, postCount: postCountRes.result } } };
 };
 
 const CommunityWrapper = tw.article`
