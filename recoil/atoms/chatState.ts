@@ -15,6 +15,7 @@ export const chatState = atom<ChatState>({
     messages: [],
     title: "",
     roomId: "",
+    streams: {},
   },
   effects_UNSTABLE: [persistAtom],
 });
