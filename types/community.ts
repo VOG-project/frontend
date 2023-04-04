@@ -52,14 +52,16 @@ export interface CommunityProps {
   data: {
     success: boolean;
     result: Content[];
+    postCount: number;
   };
-  postCount: number;
 }
 
 export interface PostProps {
   content?: ContentDetail;
   comments: Comment[];
+  likes: Number[];
   handleCommentSubmit: HandleCommentSubmit;
+  handleLikeButtonClick: () => void;
   handleUserProfileOpen: (userId: number | null) => Promise<void>;
 }
 
