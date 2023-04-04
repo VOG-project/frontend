@@ -8,7 +8,9 @@ import timeDifference from "@/utils/timeDifference";
 const Post = ({
   content,
   comments,
+  likes,
   handleCommentSubmit,
+  handleLikeButtonClick,
   handleUserProfileOpen,
 }: PostProps) => {
   if (!content) return null;
@@ -27,7 +29,7 @@ const Post = ({
         <PostInfoContainer>
           <PostInfo>
             {getIcons("thumb", 16)}
-            <PostInfoText>{content.likeCount}</PostInfoText>
+            <PostInfoText>{likes.length}</PostInfoText>
           </PostInfo>
           <PostInfo>
             {getIcons("eye", 16)}
@@ -40,12 +42,12 @@ const Post = ({
         </PostInfoContainer>
       </PostAuthor>
       <PostTextContainer>
-        <PostText>{content.content}</PostText>
+        <PostText dangerouslySetInnerHTML={{ __html: content.content }} />
         <PostLike>
-          <Button bgColor="primary" width={6}>
+          <Button bgColor="primary" width={6} onClick={handleLikeButtonClick}>
             <LikeButton>
               {getIcons("thumb", 16)}
-              <LikeCount>{content.likeCount}</LikeCount>
+              <LikeCount>{likes.length}</LikeCount>
             </LikeButton>
           </Button>
         </PostLike>
@@ -85,7 +87,7 @@ const PostNickname = tw.span``;
 
 const PostTextContainer = tw.div``;
 
-const PostText = tw.p`
+const PostText = tw.div`
   p-12
 `;
 
