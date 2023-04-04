@@ -42,7 +42,6 @@ const Socket = () => {
       {roomId && (
         <ChatSocket
           isChatRoom={isChatRoom}
-          roomId={roomId}
           setChat={setChat}
           socketConnect={socketConnect}
           handleChatRoomLeave={handleChatRoomLeave}
