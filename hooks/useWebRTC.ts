@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { socketClient } from "@/utils/socketClient";
 import useChatState from "./useChatState";
 
