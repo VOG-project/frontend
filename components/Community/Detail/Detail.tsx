@@ -81,7 +81,6 @@ const Detail = () => {
     sequence: number
   ) => {
     if (!userId) return;
-    console.log(sequence);
     if (!content) {
       toast.alert("댓글을 입력해주세요.");
       return;
