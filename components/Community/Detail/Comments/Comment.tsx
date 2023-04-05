@@ -11,7 +11,6 @@ const Comment = ({
   createdAt,
   content,
   group,
-  sequence,
   reply,
   handleCommentSubmit,
   handleUserProfileOpen,
@@ -30,40 +29,32 @@ const Comment = ({
       <CommentEdit
         isReply={true}
         group={group}
-        sequence={sequence}
+        sequence={reply.length}
         handleCommentSubmit={handleCommentSubmit}
       />
-      {reply.length > 1 && (
+      {
         <ReplyToggle onClick={() => setReplyToggle((prev) => !prev)}>
           {replyToggle ? getIcons("on", 24) : getIcons("off", 24)}답글
-          {reply.length - 1}개
+          {reply.length}개
         </ReplyToggle>
-      )}
+      }
       {replyToggle &&
-        reply
-          .filter((reply) => reply.sequence > 0)
-          .map((reply) => {
-            return (
-              <CommentReply key={reply.id}>
-                <ReturnIcon>{getIcons("return", 24)}</ReturnIcon>
-                <CommentAuthor>
-                  <CommentNickname
-                    onClick={() => handleUserProfileOpen(reply.user.id)}
-                  >
-                    {reply.user.nickname}
-                  </CommentNickname>
-                  <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
-                </CommentAuthor>
-                <CommentText>{reply.content}</CommentText>
-                <CommentEdit
-                  isReply={true}
-                  group={reply.group}
-                  sequence={reply.sequence}
-                  handleCommentSubmit={handleCommentSubmit}
-                />
-              </CommentReply>
-            );
-          })}
+        reply.slice(1).map((reply) => {
+          return (
+            <CommentReply key={reply.id}>
+              <ReturnIcon>{getIcons("return", 24)}</ReturnIcon>
+              <CommentAuthor>
+                <CommentNickname
+                  onClick={() => handleUserProfileOpen(reply.user.id)}
+                >
+                  {reply.user.nickname}
+                </CommentNickname>
+                <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
+              </CommentAuthor>
+              <CommentText>{reply.content}</CommentText>
+            </CommentReply>
+          );
+        })}
     </CommentContainer>
   );
 };

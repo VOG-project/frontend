@@ -20,7 +20,6 @@ const Comments = ({
             createdAt={comment.createdAt}
             content={comment.content}
             group={comment.group}
-            sequence={comment.sequence}
             reply={comment.reply}
             handleCommentSubmit={handleCommentSubmit}
             handleUserProfileOpen={handleUserProfileOpen}
@@ -29,7 +28,7 @@ const Comments = ({
       })}
       <CommentEdit
         isReply={false}
-        group={0}
+        group={undefined}
         sequence={0}
         handleCommentSubmit={handleCommentSubmit}
       />
