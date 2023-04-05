@@ -32,26 +32,43 @@ const Detail = () => {
   const router = useRouter();
   const query = router.query as CommunityQuery;
 
+  const updateComments = async (postId: number) => {
+    const res = await getCommentsRequest(postId);
+
+    if (res.success) {
+      setComments(res.result);
+    } else {
+      toast.alert(res.error);
+    }
+  };
+
+  const updateLikes = async (postId: number) => {
+    const res = await getLikeListRequest(postId);
+
+    if (res.success) {
+      setLikes(res.result.userIds);
+    } else {
+      toast.alert(res.error);
+    }
+  };
+
+  const updatePostDetail = async (postId: number) => {
+    const res = await getPostRequest(postId);
+
+    if (res.success) {
+      setContent(res.result);
+    } else {
+      toast.alert(res.error);
+    }
+  };
+
   useEffect(() => {
+    const postId = Number(query.id);
     setCategory(query.category);
     setTitle(getTitle(category));
-    (async () => {
-      const postRes = await getPostRequest(Number(query.id));
-      const commentsRes = await getCommentsRequest(Number(query.id));
-      const likesRes = await getLikeListRequest(Number(query.id));
-
-      if (postRes.success) {
-        setContent(postRes.result);
-      }
-
-      if (commentsRes.success) {
-        setComments(commentsRes.result);
-      }
-
-      if (likesRes.success) {
-        setLikes(likesRes.result.userIds);
-      }
-    })();
+    updatePostDetail(postId);
+    updateLikes(postId);
+    updateComments(postId);
   }, [query, category]);
 
   const handleListButtonClick = () => {
@@ -60,25 +77,27 @@ const Detail = () => {
 
   const handleCommentSubmit = async (
     content: string | undefined,
-    group: number,
+    group: number | undefined,
     sequence: number
   ) => {
     if (!userId) return;
-
+    console.log(sequence);
     if (!content) {
       toast.alert("댓글을 입력해주세요.");
       return;
     }
 
-    const postId = query.id;
+    const postId = Number(query.id);
     const res = await createCommentRequest(
       userId,
-      Number(postId),
+      postId,
       content,
-      group,
+      group || userId,
       sequence
     );
-    console.log(res);
+    if (res.success) {
+      updateComments(postId);
+    }
   };
 
   const handleLikeButtonClick = async () => {
@@ -90,7 +109,7 @@ const Detail = () => {
       console.log(res);
     } else {
       const res = await addLikePostRequest(Number(postId));
-      console.log(res);
+      console.log("add like", res);
     }
   };
 
