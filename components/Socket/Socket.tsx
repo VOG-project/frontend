@@ -10,12 +10,10 @@ import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
 const Socket = () => {
   const [isChatRoom, setChatRoom] = useState(false);
   const router = useRouter();
-  const {
-    chat: { roomId },
-    setChat,
-    resetChat,
-  } = useChatState();
+  const { chat, setChat, resetChat } = useChatState();
   const { userId, user } = useUserState();
+
+  const roomId = chat.roomId;
 
   useEffect(() => {
     if (router.asPath.split("/").includes("chat") && router.query.id) {
@@ -42,6 +40,7 @@ const Socket = () => {
       {roomId && (
         <ChatSocket
           isChatRoom={isChatRoom}
+          chat={chat}
           setChat={setChat}
           socketConnect={socketConnect}
           handleChatRoomLeave={handleChatRoomLeave}
