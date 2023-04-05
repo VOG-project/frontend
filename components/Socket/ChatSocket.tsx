@@ -42,23 +42,21 @@ const ChatSocket = ({
     const peerConnection = new RTCPeerConnection({
       iceServers: [
         {
-          urls: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
-            "stun:stun4.l.google.com:19302",
-          ],
+          urls: ["stun:stun.l.google.com:19302"],
         },
       ],
     });
-    const myStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-    myStream
-      .getTracks()
-      .forEach((track) => peerConnection.addTrack(track, myStream));
+    navigator.mediaDevices
+      .getUserMedia(CONSTRAINTS)
+      .then((stream) =>
+        stream
+          .getTracks()
+          .forEach((track) => peerConnection.addTrack(track, stream))
+      );
 
     peerConnection.onicecandidate = (e) => {
       if (e.candidate) {
+        console.log("emit iceCandidate", e.candidate);
         socketClient.emit("iceCandidate", {
           targetId: socketId,
           iceCandidate: e.candidate,
@@ -73,6 +71,7 @@ const ChatSocket = ({
     peerConnection.oniceconnectionstatechange = (e) => {
       console.log(e);
     };
+
     if (peerConnectionsRef.current) {
       // peerConnectionsRef.current[socketId] = peerConnection;
       peerConnectionsRef.current = {
@@ -158,10 +157,13 @@ const ChatSocket = ({
 
     socketClient.on("iceCandidate", async (data) => {
       const { socketId, iceCandidate } = data;
+      console.log(socketId);
       // await getIceCandidate(socketId, iceCandidate);
       const peerConnection = peerConnectionsRef.current[socketId];
       if (peerConnection) {
+        console.log(iceCandidate);
         await peerConnection.addIceCandidate(iceCandidate);
+        console.log(peerConnection);
       }
     });
 
@@ -170,10 +172,6 @@ const ChatSocket = ({
     };
   }, []);
 
-  useEffect(() => {
-    console.log(peerConnectionsRef);
-  }, [peerConnectionsRef]);
-
   return (
     <ChatSocketContainer isChatRoom={isChatRoom}>
       <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
@@ -181,6 +179,7 @@ const ChatSocket = ({
       </Button>
       {socketIds.map((socketId) => {
         const stream = chat.streams[socketId];
+        console.log(stream);
         return <Audio key={socketId} stream={stream}></Audio>;
       })}
     </ChatSocketContainer>
