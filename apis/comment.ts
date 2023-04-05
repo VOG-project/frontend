@@ -1,7 +1,11 @@
 import customAxios from "@/utils/customAxios";
 
 const getCommentsRequest = async (postId: number) => {
-  const res = await customAxios().get(`/comments/${postId}`);
+  const res = await customAxios().get(`/comments/${postId}`, {
+    params: {
+      cursor: 0,
+    },
+  });
 
   return res.data;
 };
