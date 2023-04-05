@@ -46,13 +46,21 @@ const ChatSocket = ({
         },
       ],
     });
-    navigator.mediaDevices
-      .getUserMedia(CONSTRAINTS)
-      .then((stream) =>
-        stream
-          .getTracks()
-          .forEach((track) => peerConnection.addTrack(track, stream))
-      );
+    // navigator.mediaDevices
+    //   .getUserMedia(CONSTRAINTS)
+    //   .then((stream) =>
+    //     stream
+    //       .getTracks()
+    //       .forEach((track) => peerConnection.addTrack(track, stream))
+    //   );
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+      stream
+        .getTracks()
+        .forEach((track) => peerConnection.addTrack(track, stream));
+    } catch (error) {
+      console.error(error);
+    }
 
     peerConnection.onicecandidate = (e) => {
       if (e.candidate) {
@@ -65,7 +73,12 @@ const ChatSocket = ({
     };
 
     peerConnection.ontrack = (e) => {
-      handleTrack(e, socketId);
+      const stream = e.streams[0];
+      if (stream) {
+        setChat((prev) => {
+          return { ...prev, streams: { ...prev.streams, [socketId]: stream } };
+        });
+      }
     };
 
     peerConnection.oniceconnectionstatechange = (e) => {
@@ -157,13 +170,10 @@ const ChatSocket = ({
 
     socketClient.on("iceCandidate", async (data) => {
       const { socketId, iceCandidate } = data;
-      console.log(socketId);
       // await getIceCandidate(socketId, iceCandidate);
       const peerConnection = peerConnectionsRef.current[socketId];
       if (peerConnection) {
-        console.log(iceCandidate);
         await peerConnection.addIceCandidate(iceCandidate);
-        console.log(peerConnection);
       }
     });
 
@@ -179,7 +189,6 @@ const ChatSocket = ({
       </Button>
       {socketIds.map((socketId) => {
         const stream = chat.streams[socketId];
-        console.log(stream);
         return <Audio key={socketId} stream={stream}></Audio>;
       })}
     </ChatSocketContainer>
