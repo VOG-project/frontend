@@ -2,7 +2,7 @@ import { ParsedUrlQuery } from "querystring";
 
 type HandleCommentSubmit = (
   content: string | undefined,
-  group: number,
+  group: number | undefined,
   sequence: number
 ) => Promise<void>;
 
@@ -76,8 +76,7 @@ export interface CommentProps {
   author: string;
   createdAt: string;
   content: string;
-  group: number;
-  sequence: number;
+  group: number | undefined;
   reply: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
   handleUserProfileOpen: (userId: number | null) => Promise<void>;
@@ -85,7 +84,7 @@ export interface CommentProps {
 
 export interface CommentEditProps {
   isReply: boolean;
-  group: number;
+  group: number | undefined;
   sequence: number;
   handleCommentSubmit: HandleCommentSubmit;
 }
