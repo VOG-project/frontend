@@ -16,13 +16,14 @@ const SelectGame = () => {
     <SelectGameWrapper>
       <SelectGameContainer>
         {GAMES.map((game) => {
-          const { name, image, logo } = game;
+          const { name, image, logo, disabled } = game;
           return (
             <GameCard
               key={name}
               name={name}
               image={image}
               logo={logo}
+              disabled={disabled}
               onGameCardClick={handleGameCardClick}
             />
           );
