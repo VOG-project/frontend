@@ -69,7 +69,17 @@ const ChatSocket = ({
     peerConnection.ontrack = (e) => {
       handleTrack(e, socketId);
     };
-    peerConnectionsRef.current[socketId] = peerConnection;
+
+    peerConnection.oniceconnectionstatechange = (e) => {
+      console.log(e);
+    };
+    if (peerConnectionsRef.current) {
+      // peerConnectionsRef.current[socketId] = peerConnection;
+      peerConnectionsRef.current = {
+        ...peerConnectionsRef.current,
+        [socketId]: peerConnection,
+      };
+    }
 
     return peerConnection;
   };
@@ -93,7 +103,6 @@ const ChatSocket = ({
       // await createPeerConnection(socketId);
       // await sendOffer(socketId);
       const peerConnection = await createPeerConnection(socketId);
-      console.log(peerConnection);
       const offer = await peerConnection.createOffer({
         offerToReceiveAudio: true,
       });
@@ -153,7 +162,6 @@ const ChatSocket = ({
       const peerConnection = peerConnectionsRef.current[socketId];
       if (peerConnection) {
         await peerConnection.addIceCandidate(iceCandidate);
-        console.log(peerConnectionsRef.current);
       }
     });
 
@@ -161,6 +169,10 @@ const ChatSocket = ({
       socketClient.removeAllListeners();
     };
   }, []);
+
+  useEffect(() => {
+    console.log(peerConnectionsRef);
+  }, [peerConnectionsRef]);
 
   return (
     <ChatSocketContainer isChatRoom={isChatRoom}>
