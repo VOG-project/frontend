@@ -27,16 +27,8 @@ const ChatSocket = ({
   //   getIceCandidate,
   // } = useWebRTC();
   const [socketIds, setSocketIds] = useState<string[]>([]);
+  const [streams, setStreams] = useState<MediaStream[]>([]);
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-
-  const handleTrack = (e: RTCTrackEvent, socketId: string) => {
-    setChat((prev) => {
-      return {
-        ...prev,
-        streams: { ...prev.streams, [socketId]: e.streams[0] },
-      };
-    });
-  };
 
   const createPeerConnection = async (socketId: string) => {
     const peerConnection = new RTCPeerConnection({
@@ -55,9 +47,10 @@ const ChatSocket = ({
     //   );
     try {
       const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-      stream
-        .getTracks()
-        .forEach((track) => peerConnection.addTrack(track, stream));
+      stream.getTracks().forEach((track) => {
+        console.log(track);
+        peerConnection.addTrack(track, stream);
+      });
     } catch (error) {
       console.error(error);
     }
@@ -114,13 +107,15 @@ const ChatSocket = ({
     socketClient.on("welcome", async (socketId) => {
       // await createPeerConnection(socketId);
       // await sendOffer(socketId);
-      const peerConnection = await createPeerConnection(socketId);
-      const offer = await peerConnection.createOffer({
-        offerToReceiveAudio: true,
-      });
-      await peerConnection.setLocalDescription(offer);
-      socketClient.emit("offer", { targetId: socketId, offer });
-      console.log("sent offer");
+      try {
+        const peerConnection = await createPeerConnection(socketId);
+        const offer = await peerConnection.createOffer();
+        peerConnection.setLocalDescription(offer);
+        socketClient.emit("offer", { targetId: socketId, offer });
+        console.log("sent offer");
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     socketClient.on("inputChat", (data) => {
@@ -152,9 +147,7 @@ const ChatSocket = ({
       console.log("received offer");
 
       await peerConnection.setRemoteDescription(offer);
-      const answer = await peerConnection.createAnswer({
-        offerToReceiveAudio: true,
-      });
+      const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
       socketClient.emit("answer", { targetId: socketId, answer });
       console.log("sent answer");
@@ -187,10 +180,9 @@ const ChatSocket = ({
       <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
         <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
       </Button>
-      {socketIds.map((socketId) => {
-        const stream = chat.streams[socketId];
-        return <Audio key={socketId} stream={stream}></Audio>;
-      })}
+      {Object.values(chat.streams).map((stream) => (
+        <Audio stream={stream}></Audio>
+      ))}
     </ChatSocketContainer>
   );
 };
