@@ -48,7 +48,6 @@ const ChatSocket = ({
     try {
       const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
       stream.getTracks().forEach((track) => {
-        console.log(track);
         peerConnection.addTrack(track, stream);
       });
     } catch (error) {
@@ -56,16 +55,15 @@ const ChatSocket = ({
     }
 
     peerConnection.onicecandidate = (e) => {
-      if (e.candidate) {
-        console.log("emit iceCandidate", e.candidate);
-        socketClient.emit("iceCandidate", {
-          targetId: socketId,
-          iceCandidate: e.candidate,
-        });
-      }
+      console.log("onicecandidate");
+      socketClient.emit("iceCandidate", {
+        targetId: socketId,
+        iceCandidate: e.candidate,
+      });
     };
 
     peerConnection.ontrack = (e) => {
+      console.log("ontrack");
       const stream = e.streams[0];
       if (stream) {
         setChat((prev) => {
@@ -79,7 +77,6 @@ const ChatSocket = ({
     };
 
     if (peerConnectionsRef.current) {
-      // peerConnectionsRef.current[socketId] = peerConnection;
       peerConnectionsRef.current = {
         ...peerConnectionsRef.current,
         [socketId]: peerConnection,
@@ -109,8 +106,10 @@ const ChatSocket = ({
       // await sendOffer(socketId);
       try {
         const peerConnection = await createPeerConnection(socketId);
-        const offer = await peerConnection.createOffer();
-        peerConnection.setLocalDescription(offer);
+        const offer = await peerConnection.createOffer({
+          offerToReceiveAudio: true,
+        });
+        await peerConnection.setLocalDescription(offer);
         socketClient.emit("offer", { targetId: socketId, offer });
         console.log("sent offer");
       } catch (error) {
@@ -142,23 +141,32 @@ const ChatSocket = ({
       const { socketId, offer } = data;
       // await createPeerConnection(socketId);
       // await getOffer(socketId, offer);
+      try {
+        const peerConnection = await createPeerConnection(socketId);
+        console.log("received offer");
 
-      const peerConnection = await createPeerConnection(socketId);
-      console.log("received offer");
-
-      await peerConnection.setRemoteDescription(offer);
-      const answer = await peerConnection.createAnswer();
-      await peerConnection.setLocalDescription(answer);
-      socketClient.emit("answer", { targetId: socketId, answer });
-      console.log("sent answer");
+        await peerConnection.setRemoteDescription(offer);
+        const answer = await peerConnection.createAnswer({
+          offerToReceiveAudio: true,
+        });
+        await peerConnection.setLocalDescription(answer);
+        socketClient.emit("answer", { targetId: socketId, answer });
+        console.log("sent answer");
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     socketClient.on("answer", async (data) => {
       const { socketId, answer } = data;
       // await getAnswer(socketId, answer);
-      const peerConnection = peerConnectionsRef.current[socketId];
-      await peerConnection.setRemoteDescription(answer);
-      console.log("received answer");
+      try {
+        const peerConnection = peerConnectionsRef.current[socketId];
+        await peerConnection.setRemoteDescription(answer);
+        console.log("received answer");
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     socketClient.on("iceCandidate", async (data) => {
@@ -167,6 +175,7 @@ const ChatSocket = ({
       const peerConnection = peerConnectionsRef.current[socketId];
       if (peerConnection) {
         await peerConnection.addIceCandidate(iceCandidate);
+        console.log("addIcecandidate");
       }
     });
 
