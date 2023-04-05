@@ -15,9 +15,7 @@ export interface ChatState {
   }[];
   title: string;
   roomId: string;
-  streams: {
-    [socketId: string]: MediaStream;
-  };
+  streams: { [socketId: string]: MediaStream };
 }
 
 export interface ChatMemberProps {
@@ -65,6 +63,7 @@ export interface ChatProps {
 
 export interface ChatSocketProps {
   isChatRoom: boolean;
+  chat: ChatState;
   setChat: SetterOrUpdater<ChatState>;
   socketConnect: () => void;
   handleChatRoomLeave: () => void;
