@@ -70,19 +70,35 @@ const ChatSocket = ({
     socketClient.on("welcome", async (socketId) => {
       // await createPeerConnection(socketId);
       // await sendOffer(socketId);
-      const peerConnection = new RTCPeerConnection(RTC_CONFIG);
+      const peerConnection = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [
+              "stun.l.google.com:19302",
+              "stun1.l.google.com:19302",
+              "stun2.l.google.com:19302",
+              "stun3.l.google.com:19302",
+              "stun4.l.google.com:19302",
+            ],
+          },
+        ],
+      });
       const myStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
       myStream
         .getTracks()
         .forEach((track) => peerConnection.addTrack(track, myStream));
 
       peerConnection.onicecandidate = (e) => {
-        if (e.candidate) {
-          socketClient.emit("iceCandidate", {
-            targetId: socketId,
-            iceCandidate: e.candidate,
-          });
-        }
+        socketClient.emit("iceCandidate", {
+          targetId: socketId,
+          iceCandidate: e.candidate,
+        });
+        // if (e.candidate) {
+        //   socketClient.emit("iceCandidate", {
+        //     targetId: socketId,
+        //     iceCandidate: e.candidate,
+        //   });
+        // }
       };
 
       peerConnection.ontrack = (e) => {
@@ -90,9 +106,12 @@ const ChatSocket = ({
       };
 
       peerConnections[socketId] = peerConnection;
-      const offer = await peerConnection.createOffer({});
+      const offer = await peerConnection.createOffer({
+        offerToReceiveAudio: true,
+      });
       await peerConnection.setLocalDescription(offer);
       socketClient.emit("offer", { targetId: socketId, offer });
+      console.log("sent offer");
     });
 
     socketClient.on("inputChat", (data) => {
@@ -119,19 +138,36 @@ const ChatSocket = ({
       const { socketId, offer } = data;
       // await createPeerConnection(socketId);
       // await getOffer(socketId, offer);
-      const peerConnection = new RTCPeerConnection(RTC_CONFIG);
+      const peerConnection = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [
+              "stun.l.google.com:19302",
+              "stun1.l.google.com:19302",
+              "stun2.l.google.com:19302",
+              "stun3.l.google.com:19302",
+              "stun4.l.google.com:19302",
+            ],
+          },
+        ],
+      });
       const myStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
       myStream
         .getTracks()
         .forEach((track) => peerConnection.addTrack(track, myStream));
 
       peerConnection.onicecandidate = (e) => {
-        if (e.candidate) {
-          socketClient.emit("iceCandidate", {
-            targetId: socketId,
-            iceCandidate: e.candidate,
-          });
-        }
+        socketClient.emit("iceCandidate", {
+          targetId: socketId,
+          iceCandidate: e.candidate,
+        });
+
+        // if (e.candidate) {
+        //   socketClient.emit("iceCandidate", {
+        //     targetId: socketId,
+        //     iceCandidate: e.candidate,
+        //   });
+        // }
       };
 
       peerConnection.ontrack = (e) => {
@@ -139,11 +175,15 @@ const ChatSocket = ({
       };
 
       peerConnections[socketId] = peerConnection;
+      console.log("received offer");
 
       await peerConnection.setRemoteDescription(offer);
-      const answer = await peerConnection.createAnswer({});
+      const answer = await peerConnection.createAnswer({
+        offerToReceiveAudio: true,
+      });
       await peerConnection.setLocalDescription(answer);
       socketClient.emit("answer", { targetId: socketId, answer });
+      console.log("sent answer");
     });
 
     socketClient.on("answer", async (data) => {
@@ -151,6 +191,7 @@ const ChatSocket = ({
       // await getAnswer(socketId, answer);
       const peerConnection = peerConnections[socketId];
       await peerConnection.setRemoteDescription(answer);
+      console.log("received answer");
     });
 
     socketClient.on("iceCandidate", async (data) => {
