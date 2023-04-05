@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import tw, { styled } from "twin.macro";
 // import useWebRTC from "@/hooks/useWebRTC";
 import Button from "../common/Button";
@@ -40,7 +40,7 @@ const ChatSocket = ({
   //   getAnswer,
   //   getIceCandidate,
   // } = useWebRTC();
-
+  const [socketIds, setSocketIds] = useState<string[]>([]);
   const peerConnections: { [key: string]: RTCPeerConnection } = {};
   const handleTrack = (e: RTCTrackEvent, socketId: string) => {
     setChat((prev) => {
@@ -56,6 +56,12 @@ const ChatSocket = ({
 
     socketClient.on("setChat", async (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
+      setSocketIds(() =>
+        chatParticipant.reduce(
+          (acc: string[], cur) => [...acc, cur.socketId],
+          []
+        )
+      );
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant, title };
       });
@@ -65,7 +71,6 @@ const ChatSocket = ({
       // await createPeerConnection(socketId);
       // await sendOffer(socketId);
       const peerConnection = new RTCPeerConnection(RTC_CONFIG);
-
       const myStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
       myStream
         .getTracks()
@@ -167,15 +172,10 @@ const ChatSocket = ({
       <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
         <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
       </Button>
-      {chat.chatParticipant
-        .reduce((acc: string[], cur) => {
-          const socketId = cur.socketId;
-          return [...acc, socketId];
-        }, [])
-        .map((socketId) => {
-          const stream = chat.streams[socketId];
-          return <Audio key={socketId} stream={stream}></Audio>;
-        })}
+      {socketIds.map((socketId) => {
+        const stream = chat.streams[socketId];
+        return <Audio key={socketId} stream={stream}></Audio>;
+      })}
     </ChatSocketContainer>
   );
 };
