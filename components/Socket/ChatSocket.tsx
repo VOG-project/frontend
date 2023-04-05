@@ -119,7 +119,7 @@ const ChatSocket = ({
       const { socketId, offer } = data;
       // await createPeerConnection(socketId);
       // await getOffer(socketId, offer);
-      const peerConnection = new RTCPeerConnection();
+      const peerConnection = new RTCPeerConnection(RTC_CONFIG);
       const myStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
       myStream
         .getTracks()
