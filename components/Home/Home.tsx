@@ -14,8 +14,12 @@ const Home = () => {
             커뮤니티에서 여러 정보를 공유하세요.
           </HomeText>
           <ButtonContainer>
-            <Button width={5}>채팅</Button>
-            <Button width={5}>커뮤니티</Button>
+            <Button bgColor="primary" width={5}>
+              채팅
+            </Button>
+            <Button bgColor="primary" width={5}>
+              커뮤니티
+            </Button>
           </ButtonContainer>
         </HomeContent>
       </HomeContainer>

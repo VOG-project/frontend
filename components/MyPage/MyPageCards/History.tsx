@@ -31,6 +31,7 @@ const History = () => {
         <HistoryContent>
           Test
           <CloseButton
+            bgColor="primary"
             position={{ type: "absolute", top: "0.5rem", right: "2rem" }}
             width={2.5}
             onClick={() => setIsOpen(false)}
