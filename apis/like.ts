@@ -6,14 +6,18 @@ const getLikeListRequest = async (postId: number) => {
   return res.data;
 };
 
-const addLikePostRequest = async (postId: number) => {
-  const res = await customAxios().post(`/like/${postId}`);
+const addLikePostRequest = async (userId: number, postId: number) => {
+  const res = await customAxios().post(`/like/${postId}`, {
+    userId,
+  });
 
   return res.data;
 };
 
-const cancelLikePostRequset = async (postId: number) => {
-  const res = await customAxios().patch(`/like/${postId}`);
+const cancelLikePostRequset = async (userId: number, postId: number) => {
+  const res = await customAxios().patch(`/like/${postId}`, {
+    userId,
+  });
 
   return res.data;
 };
