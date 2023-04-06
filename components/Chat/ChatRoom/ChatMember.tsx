@@ -14,12 +14,12 @@ const ChatMember = ({ members, handleChatRoomLeave }: ChatMemberProps) => {
           return (
             <MemberInfo key={member.userId}>
               <MemberProfilePic
-                src="/image/valorant_jett.jpg"
+                src={member.user.profileUrl}
                 alt="profile pic"
                 width={128}
                 height={128}
               />
-              <MemberNickname>{member.nickname}</MemberNickname>
+              <MemberNickname>{member.user.nickname}</MemberNickname>
             </MemberInfo>
           );
         })}

@@ -5,8 +5,14 @@ export interface ChatQuery extends ParsedUrlQuery {
   id: string;
 }
 
+interface ChatParticipant {
+  userId: number;
+  socketId: string;
+  user: { nickname: string; profileUrl: string; sex: string };
+}
+
 export interface ChatState {
-  chatParticipant: { userId: number; socketId: string; nickname: string }[];
+  chatParticipant: ChatParticipant[];
   messages: {
     content: string;
     nickname: string;
@@ -19,7 +25,7 @@ export interface ChatState {
 }
 
 export interface ChatMemberProps {
-  members: { userId: number; socketId: string; nickname: string }[];
+  members: ChatParticipant[];
   handleChatRoomLeave: () => void;
 }
 
