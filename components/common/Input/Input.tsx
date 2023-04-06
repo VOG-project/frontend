@@ -19,6 +19,8 @@ interface InputProps {
   height?: number;
   bgColor?: "gray";
   type?: "default" | "password" | "radio" | "number";
+  min?: number;
+  max?: number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -29,6 +31,8 @@ const Input = ({
   width,
   height,
   bgColor,
+  min,
+  max,
   type = "default",
   onChange,
 }: InputProps) => {
@@ -42,6 +46,8 @@ const Input = ({
           height={height}
           bgColor={bgColor}
           type={type}
+          min={min}
+          max={max}
           onChange={onChange}
         />
       ) : (
@@ -53,6 +59,8 @@ const Input = ({
           height={height}
           bgColor={bgColor}
           type={type}
+          min={min}
+          max={max}
         />
       )}
     </>
