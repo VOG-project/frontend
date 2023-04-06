@@ -13,7 +13,7 @@ const hasAuth =
       if (!isLogin) {
         router.push("/login");
       }
-    });
+    }, []);
     return <Component {...props} />;
   };
 
