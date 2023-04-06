@@ -101,14 +101,22 @@ const Detail = () => {
 
   const handleLikeButtonClick = async () => {
     if (!userId) return;
-    const postId = query.id;
+    const postId = Number(query.id);
 
     if (userId in likes) {
-      const res = await cancelLikePostRequset(Number(postId));
-      console.log(res);
+      const res = await cancelLikePostRequset(userId, postId);
+      if (res.success) {
+        updateLikes(postId);
+      } else {
+        toast.alert(res.error);
+      }
     } else {
-      const res = await addLikePostRequest(Number(postId));
-      console.log("add like", res);
+      const res = await addLikePostRequest(userId, postId);
+      if (res.success) {
+        updateLikes(postId);
+      } else {
+        toast.alert(res.error);
+      }
     }
   };
 
