@@ -15,7 +15,7 @@ export interface ChatState {
   }[];
   title: string;
   roomId: string;
-  streams: { [socketId: string]: MediaStream };
+  streams: { socketId: string; stream: MediaStream }[];
 }
 
 export interface ChatMemberProps {

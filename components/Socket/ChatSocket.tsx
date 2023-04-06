@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import tw, { styled } from "twin.macro";
-// import useWebRTC from "@/hooks/useWebRTC";
 import Button from "../common/Button";
-import Audio from "../common/Audio/Audio";
+// import Audio from "../common/Audio";
 import { socketClient } from "@/utils/socketClient";
 import { getIcons } from "../icons";
 import { ChatSocketProps } from "@/types/chat";
@@ -19,15 +18,6 @@ const ChatSocket = ({
   socketConnect,
   handleChatRoomLeave,
 }: ChatSocketProps) => {
-  // const {
-  //   createPeerConnection,
-  //   sendOffer,
-  //   getOffer,
-  //   getAnswer,
-  //   getIceCandidate,
-  // } = useWebRTC();
-  const [socketIds, setSocketIds] = useState<string[]>([]);
-  const [streams, setStreams] = useState<MediaStream[]>([]);
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
 
   const createPeerConnection = async (socketId: string) => {
@@ -38,28 +28,24 @@ const ChatSocket = ({
         },
       ],
     });
-    // navigator.mediaDevices
-    //   .getUserMedia(CONSTRAINTS)
-    //   .then((stream) =>
-    //     stream
-    //       .getTracks()
-    //       .forEach((track) => peerConnection.addTrack(track, stream))
-    //   );
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
       stream.getTracks().forEach((track) => {
         peerConnection.addTrack(track, stream);
       });
     } catch (error) {
-      console.error(error);
+      console.error("getTrack error: ", error);
     }
 
     peerConnection.onicecandidate = (e) => {
-      console.log("onicecandidate");
-      socketClient.emit("iceCandidate", {
-        targetId: socketId,
-        iceCandidate: e.candidate,
-      });
+      if (e.candidate) {
+        console.log("onicecandidate", e.candidate);
+        socketClient.emit("iceCandidate", {
+          targetId: socketId,
+          iceCandidate: e.candidate,
+        });
+      }
     };
 
     peerConnection.ontrack = (e) => {
@@ -67,7 +53,7 @@ const ChatSocket = ({
       const stream = e.streams[0];
       if (stream) {
         setChat((prev) => {
-          return { ...prev, streams: { ...prev.streams, [socketId]: stream } };
+          return { ...prev, streams: [...prev.streams, { socketId, stream }] };
         });
       }
     };
@@ -91,19 +77,12 @@ const ChatSocket = ({
 
     socketClient.on("setChat", async (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
-      const socketIds = chatParticipant.reduce(
-        (acc: string[], cur) => [...acc, cur.socketId],
-        []
-      );
-      setSocketIds(socketIds);
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant, title };
       });
     });
 
     socketClient.on("welcome", async (socketId) => {
-      // await createPeerConnection(socketId);
-      // await sendOffer(socketId);
       try {
         const peerConnection = await createPeerConnection(socketId);
         const offer = await peerConnection.createOffer({
@@ -139,8 +118,6 @@ const ChatSocket = ({
 
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
-      // await createPeerConnection(socketId);
-      // await getOffer(socketId, offer);
       try {
         const peerConnection = await createPeerConnection(socketId);
         console.log("received offer");
@@ -159,11 +136,10 @@ const ChatSocket = ({
 
     socketClient.on("answer", async (data) => {
       const { socketId, answer } = data;
-      // await getAnswer(socketId, answer);
       try {
         const peerConnection = peerConnectionsRef.current[socketId];
         await peerConnection.setRemoteDescription(answer);
-        console.log("received answer");
+        console.log("received answer", peerConnection);
       } catch (error) {
         console.error(error);
       }
@@ -171,11 +147,10 @@ const ChatSocket = ({
 
     socketClient.on("iceCandidate", async (data) => {
       const { socketId, iceCandidate } = data;
-      // await getIceCandidate(socketId, iceCandidate);
       const peerConnection = peerConnectionsRef.current[socketId];
       if (peerConnection) {
         await peerConnection.addIceCandidate(iceCandidate);
-        console.log("addIcecandidate");
+        console.log("addIcecandidate", iceCandidate);
       }
     });
 
@@ -184,14 +159,19 @@ const ChatSocket = ({
     };
   }, []);
 
+  useEffect(() => {
+    console.log(chat.streams);
+  }, [chat]);
+
   return (
     <ChatSocketContainer isChatRoom={isChatRoom}>
       <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
         <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
       </Button>
-      {Object.values(chat.streams).map((stream) => (
-        <Audio stream={stream}></Audio>
-      ))}
+      {/* {chat.streams.map((stream) => {
+        console.log(stream);
+        // return <Audio key={stream.socketId} stream={stream.stream}></Audio>;
+      })} */}
     </ChatSocketContainer>
   );
 };
