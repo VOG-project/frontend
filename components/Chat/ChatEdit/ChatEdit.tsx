@@ -21,19 +21,27 @@ const ChatEdit = ({
       handleConfirm={handleModalClose}
     >
       <ChatEditForm onSubmit={handleSubmit(handleChatRoomCreate)}>
-        <Input
-          register={register("title")}
-          width={18}
-          bgColor="gray"
-          placeholder="제목을 입력하세요"
-        />
-        <Input
-          type="number"
-          register={register("maximumMember")}
-          width={18}
-          bgColor="gray"
-          placeholder="최대 인원을 입력해주세요"
-        />
+        <ChatEditInput>
+          <ChatEditLabel>제목</ChatEditLabel>
+          <Input
+            register={register("title")}
+            width={18}
+            bgColor="gray"
+            placeholder="제목을 입력하세요"
+          />
+        </ChatEditInput>
+        <ChatEditInput>
+          <ChatEditLabel>최대 인원수</ChatEditLabel>
+          <Input
+            type="number"
+            register={register("maximumMember")}
+            width={18}
+            bgColor="gray"
+            placeholder="최대 인원을 입력해주세요"
+            min={2}
+            max={5}
+          />
+        </ChatEditInput>
         <ChatEditButtonContainer>
           <Button
             type="button"
@@ -61,3 +69,9 @@ const ChatEditForm = tw.form`
 const ChatEditButtonContainer = tw.div`
   flex justify-end px-8 space-x-4
 `;
+
+const ChatEditInput = tw.div`
+  flex flex-col w-full p-4
+`;
+
+const ChatEditLabel = tw.label``;
