@@ -1,4 +1,20 @@
-import hasAuth from "@/hocs/hasAuth";
+import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { loginState } from "@/recoil/selectors/loginState";
 import SelectGame from "@/components/SelectGame";
+import { useEffect } from "react";
 
-export default hasAuth(SelectGame);
+const SelectGamePage = () => {
+  const isLogin = useRecoilValue(loginState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLogin) {
+      router.push("/login");
+    }
+  }, []);
+
+  return <SelectGame />;
+};
+
+export default SelectGamePage;

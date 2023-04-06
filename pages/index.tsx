@@ -1,4 +1,20 @@
+import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { loginState } from "@/recoil/selectors/loginState";
 import Home from "@/components/Home";
-import hasAuth from "../hocs/hasAuth";
+import { useEffect } from "react";
 
-export default hasAuth(Home);
+const HomePage = () => {
+  const isLogin = useRecoilValue(loginState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLogin) {
+      router.push("/login");
+    }
+  }, []);
+
+  return <Home />;
+};
+
+export default HomePage;
