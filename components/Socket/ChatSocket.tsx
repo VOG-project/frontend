@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import tw, { styled } from "twin.macro";
 import Button from "../common/Button";
-// import Audio from "../common/Audio";
+import Audio from "../common/Audio";
 import { socketClient } from "@/utils/socketClient";
 import { getIcons } from "../icons";
 import { ChatSocketProps } from "@/types/chat";
@@ -19,7 +19,6 @@ const ChatSocket = ({
   handleChatRoomLeave,
 }: ChatSocketProps) => {
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-
   const createPeerConnection = async (socketId: string) => {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
@@ -31,6 +30,7 @@ const ChatSocket = ({
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+      console.log(stream);
       stream.getTracks().forEach((track) => {
         peerConnection.addTrack(track, stream);
       });
@@ -165,13 +165,23 @@ const ChatSocket = ({
 
   return (
     <ChatSocketContainer isChatRoom={isChatRoom}>
-      <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
+      <Button
+        width={6}
+        bgColor="secondary"
+        onClick={() => {
+          if (peerConnectionsRef.current) {
+            Object.values(peerConnectionsRef.current).forEach(
+              (peerConnection) => peerConnection.close()
+            );
+          }
+          handleChatRoomLeave();
+        }}
+      >
         <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
       </Button>
-      {/* {chat.streams.map((stream) => {
-        console.log(stream);
-        // return <Audio key={stream.socketId} stream={stream.stream}></Audio>;
-      })} */}
+      {chat.streams.map((stream) => {
+        return <Audio key={stream.socketId} stream={stream.stream}></Audio>;
+      })}
     </ChatSocketContainer>
   );
 };
