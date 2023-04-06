@@ -7,8 +7,10 @@ interface AudioProps {
 const Audio = ({ stream }: AudioProps) => {
   const streamRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
-    if (streamRef.current) {
-      streamRef.current.srcObject = stream;
+    if (stream instanceof MediaStream) {
+      if (streamRef.current) {
+        streamRef.current.srcObject = stream;
+      }
     }
   }, [stream]);
   return <audio ref={streamRef} autoPlay></audio>;
