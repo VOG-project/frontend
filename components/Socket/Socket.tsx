@@ -12,7 +12,6 @@ const Socket = () => {
   const router = useRouter();
   const { chat, setChat, resetChat } = useChatState();
   const { userId, user } = useUserState();
-
   const roomId = chat.roomId;
 
   useEffect(() => {
@@ -20,6 +19,20 @@ const Socket = () => {
       setChatRoom(true);
     } else setChatRoom(false);
   }, [router]);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, []);
+
+  const handleUnload = (e: BeforeUnloadEvent) => {
+    if (chat.roomId) {
+      e.preventDefault();
+      handleChatRoomLeave();
+      e.returnValue = "";
+    }
+  };
 
   const socketConnect = () => {
     if (!userId) return;
