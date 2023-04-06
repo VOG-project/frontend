@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import tw from "twin.macro";
-import ChatSocket from "./ChatSocket";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
 import { socketClient } from "@/utils/socketClient";
 import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
+
+const DynamicChatSocket = dynamic(() => import("./ChatSocket"));
 
 const Socket = () => {
   const [isChatRoom, setChatRoom] = useState(false);
@@ -38,7 +40,7 @@ const Socket = () => {
   return (
     <SocketContainer>
       {roomId && (
-        <ChatSocket
+        <DynamicChatSocket
           isChatRoom={isChatRoom}
           chat={chat}
           setChat={setChat}
