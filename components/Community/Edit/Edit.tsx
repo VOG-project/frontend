@@ -9,7 +9,6 @@ import { getIcons } from "@/components/icons";
 import { createPostRequest } from "@/apis/community";
 import { CommunityQuery } from "@/types/community";
 import "react-quill/dist/quill.snow.css";
-import { GetServerSideProps } from "next";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -102,10 +101,6 @@ const Edit = () => {
 };
 
 export default Edit;
-
-export const getServerSideProps: GetServerSideProps = (context) => {
-  const query = context.query;
-};
 
 const EditWrapper = tw.section`
   w-full h-full ml-64
