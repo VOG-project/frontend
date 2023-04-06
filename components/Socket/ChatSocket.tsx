@@ -29,15 +29,11 @@ const ChatSocket = ({
     });
 
     try {
-      if (typeof window !== "undefined") {
-        const stream = await window.navigator.mediaDevices.getUserMedia(
-          CONSTRAINTS
-        );
-        console.log(stream);
-        stream.getTracks().forEach((track) => {
-          peerConnection.addTrack(track, stream);
-        });
-      }
+      const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+      console.log("getUserMedia : ", navigator, stream);
+      stream.getTracks().forEach((track) => {
+        peerConnection.addTrack(track, stream);
+      });
     } catch (error) {
       console.error("getTrack error: ", error);
     }
