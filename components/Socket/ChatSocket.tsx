@@ -121,7 +121,9 @@ const ChatSocket = ({
       console.log("getOffer", socketId, offer);
       const peerConnection = createPeerConnection(socketId);
       await peerConnection.setRemoteDescription(offer);
-      const answer = await peerConnection.createAnswer();
+      const answer = await peerConnection.createAnswer({
+        offerToReceiveAudio: true,
+      });
       peerConnection.setLocalDescription(answer);
       console.log("send answer: ", answer);
       socketClient.emit("answer", { targetId: socketId, answer: answer });
