@@ -81,9 +81,6 @@ const ChatSocket = ({
 
     socketClient.on("setChat", async (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
-      chatParticipant.forEach((participant) => {
-        createPeerConnection(participant.socketId);
-      });
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant, title };
       });
@@ -91,9 +88,7 @@ const ChatSocket = ({
 
     socketClient.on("welcome", async (socketId) => {
       try {
-        const peerConnection =
-          peerConnectionsRef.current[socketId] ||
-          createPeerConnection(socketId);
+        const peerConnection = createPeerConnection(socketId);
         const offer = await peerConnection.createOffer({
           offerToReceiveAudio: true,
         });
@@ -128,15 +123,16 @@ const ChatSocket = ({
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
       try {
-        const peerConnection = peerConnectionsRef.current[socketId];
+        const peerConnection = createPeerConnection(socketId);
         console.log("received offer");
 
         await peerConnection.setRemoteDescription(offer);
         const answer = await peerConnection.createAnswer({
           offerToReceiveAudio: true,
         });
-        peerConnection.setLocalDescription(answer);
-        socketClient.emit("answer", { targetId: socketId, answer });
+        peerConnection.setLocalDescription(answer).then(() => {
+          socketClient.emit("answer", { targetId: socketId, answer });
+        });
         console.log("sent answer");
       } catch (error) {
         console.error(error);
@@ -156,10 +152,12 @@ const ChatSocket = ({
 
     socketClient.on("iceCandidate", async (data) => {
       const { socketId, iceCandidate } = data;
-      const peerConnection = peerConnectionsRef.current[socketId];
-      if (peerConnection) {
-        await peerConnection.addIceCandidate(iceCandidate);
-        console.log("addIcecandidate", iceCandidate);
+      if (peerConnectionsRef.current) {
+        const peerConnection = peerConnectionsRef.current[socketId];
+        if (peerConnection) {
+          await peerConnection.addIceCandidate(iceCandidate);
+          console.log("addIcecandidate", iceCandidate);
+        }
       }
     });
 
