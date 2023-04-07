@@ -95,7 +95,7 @@ const ChatSocket = ({
           const offer = await peerConnection.createOffer({
             offerToReceiveAudio: true,
           });
-          await peerConnection.setLocalDescription(offer);
+          peerConnection.setLocalDescription(offer);
           socketClient.emit("offer", { targetId: socketId, offer });
           console.log("sent offer");
         }
@@ -135,7 +135,7 @@ const ChatSocket = ({
           const answer = await peerConnection.createAnswer({
             offerToReceiveAudio: true,
           });
-          await peerConnection.setLocalDescription(answer);
+          peerConnection.setLocalDescription(answer);
           socketClient.emit("answer", { targetId: socketId, answer });
           console.log("sent answer");
         }
