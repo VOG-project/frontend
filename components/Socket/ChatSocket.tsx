@@ -18,7 +18,7 @@ const ChatSocket = ({
   handleChatRoomLeave,
 }: ChatSocketProps) => {
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-  const createPeerConnection = async (socketId: string) => {
+  const createPeerConnection = (socketId: string) => {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -33,15 +33,14 @@ const ChatSocket = ({
       ],
     });
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-      console.log("getUserMedia : ", navigator, stream);
-      stream.getTracks().forEach((track) => {
-        peerConnection.addTrack(track, stream);
-      });
-    } catch (error) {
-      console.error("getTrack error: ", error);
-    }
+    navigator.mediaDevices
+      .getUserMedia(CONSTRAINTS)
+      .then((stream) =>
+        stream
+          .getTracks()
+          .forEach((track) => peerConnection.addTrack(track, stream))
+      )
+      .catch((error) => console.error(error));
 
     peerConnection.onicecandidate = (e) => {
       if (e.candidate) {
@@ -82,6 +81,9 @@ const ChatSocket = ({
 
     socketClient.on("setChat", async (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
+      chatParticipant.forEach((participant) => {
+        createPeerConnection(participant.socketId);
+      });
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant, title };
       });
@@ -89,7 +91,7 @@ const ChatSocket = ({
 
     socketClient.on("welcome", async (socketId) => {
       try {
-        const peerConnection = await createPeerConnection(socketId);
+        const peerConnection = peerConnectionsRef.current[socketId];
         const offer = await peerConnection.createOffer({
           offerToReceiveAudio: true,
         });
@@ -124,7 +126,7 @@ const ChatSocket = ({
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
       try {
-        const peerConnection = await createPeerConnection(socketId);
+        const peerConnection = peerConnectionsRef.current[socketId];
         console.log("received offer");
 
         peerConnection.setRemoteDescription(offer);
