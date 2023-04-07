@@ -122,6 +122,13 @@ const ChatSocket = ({
       peerConnection.setLocalDescription(answer);
       console.log("send answer: ", answer);
       socketClient.emit("answer", { targetId: socketId, answer: answer });
+
+      if (iceCandidateRef.current[socketId]) {
+        iceCandidateRef.current[socketId].map((iceCandidate) => {
+          peerConnection.addIceCandidate(iceCandidate);
+          iceCandidateRef.current[socketId] = [];
+        });
+      }
     });
 
     socketClient.on("answer", (data) => {
@@ -145,10 +152,7 @@ const ChatSocket = ({
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log("getCandidate", socketId, iceCandidate, peerConnection);
       if (peerConnection.remoteDescription == null) {
-        iceCandidateRef.current = {
-          ...iceCandidateRef.current,
-          [socketId]: [...iceCandidateRef.current[socketId], iceCandidate],
-        };
+        iceCandidateRef.current[socketId].push(iceCandidate);
       } else {
         peerConnection.addIceCandidate(iceCandidate);
       }
