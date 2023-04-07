@@ -30,15 +30,8 @@ const ChatSocket = ({
   const createPeerConnection = (socketId: string) => {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
-        {
-          urls: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
-            "stun:stun4.l.google.com:19302",
-          ],
-        },
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" },
       ],
     });
 
@@ -48,7 +41,6 @@ const ChatSocket = ({
     };
 
     peerConnection.onicecandidate = (e) => {
-      console.log("icecandidate");
       if (e.candidate) {
         console.log("onicecandidate", e.candidate);
         socketClient.emit("iceCandidate", {
@@ -95,9 +87,7 @@ const ChatSocket = ({
 
     socketClient.on("welcome", async (socketId) => {
       const peerConnection = createPeerConnection(socketId);
-      const offer = await peerConnection.createOffer({
-        offerToReceiveAudio: true,
-      });
+      const offer = await peerConnection.createOffer();
       peerConnection.setLocalDescription(offer);
       socketClient.emit("offer", { targetId: socketId, offer: offer });
     });
@@ -127,9 +117,7 @@ const ChatSocket = ({
       console.log("getOffer", socketId, offer);
       const peerConnection = createPeerConnection(socketId);
       peerConnection.setRemoteDescription(offer);
-      const answer = await peerConnection.createAnswer({
-        offerToReceiveAudio: true,
-      });
+      const answer = await peerConnection.createAnswer();
       peerConnection.setLocalDescription(answer);
       socketClient.emit("answer", { targetId: socketId, answer: answer });
     });
