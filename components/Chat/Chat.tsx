@@ -28,9 +28,15 @@ const Chat = ({ data }: ChatProps) => {
   const [curPage, setCurPage] = useState(1);
   const [totalCount, setTotalCount] = useState(chatRoomCount);
   const { userId } = useUserState();
-  const { setChat } = useChatState();
+  const { chat, setChat } = useChatState();
   const { toast } = useToast();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
+
+  useEffect(() => {
+    if (chat.roomId) {
+      router.push(`/chat/${chat.roomId}`);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
