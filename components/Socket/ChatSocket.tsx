@@ -12,6 +12,7 @@ const CONSTRAINTS = {
 };
 
 const ChatSocket = ({
+  userId,
   isChatRoom,
   chat,
   setChat,
@@ -77,6 +78,11 @@ const ChatSocket = ({
 
     socketClient.on("setChat", async (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
+      chatParticipant.forEach((participant) => {
+        if (participant.userId !== userId) {
+          createPeerConnection(participant.socketId);
+        }
+      });
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant, title };
       });
@@ -84,13 +90,15 @@ const ChatSocket = ({
 
     socketClient.on("welcome", async (socketId) => {
       try {
-        const peerConnection = await createPeerConnection(socketId);
-        const offer = await peerConnection.createOffer({
-          offerToReceiveAudio: true,
-        });
-        await peerConnection.setLocalDescription(offer);
-        socketClient.emit("offer", { targetId: socketId, offer });
-        console.log("sent offer");
+        if (peerConnectionsRef.current) {
+          const peerConnection = peerConnectionsRef.current[socketId];
+          const offer = await peerConnection.createOffer({
+            offerToReceiveAudio: true,
+          });
+          await peerConnection.setLocalDescription(offer);
+          socketClient.emit("offer", { targetId: socketId, offer });
+          console.log("sent offer");
+        }
       } catch (error) {
         console.error(error);
       }
@@ -119,16 +127,18 @@ const ChatSocket = ({
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
       try {
-        const peerConnection = await createPeerConnection(socketId);
-        console.log("received offer");
+        if (peerConnectionsRef.current) {
+          const peerConnection = peerConnectionsRef.current[socketId];
+          console.log("received offer");
 
-        await peerConnection.setRemoteDescription(offer);
-        const answer = await peerConnection.createAnswer({
-          offerToReceiveAudio: true,
-        });
-        await peerConnection.setLocalDescription(answer);
-        socketClient.emit("answer", { targetId: socketId, answer });
-        console.log("sent answer");
+          await peerConnection.setRemoteDescription(offer);
+          const answer = await peerConnection.createAnswer({
+            offerToReceiveAudio: true,
+          });
+          await peerConnection.setLocalDescription(answer);
+          socketClient.emit("answer", { targetId: socketId, answer });
+          console.log("sent answer");
+        }
       } catch (error) {
         console.error(error);
       }
