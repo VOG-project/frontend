@@ -115,6 +115,12 @@ const ChatSocket = ({
 
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
+      if (iceCandidateRef.current[socketId]) {
+        iceCandidateRef.current[socketId].map((iceCandidate) => {
+          peerConnection.addIceCandidate(iceCandidate);
+          iceCandidateRef.current[socketId] = [];
+        });
+      }
       console.log("getOffer", socketId, offer);
       const peerConnection = createPeerConnection(socketId);
       peerConnection.setRemoteDescription(offer);
