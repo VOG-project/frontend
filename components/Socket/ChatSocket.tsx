@@ -87,7 +87,9 @@ const ChatSocket = ({
 
     socketClient.on("welcome", async (socketId) => {
       const peerConnection = createPeerConnection(socketId);
-      const offer = await peerConnection.createOffer();
+      const offer = await peerConnection.createOffer({
+        offerToReceiveAudio: true,
+      });
       peerConnection.setLocalDescription(offer);
       console.log("send offer: ", offer);
       socketClient.emit("offer", { targetId: socketId, offer: offer });
