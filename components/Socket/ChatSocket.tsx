@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import tw, { styled } from "twin.macro";
+import tw from "twin.macro";
 import Button from "../common/Button";
 import Audio from "../common/Audio";
 import { socketClient } from "@/utils/socketClient";
@@ -12,7 +12,6 @@ const CONSTRAINTS = {
 };
 
 const ChatSocket = ({
-  isChatRoom,
   chat,
   setChat,
   socketConnect,
@@ -170,7 +169,7 @@ const ChatSocket = ({
   }, [chat]);
 
   return (
-    <ChatSocketContainer isChatRoom={isChatRoom}>
+    <ChatSocketContainer>
       <Button
         width={6}
         bgColor="secondary"
@@ -194,12 +193,9 @@ const ChatSocket = ({
 
 export default ChatSocket;
 
-const ChatSocketContainer = styled.div<{ isChatRoom: boolean }>(
-  ({ isChatRoom }) => [
-    tw`block w-full h-16 bg-black/80`,
-    isChatRoom && tw`translate-y-full`,
-  ]
-);
+const ChatSocketContainer = tw.div`
+  block w-full h-16 bg-black/80
+`;
 
 const LeaveChatButtonIcon = tw.div`
   flex justify-center

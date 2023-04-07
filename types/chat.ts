@@ -68,7 +68,6 @@ export interface ChatProps {
 }
 
 export interface ChatSocketProps {
-  isChatRoom: boolean;
   chat: ChatState;
   setChat: SetterOrUpdater<ChatState>;
   socketConnect: () => void;
