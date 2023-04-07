@@ -152,7 +152,11 @@ const ChatSocket = ({
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log("getCandidate", socketId, iceCandidate, peerConnection);
       if (peerConnection.remoteDescription == null) {
-        iceCandidateRef.current[socketId].push(iceCandidate);
+        if (iceCandidateRef.current[socketId].length === 0) {
+          iceCandidateRef.current[socketId] = [iceCandidate];
+        } else {
+          iceCandidateRef.current[socketId].push(iceCandidate);
+        }
       } else {
         peerConnection.addIceCandidate(iceCandidate);
       }
