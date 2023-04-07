@@ -50,9 +50,8 @@ const Socket = () => {
 
   return (
     <SocketContainer>
-      {roomId && userId && (
+      {roomId && (
         <ChatSocket
-          userId={userId}
           isChatRoom={isChatRoom}
           chat={chat}
           setChat={setChat}
