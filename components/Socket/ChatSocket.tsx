@@ -141,11 +141,11 @@ const ChatSocket = ({
       peerConnection.setRemoteDescription(answer);
     });
 
-    socketClient.on("iceCandidate", async (data) => {
+    socketClient.on("iceCandidate", (data) => {
       const { socketId, iceCandidate } = data;
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log("getCandidate", socketId, iceCandidate, peerConnection);
-      await peerConnection.addIceCandidate(iceCandidate);
+      peerConnection.addIceCandidate(iceCandidate);
     });
 
     return () => {
