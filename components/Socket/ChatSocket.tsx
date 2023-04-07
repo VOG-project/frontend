@@ -20,6 +20,7 @@ const ChatSocket = ({
 }: ChatSocketProps) => {
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
   const localStreamRef = useRef<MediaStream>();
+  const iceCandidateRef = useRef<{ [ket: string]: Array<RTCIceCandidate> }>({});
 
   const getLocalStream = async () => {
     const localStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
@@ -82,8 +83,8 @@ const ChatSocket = ({
   };
 
   useEffect(() => {
-    getLocalStream();
     socketConnect();
+    getLocalStream();
 
     socketClient.on("setChat", (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
@@ -139,6 +140,13 @@ const ChatSocket = ({
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log(peerConnection);
       peerConnection.setRemoteDescription(answer);
+
+      if (iceCandidateRef.current[socketId]) {
+        iceCandidateRef.current[socketId].map((iceCandidate) => {
+          peerConnection.addIceCandidate(iceCandidate);
+          iceCandidateRef.current[socketId] = [];
+        });
+      }
     });
 
     socketClient.on("iceCandidate", (data) => {
@@ -146,7 +154,14 @@ const ChatSocket = ({
       const iceCandidate = new RTCIceCandidate(data.iceCandidate);
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log("getCandidate", socketId, iceCandidate, peerConnection);
-      peerConnection.addIceCandidate(iceCandidate);
+      if (peerConnection.remoteDescription == null) {
+        iceCandidateRef.current = {
+          ...iceCandidateRef.current,
+          [socketId]: [...iceCandidateRef.current[socketId], iceCandidate],
+        };
+      } else {
+        peerConnection.addIceCandidate(iceCandidate);
+      }
     });
 
     return () => {
