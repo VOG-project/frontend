@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import tw from "twin.macro";
+import tw, { styled } from "twin.macro";
 import ChatSocket from "./ChatSocket";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
@@ -49,10 +49,9 @@ const Socket = () => {
   };
 
   return (
-    <SocketContainer>
+    <SocketContainer isChatRoom={isChatRoom}>
       {roomId && (
         <ChatSocket
-          isChatRoom={isChatRoom}
           chat={chat}
           setChat={setChat}
           socketConnect={socketConnect}
@@ -65,6 +64,9 @@ const Socket = () => {
 
 export default Socket;
 
-const SocketContainer = tw.div`
-  fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 pl-64 w-full max-w-[120rem] z-[100]
-`;
+const SocketContainer = styled.div<{ isChatRoom: boolean }>(
+  ({ isChatRoom }) => [
+    tw`fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 pl-64 w-full max-w-[120rem] z-[100]`,
+    isChatRoom && `translate-y-full`,
+  ]
+);
