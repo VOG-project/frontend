@@ -197,7 +197,7 @@ export default ChatSocket;
 const ChatSocketContainer = styled.div<{ isChatRoom: boolean }>(
   ({ isChatRoom }) => [
     tw`block w-full h-16 bg-black/80`,
-    isChatRoom && tw`-translate-y-full`,
+    isChatRoom && tw`translate-y-full`,
   ]
 );
 
