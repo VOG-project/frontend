@@ -23,7 +23,13 @@ const ChatSocket = ({
     const peerConnection = new RTCPeerConnection({
       iceServers: [
         {
-          urls: ["stun:stun.l.google.com:19302"],
+          urls: [
+            "stun:stun.l.google.com:19302",
+            "stun:stun1.l.google.com:19302",
+            "stun:stun2.l.google.com:19302",
+            "stun:stun3.l.google.com:19302",
+            "stun:stun4.l.google.com:19302",
+          ],
         },
       ],
     });
@@ -122,7 +128,7 @@ const ChatSocket = ({
         const peerConnection = await createPeerConnection(socketId);
         console.log("received offer");
 
-        await peerConnection.setRemoteDescription(offer);
+        peerConnection.setRemoteDescription(offer);
         const answer = await peerConnection.createAnswer({
           offerToReceiveAudio: true,
         });
@@ -138,7 +144,7 @@ const ChatSocket = ({
       const { socketId, answer } = data;
       try {
         const peerConnection = peerConnectionsRef.current[socketId];
-        await peerConnection.setRemoteDescription(answer);
+        peerConnection.setRemoteDescription(answer);
         console.log("received answer", peerConnection);
       } catch (error) {
         console.error(error);
