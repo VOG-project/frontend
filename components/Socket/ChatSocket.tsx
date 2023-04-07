@@ -115,12 +115,6 @@ const ChatSocket = ({
 
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
-      if (iceCandidateRef.current[socketId]) {
-        iceCandidateRef.current[socketId].map((iceCandidate) => {
-          peerConnection.addIceCandidate(iceCandidate);
-          iceCandidateRef.current[socketId] = [];
-        });
-      }
       console.log("getOffer", socketId, offer);
       const peerConnection = createPeerConnection(socketId);
       peerConnection.setRemoteDescription(offer);
@@ -128,20 +122,26 @@ const ChatSocket = ({
       peerConnection.setLocalDescription(answer);
       console.log("send answer: ", answer);
       socketClient.emit("answer", { targetId: socketId, answer: answer });
-    });
-
-    socketClient.on("answer", (data) => {
-      const { socketId, answer } = data;
       if (iceCandidateRef.current[socketId]) {
         iceCandidateRef.current[socketId].map((iceCandidate) => {
           peerConnection.addIceCandidate(iceCandidate);
           iceCandidateRef.current[socketId] = [];
         });
       }
+    });
+
+    socketClient.on("answer", (data) => {
+      const { socketId, answer } = data;
       console.log("getAnswer", socketId, answer);
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log(peerConnection);
       peerConnection.setRemoteDescription(answer);
+      if (iceCandidateRef.current[socketId]) {
+        iceCandidateRef.current[socketId].map((iceCandidate) => {
+          peerConnection.addIceCandidate(iceCandidate);
+          iceCandidateRef.current[socketId] = [];
+        });
+      }
     });
 
     socketClient.on("iceCandidate", (data) => {
