@@ -15,7 +15,7 @@ const Socket = () => {
   const roomId = chat.roomId;
 
   useEffect(() => {
-    if (router.asPath.split("/").includes("chat") && router.query.id) {
+    if (router.asPath.split("/").includes("chat") || router.query.id) {
       setChatRoom(true);
     } else setChatRoom(false);
   }, [router]);
