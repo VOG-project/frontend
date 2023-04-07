@@ -81,8 +81,6 @@ const ChatSocket = ({
     return peerConnection;
   };
 
-  let remoteCandidates = [];
-
   useEffect(() => {
     getLocalStream();
     socketConnect();
