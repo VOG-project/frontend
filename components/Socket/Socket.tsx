@@ -67,6 +67,6 @@ export default Socket;
 const SocketContainer = styled.div<{ isChatRoom: boolean }>(
   ({ isChatRoom }) => [
     tw`fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 pl-64 w-full max-w-[120rem] z-[100]`,
-    isChatRoom && `translate-y-full`,
+    !isChatRoom && `translate-y-full`,
   ]
 );
