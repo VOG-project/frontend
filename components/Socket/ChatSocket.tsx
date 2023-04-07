@@ -91,7 +91,9 @@ const ChatSocket = ({
 
     socketClient.on("welcome", async (socketId) => {
       try {
-        let peerConnection = peerConnectionsRef.current[socketId];
+        const peerConnection =
+          peerConnectionsRef.current[socketId] ||
+          createPeerConnection(socketId);
         const offer = await peerConnection.createOffer({
           offerToReceiveAudio: true,
         });
@@ -144,7 +146,7 @@ const ChatSocket = ({
     socketClient.on("answer", async (data) => {
       const { socketId, answer } = data;
       try {
-        let peerConnection = peerConnectionsRef.current[socketId];
+        const peerConnection = peerConnectionsRef.current[socketId];
         peerConnection.setRemoteDescription(answer);
         console.log("received answer", peerConnection);
       } catch (error) {
