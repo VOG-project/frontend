@@ -81,6 +81,8 @@ const ChatSocket = ({
     return peerConnection;
   };
 
+  let remoteCandidates = [];
+
   useEffect(() => {
     getLocalStream();
     socketConnect();
@@ -142,7 +144,8 @@ const ChatSocket = ({
     });
 
     socketClient.on("iceCandidate", (data) => {
-      const { socketId, iceCandidate } = data;
+      const { socketId } = data;
+      const iceCandidate = new RTCIceCandidate(data.iceCandidate);
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log("getCandidate", socketId, iceCandidate, peerConnection);
       peerConnection.addIceCandidate(iceCandidate);
