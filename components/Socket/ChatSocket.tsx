@@ -109,15 +109,16 @@ const ChatSocket = ({
       }
     });
 
-    socketClient.on("leaveUser", (data) => {
-      console.log(data);
+    socketClient.on("leaveMember", (data) => {
+      const { socketId } = data;
+      peerConnectionsRef.current[socketId].close();
     });
 
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
       console.log("getOffer", socketId, offer);
       const peerConnection = createPeerConnection(socketId);
-      peerConnection.setRemoteDescription(offer);
+      await peerConnection.setRemoteDescription(offer);
       const answer = await peerConnection.createAnswer();
       peerConnection.setLocalDescription(answer);
       console.log("send answer: ", answer);
@@ -130,12 +131,12 @@ const ChatSocket = ({
       }
     });
 
-    socketClient.on("answer", (data) => {
+    socketClient.on("answer", async (data) => {
       const { socketId, answer } = data;
       console.log("getAnswer", socketId, answer);
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log(peerConnection);
-      peerConnection.setRemoteDescription(answer);
+      await peerConnection.setRemoteDescription(answer);
       if (iceCandidateRef.current[socketId]) {
         iceCandidateRef.current[socketId].map((iceCandidate) => {
           peerConnection.addIceCandidate(iceCandidate);
