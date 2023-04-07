@@ -89,6 +89,7 @@ const ChatSocket = ({
       const peerConnection = createPeerConnection(socketId);
       const offer = await peerConnection.createOffer();
       peerConnection.setLocalDescription(offer);
+      console.log("send offer: ", offer);
       socketClient.emit("offer", { targetId: socketId, offer: offer });
     });
 
@@ -119,6 +120,7 @@ const ChatSocket = ({
       peerConnection.setRemoteDescription(offer);
       const answer = await peerConnection.createAnswer();
       peerConnection.setLocalDescription(answer);
+      console.log("send answer: ", answer);
       socketClient.emit("answer", { targetId: socketId, answer: answer });
     });
 
