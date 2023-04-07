@@ -18,7 +18,7 @@ const ChatSocket = ({
   handleChatRoomLeave,
 }: ChatSocketProps) => {
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-  const createPeerConnection = (socketId: string) => {
+  const createPeerConnection = async (socketId: string) => {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -33,16 +33,18 @@ const ChatSocket = ({
       ],
     });
 
-    navigator.mediaDevices
+    await navigator.mediaDevices
       .getUserMedia(CONSTRAINTS)
-      .then((stream) =>
+      .then((stream) => {
+        console.log("add stream", stream);
         stream
           .getTracks()
-          .forEach((track) => peerConnection.addTrack(track, stream))
-      )
+          .forEach((track) => peerConnection.addTrack(track, stream));
+      })
       .catch((error) => console.error(error));
 
     peerConnection.onicecandidate = (e) => {
+      console.log("icecandidate");
       if (e.candidate) {
         console.log("onicecandidate", e.candidate);
         socketClient.emit("iceCandidate", {
@@ -87,17 +89,10 @@ const ChatSocket = ({
     });
 
     socketClient.on("welcome", async (socketId) => {
-      try {
-        const peerConnection = createPeerConnection(socketId);
-        const offer = await peerConnection.createOffer({
-          offerToReceiveAudio: true,
-        });
-        peerConnection.setLocalDescription(offer);
-        socketClient.emit("offer", { targetId: socketId, offer });
-        console.log("sent offer");
-      } catch (error) {
-        console.error(error);
-      }
+      const peerConnection = await createPeerConnection(socketId);
+      const offer = await peerConnection.createOffer();
+      peerConnection.setLocalDescription(offer);
+      socketClient.emit("offer", { targetId: socketId, offer: offer });
     });
 
     socketClient.on("inputChat", (data) => {
@@ -122,42 +117,27 @@ const ChatSocket = ({
 
     socketClient.on("offer", async (data) => {
       const { socketId, offer } = data;
-      try {
-        const peerConnection = createPeerConnection(socketId);
-        console.log("received offer");
-
-        await peerConnection.setRemoteDescription(offer);
-        const answer = await peerConnection.createAnswer({
-          offerToReceiveAudio: true,
-        });
-        peerConnection.setLocalDescription(answer).then(() => {
-          socketClient.emit("answer", { targetId: socketId, answer });
-        });
-        console.log("sent answer");
-      } catch (error) {
-        console.error(error);
-      }
+      console.log("getOffer", socketId, offer);
+      const peerConnection = await createPeerConnection(socketId);
+      peerConnection.setRemoteDescription(offer);
+      const answer = await peerConnection.createAnswer();
+      peerConnection.setLocalDescription(answer);
+      socketClient.emit("answer", { targetId: socketId, answer: answer });
     });
 
-    socketClient.on("answer", async (data) => {
+    socketClient.on("answer", (data) => {
       const { socketId, answer } = data;
-      try {
-        const peerConnection = peerConnectionsRef.current[socketId];
-        await peerConnection.setRemoteDescription(answer);
-        console.log("received answer", peerConnection);
-      } catch (error) {
-        console.error(error);
-      }
+      console.log("getAnswer", socketId, answer);
+      const peerConnection = peerConnectionsRef.current[socketId];
+      peerConnection.setRemoteDescription(answer);
     });
 
-    socketClient.on("iceCandidate", async (data) => {
+    socketClient.on("iceCandidate", (data) => {
       const { socketId, iceCandidate } = data;
-      if (peerConnectionsRef.current) {
-        const peerConnection = peerConnectionsRef.current[socketId];
-        if (peerConnection) {
-          await peerConnection.addIceCandidate(iceCandidate);
-          console.log("addIcecandidate", iceCandidate);
-        }
+      console.log("getCandidate", socketId, iceCandidate);
+      const peerConnection = peerConnectionsRef.current[socketId];
+      if (peerConnection) {
+        peerConnection.addIceCandidate(iceCandidate);
       }
     });
 
