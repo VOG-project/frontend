@@ -11,7 +11,6 @@ const useUserProfileState = () => {
     if (!userId) return;
     const res = await getUserInfoRequest(userId);
     if (res.success) {
-      console.log(res);
       setUserProfile((prev) => {
         return {
           ...prev,
