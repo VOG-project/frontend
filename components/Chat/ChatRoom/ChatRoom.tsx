@@ -14,6 +14,7 @@ const ChatRoom = () => {
   const [message, setMessage] = useState("");
   const { user, userId } = useUser();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const {
     setChat,
@@ -64,6 +65,9 @@ const ChatRoom = () => {
       };
     });
     sendMessageEmit(message, roomId, user.nickname);
+    if (textareaRef.current) {
+      textareaRef.current.value = "";
+    }
     setMessage("");
   };
 
@@ -95,6 +99,7 @@ const ChatRoom = () => {
               onChange={handleTextAreaChange}
               onKeyDown={handleTextAreaKeyDown}
               rows={1}
+              ref={textareaRef}
             ></ChatTextArea>
             <ChatBntContainer>
               <ChatSubmitBtn
