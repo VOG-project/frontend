@@ -1,3 +1,4 @@
+import { MutableRefObject } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { SetterOrUpdater } from "recoil";
 
@@ -69,6 +70,10 @@ export interface ChatProps {
 
 export interface ChatSocketProps {
   chat: ChatState;
+  peerConnectionsRef: MutableRefObject<{
+    [key: string]: RTCPeerConnection;
+  }>;
+  localStreamRef: MutableRefObject<MediaStream | undefined>;
   setChat: SetterOrUpdater<ChatState>;
   socketConnect: () => void;
   handleChatRoomLeave: () => void;
