@@ -196,7 +196,7 @@ const ChatSocket = ({
 export default ChatSocket;
 
 const ChatSocketContainer = tw.div`
-  block w-full h-16 bg-black/80
+  w-full h-16 bg-black/80
 `;
 
 const LeaveChatButtonIcon = tw.div`

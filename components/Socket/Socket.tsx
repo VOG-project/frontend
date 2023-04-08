@@ -8,19 +8,20 @@ import { socketClient } from "@/utils/socketClient";
 import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
 
 const Socket = () => {
-  const [isChatRoom, setChatRoom] = useState(false);
+  const [isChatRoom, setIsChatRoom] = useState(false);
   const router = useRouter();
   const { chat, setChat, resetChat } = useChatState();
   const { userId, user } = useUserState();
   const roomId = chat.roomId;
 
   useEffect(() => {
-    if (
-      router.asPath.split("/").includes("chat") &&
-      typeof router.query.id === "string"
-    ) {
-      setChatRoom(true);
-    } else setChatRoom(false);
+    if (router.query.id === chat.roomId) {
+      console.log("true");
+      setIsChatRoom(true);
+    } else {
+      console.log("false");
+      setIsChatRoom(false);
+    }
   }, [router]);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const Socket = () => {
 
   return (
     <SocketContainer isChatRoom={isChatRoom}>
-      {roomId && userId && (
+      {roomId && (
         <ChatSocket
           chat={chat}
           setChat={setChat}
@@ -70,6 +71,6 @@ export default Socket;
 const SocketContainer = styled.div<{ isChatRoom: boolean }>(
   ({ isChatRoom }) => [
     tw`fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 pl-64 w-full max-w-[120rem] z-[100]`,
-    !isChatRoom && `translate-y-full`,
+    isChatRoom && tw`translate-y-64`,
   ]
 );
