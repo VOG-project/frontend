@@ -103,7 +103,7 @@ const Detail = () => {
     if (!userId) return;
     const postId = Number(query.id);
 
-    if (userId in likes) {
+    if (likes.includes(userId)) {
       const res = await cancelLikePostRequset(userId, postId);
       if (res.success) {
         updateLikes(postId);
