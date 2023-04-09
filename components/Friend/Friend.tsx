@@ -39,7 +39,7 @@ const Friend = () => {
 export default Friend;
 
 const FriendContainer = styled.div<{ isShow: boolean }>(({ isShow }) => [
-  tw`absolute flex flex-col w-60 h-full right-0 bg-black border-l border-neutral-700 transition-all`,
+  tw`absolute flex flex-col w-60 h-full right-0 bg-black border-l border-neutral-700 transition-all z-50`,
   !isShow && tw`translate-x-full`,
 ]);
 
