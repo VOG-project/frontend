@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import tw from "twin.macro";
+import Image from "next/image";
+import tw, { styled } from "twin.macro";
+import useMediaDevice from "@/hooks/useMediaDevice";
 import Button from "../common/Button";
 import Audio from "../common/Audio";
 import { socketClient } from "@/utils/socketClient";
@@ -7,24 +9,34 @@ import { getIcons } from "../icons";
 import { ChatSocketProps } from "@/types/chat";
 import { ChatState } from "@/types/chat";
 
-const CONSTRAINTS = {
-  audio: true,
-  video: false,
-};
-
 const ChatSocket = ({
   chat,
+  peerConnectionsRef,
   setChat,
   socketConnect,
   handleChatRoomLeave,
+  handleTitleClick,
+  handleUserProfileOpen,
+  handleModalOpen,
 }: ChatSocketProps) => {
-  const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-  const localStreamRef = useRef<MediaStream>();
   const iceCandidateRef = useRef<{ [ket: string]: Array<RTCIceCandidate> }>({});
+  const {
+    localStreamRef,
+    getLocalStream,
+    handleMicMuteClick,
+    handleVolumeMuteClick,
+  } = useMediaDevice();
 
-  const getLocalStream = async () => {
-    const localStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-    localStreamRef.current = localStream;
+  const processAddCandidate = (
+    socketId: string,
+    peerConnection: RTCPeerConnection
+  ) => {
+    if (iceCandidateRef.current[socketId]) {
+      iceCandidateRef.current[socketId].map((iceCandidate) => {
+        peerConnection.addIceCandidate(iceCandidate);
+        iceCandidateRef.current[socketId] = [];
+      });
+    }
   };
 
   const createPeerConnection = (socketId: string) => {
@@ -65,7 +77,7 @@ const ChatSocket = ({
     };
 
     if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach((track) => {
+      localStreamRef.current.getAudioTracks().forEach((track) => {
         if (!localStreamRef.current) return;
         peerConnection.addTrack(track, localStreamRef.current);
       });
@@ -76,7 +88,9 @@ const ChatSocket = ({
 
   useEffect(() => {
     socketConnect();
-    getLocalStream();
+    (async () => {
+      await getLocalStream();
+    })();
 
     socketClient.on("setChat", (data: ChatState) => {
       const { roomId, chatParticipant, title } = data;
@@ -113,6 +127,7 @@ const ChatSocket = ({
 
     socketClient.on("leaveMember", (data) => {
       const { socketId } = data;
+      console.log("유저나감", socketId, peerConnectionsRef.current);
       peerConnectionsRef.current[socketId].close();
     });
 
@@ -127,12 +142,7 @@ const ChatSocket = ({
       peerConnection.setLocalDescription(answer);
       console.log("send answer: ", answer);
       socketClient.emit("answer", { targetId: socketId, answer: answer });
-      if (iceCandidateRef.current[socketId]) {
-        iceCandidateRef.current[socketId].map((iceCandidate) => {
-          peerConnection.addIceCandidate(iceCandidate);
-          iceCandidateRef.current[socketId] = [];
-        });
-      }
+      processAddCandidate(socketId, peerConnection);
     });
 
     socketClient.on("answer", async (data) => {
@@ -141,12 +151,7 @@ const ChatSocket = ({
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log(peerConnection);
       await peerConnection.setRemoteDescription(answer);
-      if (iceCandidateRef.current[socketId]) {
-        iceCandidateRef.current[socketId].map((iceCandidate) => {
-          peerConnection.addIceCandidate(iceCandidate);
-          iceCandidateRef.current[socketId] = [];
-        });
-      }
+      processAddCandidate(socketId, peerConnection);
     });
 
     socketClient.on("iceCandidate", (data) => {
@@ -172,22 +177,73 @@ const ChatSocket = ({
 
   return (
     <ChatSocketContainer>
-      <Button
-        width={6}
-        bgColor="secondary"
-        onClick={() => {
-          if (peerConnectionsRef.current) {
-            Object.values(peerConnectionsRef.current).forEach(
-              (peerConnection) => peerConnection.close()
-            );
-          }
-          handleChatRoomLeave();
-        }}
-      >
-        <LeaveChatButtonIcon>{getIcons("exit", 24)}나가기</LeaveChatButtonIcon>
-      </Button>
+      <ChatTitle onClick={handleTitleClick}>
+        #{chat.title}
+        <Notification></Notification>
+      </ChatTitle>
+      <ButtonContainer>
+        <MiceMute
+          type="button"
+          width={2.5}
+          height={2.5}
+          bgColor="transparent"
+          onClick={handleMicMuteClick}
+        >
+          <MuteIcon isMuted={chat.isMicMuted}>
+            {chat.isMicMuted ? getIcons("micMute", 24) : getIcons("mic", 24)}
+          </MuteIcon>
+        </MiceMute>
+        <VolumeMute
+          type="button"
+          width={2.5}
+          height={2.5}
+          bgColor="transparent"
+          onClick={handleVolumeMuteClick}
+        >
+          <MuteIcon isMuted={chat.isVolumeMuted}>
+            {chat.isVolumeMuted
+              ? getIcons("volumeMute", 24)
+              : getIcons("volume", 24)}
+          </MuteIcon>
+        </VolumeMute>
+        <Setting
+          type="button"
+          bgColor="transparent"
+          width={2.5}
+          height={2.5}
+          onClick={handleModalOpen}
+        >
+          <SettingIcon>{getIcons("setting", 24)}</SettingIcon>
+        </Setting>
+      </ButtonContainer>
+      <MemberContainer>
+        {chat.chatParticipant.map((member) => (
+          <MemberIcon key={member.userId}>
+            <Member
+              src={member.user.profileUrl || "/image/blank_profile.png"}
+              width={64}
+              height={64}
+              alt="member"
+              onClick={() => handleUserProfileOpen(member.userId)}
+            ></Member>
+          </MemberIcon>
+        ))}
+      </MemberContainer>
+      <LeaveChatButtonContainer>
+        <Button width={6} bgColor="secondary" onClick={handleChatRoomLeave}>
+          <LeaveChatButtonIcon>
+            {getIcons("exit", 24)}나가기
+          </LeaveChatButtonIcon>
+        </Button>
+      </LeaveChatButtonContainer>
       {chat.streams.map((stream) => {
-        return <Audio key={stream.socketId} stream={stream.stream}></Audio>;
+        return (
+          <Audio
+            key={stream.socketId}
+            stream={stream.stream}
+            isMuted={chat.isVolumeMuted}
+          ></Audio>
+        );
       })}
     </ChatSocketContainer>
   );
@@ -196,9 +252,53 @@ const ChatSocket = ({
 export default ChatSocket;
 
 const ChatSocketContainer = tw.div`
-  w-full h-16 bg-black/80
+  flex items-center w-full h-16 px-8 bg-white/10
+`;
+
+const LeaveChatButtonContainer = tw.div`
+  ml-auto
 `;
 
 const LeaveChatButtonIcon = tw.div`
   flex justify-center
+`;
+
+const ChatTitle = tw.div`
+  relative w-1/6 py-1 px-2 rounded shadow-inner shadow-black text-3xl font-bold cursor-pointer bg-black/30
+  hover:bg-white/30
+`;
+
+const Notification = tw.span`
+  absolute right-1 w-4 h-4 rounded-full bg-red-700 animate-pulse
+`;
+
+const MemberContainer = tw.div`
+  w-[22.5rem] h-14 px-1 border-x border-neutral-600
+`;
+
+const MemberIcon = tw.div`
+  cursor-pointer
+`;
+
+const Member = tw(Image)`
+  float-left w-14 h-14 mx-2 bg-black rounded-full
+`;
+
+const ButtonContainer = tw.div`
+  flex px-8 gap-2
+`;
+
+const MiceMute = tw(Button)``;
+
+const VolumeMute = tw(Button)``;
+
+const Setting = tw(Button)``;
+
+const MuteIcon = styled.div<{ isMuted: boolean }>(({ isMuted }) => [
+  tw`flex items-center justify-center w-full h-full rounded`,
+  isMuted && tw`shadow-inner shadow-black text-secondary bg-black/30`,
+]);
+
+const SettingIcon = tw.div`
+  flex items-center justify-center w-full h-full rounded
 `;
