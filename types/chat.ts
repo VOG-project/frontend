@@ -23,6 +23,8 @@ export interface ChatState {
   title: string;
   roomId: string;
   streams: { socketId: string; stream: MediaStream }[];
+  isVolumeMuted: boolean;
+  isMicMuted: boolean;
 }
 
 export interface ChatMemberProps {
@@ -77,6 +79,10 @@ export interface ChatSocketProps {
   setChat: SetterOrUpdater<ChatState>;
   socketConnect: () => void;
   handleChatRoomLeave: () => void;
+  handleTitleClick: () => void;
+  handleUserProfileOpen: (userId: number | null) => Promise<void>;
+  handleMicMuteClick: () => void;
+  handleVolumeMuteClick: () => void;
 }
 
 export interface ChatEditValue {
