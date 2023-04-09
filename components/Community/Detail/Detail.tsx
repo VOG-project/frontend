@@ -155,7 +155,7 @@ const DetailWrapper = tw.article`
 `;
 
 const DetailContainer = tw.section`
-  w-full px-10
+  w-full px-10 pb-24
 `;
 
 const ListButton = tw.div`
