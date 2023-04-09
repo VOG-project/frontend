@@ -75,14 +75,12 @@ export interface ChatSocketProps {
   peerConnectionsRef: MutableRefObject<{
     [key: string]: RTCPeerConnection;
   }>;
-  localStreamRef: MutableRefObject<MediaStream | undefined>;
   setChat: SetterOrUpdater<ChatState>;
   socketConnect: () => void;
   handleChatRoomLeave: () => void;
   handleTitleClick: () => void;
   handleUserProfileOpen: (userId: number | null) => Promise<void>;
-  handleMicMuteClick: () => void;
-  handleVolumeMuteClick: () => void;
+  handleModalOpen: () => void;
 }
 
 export interface ChatEditValue {
