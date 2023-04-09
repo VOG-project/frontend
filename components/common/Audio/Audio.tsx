@@ -2,9 +2,10 @@ import { useRef, useEffect } from "react";
 
 interface AudioProps {
   stream: MediaStream;
+  isMuted: boolean;
 }
 
-const Audio = ({ stream }: AudioProps) => {
+const Audio = ({ stream, isMuted }: AudioProps) => {
   const streamRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
     if (stream instanceof MediaStream) {
@@ -13,7 +14,7 @@ const Audio = ({ stream }: AudioProps) => {
       }
     }
   }, [stream]);
-  return <audio ref={streamRef} autoPlay></audio>;
+  return <audio ref={streamRef} muted={isMuted} autoPlay></audio>;
 };
 
 export default Audio;
