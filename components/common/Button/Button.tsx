@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 interface ButtonProps {
   type?: "button" | "submit";
   width?: number;
+  height?: number;
   bgColor: "primary" | "secondary" | "transparent";
   position?: {
     type: "relative" | "absolute";
@@ -20,6 +21,7 @@ interface ButtonProps {
 const Button = ({
   type = "button",
   width,
+  height,
   bgColor = "primary",
   position,
   disabled,
@@ -31,6 +33,7 @@ const Button = ({
       <StyledButton
         type={type}
         width={width}
+        height={height}
         bgColor={bgColor}
         position={position}
         disabled={disabled}
@@ -46,6 +49,7 @@ export default Button;
 
 const StyledButton = styled.button<{
   width?: number;
+  height?: number;
   bgColor: "primary" | "secondary" | "transparent";
   position?: {
     type: "relative" | "absolute";
@@ -54,13 +58,17 @@ const StyledButton = styled.button<{
     left?: string;
     right?: string;
   };
-}>(({ width, bgColor, position }) => [
+}>(({ width, height, bgColor, position }) => [
   tw`my-4 h-10 w-full rounded text-white
     disabled:(bg-stone-500 text-stone-400)
   `,
   width &&
     css`
       width: ${width}rem;
+    `,
+  height &&
+    css`
+      height: ${height}rem;
     `,
   bgColor &&
     (bgColor === "primary"
