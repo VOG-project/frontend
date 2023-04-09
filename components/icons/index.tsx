@@ -15,6 +15,11 @@ import {
   BsToggleOn,
   BsArrowReturnRight,
   BsPeople,
+  BsMicFill,
+  BsMicMuteFill,
+  BsVolumeMuteFill,
+  BsVolumeUpFill,
+  BsGearFill,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
@@ -68,6 +73,16 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BiUserMinus size={size} color={color} />;
     case "friends":
       return <BsPeople size={size} color={color} />;
+    case "mic":
+      return <BsMicFill size={size} color={color} />;
+    case "micMute":
+      return <BsMicMuteFill size={size} color={color} />;
+    case "volumeMute":
+      return <BsVolumeMuteFill size={size} color={color} />;
+    case "volume":
+      return <BsVolumeUpFill size={size} color={color} />;
+    case "setting":
+      return <BsGearFill size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
