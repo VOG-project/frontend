@@ -8,12 +8,12 @@ const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
         return (
           <Room key={room.roomId} onClick={() => handleRoomClick(room.roomId)}>
             <RoomInfo>
-              {/* <RoomGame>발로란트</RoomGame> */}
               <RoomTitle>{room.title}</RoomTitle>
-              <RoomMemberCount>
-                {room.currentMember} / {room.maximumMember}
-              </RoomMemberCount>
+              <RoomDescription>{room.description}</RoomDescription>
             </RoomInfo>
+            <RoomMemberCount>
+              {room.currentMember} / {room.maximumMember}
+            </RoomMemberCount>
           </Room>
         );
       })}
@@ -28,21 +28,21 @@ const RoomListContainer = tw.ul`
 `;
 
 const Room = tw.li`
-  inline-block w-full text-center cursor-pointer
+  inline-block flex w-full h-28 text-center cursor-pointer shadow
 `;
 
 const RoomInfo = tw.div`
-  flex flex-col w-full h-full shadow bg-white/10 rounded-2xl
+  items-center justify-center w-full h-full bg-zinc-900
 `;
 
-// const RoomGame = tw.div`
-//   border-b border-neutral-700
-// `;
-
 const RoomTitle = tw.div`
-  pt-4 h-full text-3xl
+  flex items-center justify-center w-full h-2/3 text-3xl
+`;
+
+const RoomDescription = tw.div`
+  flex items-center w-full h-1/3 text-left px-4 shadow bg-zinc-700
 `;
 
 const RoomMemberCount = tw.div`
- text-4xl
+  shrink-0 flex items-center justify-center w-1/5 text-4xl bg-stone-800
 `;
