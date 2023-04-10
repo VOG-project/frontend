@@ -74,6 +74,7 @@ const Socket = () => {
       {roomId && (
         <ChatSocket
           chat={chat}
+          isChatRoom={isChatRoom}
           peerConnectionsRef={peerConnectionsRef}
           setChat={setChat}
           socketConnect={socketConnect}
@@ -97,7 +98,7 @@ export default Socket;
 
 const SocketContainer = styled.div<{ isChatRoom: boolean }>(
   ({ isChatRoom }) => [
-    tw`fixed flex items-center justify-center bottom-0 pl-64 w-full max-w-[120rem] z-10`,
-    isChatRoom && tw`translate-y-64`,
+    tw`fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 w-full pl-64 max-w-[120rem] z-10`,
+    isChatRoom && tw`translate-y-16`,
   ]
 );
