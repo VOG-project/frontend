@@ -31,6 +31,15 @@ const ChatEdit = ({
           />
         </ChatEditInput>
         <ChatEditInput>
+          <ChatEditLabel>설명</ChatEditLabel>
+          <Input
+            register={register("description")}
+            width={18}
+            bgColor="gray"
+            placeholder="설명을 입력하세요"
+          />
+        </ChatEditInput>
+        <ChatEditInput>
           <ChatEditLabel>최대 인원수</ChatEditLabel>
           <Input
             type="number"
