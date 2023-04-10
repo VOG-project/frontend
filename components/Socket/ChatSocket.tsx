@@ -11,6 +11,7 @@ import { ChatState } from "@/types/chat";
 
 const ChatSocket = ({
   chat,
+  isChatRoom,
   peerConnectionsRef,
   setChat,
   socketConnect,
@@ -181,7 +182,7 @@ const ChatSocket = ({
         #{chat.title}
         <Notification></Notification>
       </ChatTitle>
-      <ButtonContainer>
+      <ButtonContainer isChatRoom={isChatRoom}>
         <MiceMute
           type="button"
           width={2.5}
@@ -284,9 +285,12 @@ const Member = tw(Image)`
   float-left w-14 h-14 mx-2 bg-black rounded-full
 `;
 
-const ButtonContainer = tw.div`
-  flex px-8 gap-2
-`;
+const ButtonContainer = styled.div<{ isChatRoom: boolean }>(
+  ({ isChatRoom }) => [
+    tw`flex px-8 gap-2`,
+    isChatRoom && tw`absolute -top-36 left-[20.5rem]`,
+  ]
+);
 
 const MiceMute = tw(Button)``;
 

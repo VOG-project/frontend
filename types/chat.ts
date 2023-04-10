@@ -73,6 +73,7 @@ export interface ChatProps {
 
 export interface ChatSocketProps {
   chat: ChatState;
+  isChatRoom: boolean;
   peerConnectionsRef: MutableRefObject<{
     [key: string]: RTCPeerConnection;
   }>;
