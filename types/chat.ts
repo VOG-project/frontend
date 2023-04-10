@@ -52,6 +52,7 @@ export interface ChatRoom {
   updatedAt: string;
   roomId: string;
   title: string;
+  description: string;
   currentMember: number;
   maximumMember: number;
   no: number;
@@ -85,5 +86,6 @@ export interface ChatSocketProps {
 
 export interface ChatEditValue {
   title: string;
+  description: string;
   maximumMember: number;
 }
