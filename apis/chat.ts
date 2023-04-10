@@ -3,11 +3,13 @@ import customAxios from "@/utils/customAxios";
 const createChatRoomRequest = async (
   userId: number,
   title: string,
+  description: string,
   maximumMember: number
 ) => {
   const res = await customAxios().post("/chats/rooms", {
     userId,
     title,
+    description,
     maximumMember,
   });
 
