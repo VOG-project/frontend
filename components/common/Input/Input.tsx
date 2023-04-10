@@ -12,6 +12,7 @@ interface InputProps {
     | "currentPassword"
     | "title"
     | "maximumMember"
+    | "description"
   >;
   placeholder?: string;
   value?: string;
