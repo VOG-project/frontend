@@ -6,13 +6,15 @@ import { ChatEditValue } from "@/types/chat";
 const useChatEditForm = () => {
   const chatSchema = yup.object().shape({
     title: yup.string().required(),
-    maximumMember: yup.number().min(2).max(20).required(),
+    description: yup.string().required(),
+    maximumMember: yup.number().min(2).max(5).required(),
   });
 
   const { register, handleSubmit } = useForm<ChatEditValue>({
     mode: "onChange",
     defaultValues: {
       title: "",
+      description: "",
       maximumMember: 2,
     },
     resolver: yupResolver(chatSchema),
