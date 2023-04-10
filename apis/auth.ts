@@ -11,6 +11,9 @@ const loginRequest = async ({ email, password }: LoginRequest) => {
     password,
   });
 
+  console.log(res.headers);
+  console.log(res);
+
   return res.data;
 };
 
