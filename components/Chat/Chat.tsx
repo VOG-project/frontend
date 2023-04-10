@@ -55,8 +55,13 @@ const Chat = ({ data }: ChatProps) => {
       return;
     }
 
-    const { title, maximumMember } = data;
-    const res = await createChatRoomRequest(userId, title, maximumMember);
+    const { title, description, maximumMember } = data;
+    const res = await createChatRoomRequest(
+      userId,
+      title,
+      description,
+      maximumMember
+    );
     if (res.success) {
       const { roomId } = res.result;
       setChat((prev) => {
@@ -122,7 +127,6 @@ export default Chat;
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await getChatRoomsRequest(1);
   const chatRoomCountRes = await getChatRoomCountRequest();
-  console.log(chatRoomCountRes.result);
   return {
     props: {
       data: { ...res, chatRoomCount: chatRoomCountRes.result.chatRoomCount },
