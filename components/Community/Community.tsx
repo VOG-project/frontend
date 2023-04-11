@@ -87,6 +87,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const query = context.query as CommunityQuery;
   const category = query.category;
 
+  console.log("req headers : ", req.headers);
+
   const postRes = await axios.get("/posts", {
     headers: {
       "Content-Type": "Application/json",
