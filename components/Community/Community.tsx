@@ -88,6 +88,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const category = query.category;
 
   console.log("req headers : ", req.headers);
+  console.log("req headers cookie: ", req.headers.cookie);
+  console.log("req headers set-cookie", req.headers["set-cookie"]);
 
   const postRes = await axios.get("/posts", {
     headers: {
