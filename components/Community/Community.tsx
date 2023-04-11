@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -82,13 +83,39 @@ const Community = ({ data }: CommunityProps) => {
 export default Community;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const req = context.req;
   const query = context.query as CommunityQuery;
   const category = query.category;
 
-  const res = await getPostsRequest(category, 1);
-  const postCountRes = await getPostCount(category);
+  const postRes = await axios.get("/posts", {
+    headers: {
+      "Content-Type": "Application/json",
+      Cookie: req.headers.cookie,
+    },
+    params: {
+      board: category,
+      page: 1,
+    },
+  });
 
-  return { props: { data: { ...res, postCount: postCountRes.result } } };
+  const postCountRes = await axios.get("/posts/count", {
+    headers: {
+      "Content-Type": "Application/json",
+      Cookie: req.headers.cookie,
+    },
+    params: {
+      category: category,
+    },
+  });
+
+  // const res = await getPostsRequest(category, 1));
+  // const postCountRes = await getPostCount(category);
+
+  return {
+    props: {
+      data: { ...postRes.data.result, postCount: postCountRes.data.result },
+    },
+  };
 };
 
 const CommunityWrapper = tw.article`
