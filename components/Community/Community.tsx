@@ -101,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const postCountRes = await axios.get("/posts/count", {
     headers: {
       "Content-Type": "Application/json",
-      Cookie: req.headers.cookie,
+      Cookie: req.headers["set-cookie"],
     },
     params: {
       category: category,
