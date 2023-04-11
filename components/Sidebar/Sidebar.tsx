@@ -38,7 +38,7 @@ const Sidebar = () => {
     const res = await logoutRequest();
     if (res.success) {
       resetUser();
-      router.push("/");
+      router.replace("/login");
     }
   };
   return (
