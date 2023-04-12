@@ -1,6 +1,7 @@
+import Link from "next/link";
+import Image from "next/image";
 import tw from "twin.macro";
 import Button from "../common/Button";
-import Link from "next/link";
 
 const OAuthLogin = () => {
   const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
@@ -11,7 +12,13 @@ const OAuthLogin = () => {
       <NaverLogin
         href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_STATE}&redirect_uri=http://localhost:3000/auth/login/naver`}
       >
-        <NaverIcon></NaverIcon>
+        <NaverIcon
+          src={"/image/naver.png"}
+          width={200}
+          height={200}
+          quality={100}
+          alt="naver"
+        />
         <NaverText>Log in with Naver</NaverText>
       </NaverLogin>
 
@@ -32,8 +39,8 @@ const NaverLogin = tw(Link)`
   flex items-center justify-center w-3/6 h-12 rounded bg-[#03C75A]
 `;
 
-const NaverIcon = tw.div`
-  shrink-0 w-12 h-12 bg-[url("/image/naver.png")] bg-cover bg-center
+const NaverIcon = tw(Image)`
+  shrink-0 w-12 h-12
 `;
 
 const NaverText = tw.div`
