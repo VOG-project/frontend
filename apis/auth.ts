@@ -5,10 +5,10 @@ export interface LoginRequest {
   password: string;
 }
 
-const loginRequest = async ({ email, password }: LoginRequest) => {
-  const res = await customAxios().post("/auth/login", {
-    email,
-    password,
+const naverLoginRequest = async (code: string, state: string) => {
+  const res = await customAxios().post("/auth/login/naver", {
+    code,
+    state,
   });
 
   return res.data;
@@ -20,4 +20,4 @@ const logoutRequest = async () => {
   return res.data;
 };
 
-export { loginRequest, logoutRequest };
+export { naverLoginRequest, logoutRequest };
