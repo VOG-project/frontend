@@ -1,10 +1,16 @@
 import axios, { AxiosError } from "axios";
+import { getAccessToken } from "./tokenManager";
 
 const customAxios = () => {
+  const accessToken = getAccessToken();
+
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_ENDPOINT,
     timeout: 3000,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     withCredentials: true,
   });
 
