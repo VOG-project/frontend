@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import tw, { styled } from "twin.macro";
-import useModal from "@/hooks/useModal";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import ChatSocket from "./ChatSocket";
-import DeviceSettingModal from "./DeviceSettingModal";
 import { socketClient } from "@/utils/socketClient";
 import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
 import useMediaDevice from "@/hooks/useMediaDevice";
@@ -14,11 +12,17 @@ import useMediaDevice from "@/hooks/useMediaDevice";
 const Socket = () => {
   const [isChatRoom, setIsChatRoom] = useState(false);
   const router = useRouter();
-  const { isOpen, handleModalOpen, handleModalClose } = useModal();
   const { chat, setChat, resetChat } = useChatState();
   const { userId, user } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
-  const { peerConnectionsRef } = useMediaDevice();
+  const {
+    peerConnectionsRef,
+    localStreamRef,
+    getLocalStream,
+    getDevices,
+    handleMicMuteClick,
+    handleVolumeMuteClick,
+  } = useMediaDevice();
 
   const roomId = chat.roomId;
 
@@ -37,10 +41,10 @@ const Socket = () => {
   }, []);
 
   const handleUnload = (e: BeforeUnloadEvent) => {
-    if (chat.roomId) {
+    if (roomId) {
       e.preventDefault();
-      handleChatRoomLeave();
       e.returnValue = "";
+      handleChatRoomLeave();
     }
   };
 
@@ -67,6 +71,7 @@ const Socket = () => {
     }
     leaveRoomEmit(userId, roomId);
     resetChat();
+    router.back();
   };
 
   return (
@@ -76,20 +81,18 @@ const Socket = () => {
           chat={chat}
           isChatRoom={isChatRoom}
           peerConnectionsRef={peerConnectionsRef}
+          localStreamRef={localStreamRef}
           setChat={setChat}
           socketConnect={socketConnect}
+          getLocalStream={getLocalStream}
+          getDevices={getDevices}
           handleChatRoomLeave={handleChatRoomLeave}
+          handleMicMuteClick={handleMicMuteClick}
+          handleVolumeMuteClick={handleVolumeMuteClick}
           handleTitleClick={handleTitleClick}
           handleUserProfileOpen={handleUserProfileOpen}
-          handleModalOpen={handleModalOpen}
         />
       )}
-      <DeviceSettingModal
-        peerConnectionsRef={peerConnectionsRef}
-        isOpen={isOpen}
-        handleClose={handleModalClose}
-        handleConfirm={handleModalClose}
-      />
     </SocketContainer>
   );
 };

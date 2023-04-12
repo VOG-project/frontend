@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import tw, { styled } from "twin.macro";
-import useMediaDevice from "@/hooks/useMediaDevice";
+import DeviceSetting from "./DeviceSetting";
 import Button from "../common/Button";
 import Audio from "../common/Audio";
 import { socketClient } from "@/utils/socketClient";
@@ -13,20 +13,19 @@ const ChatSocket = ({
   chat,
   isChatRoom,
   peerConnectionsRef,
+  localStreamRef,
   setChat,
   socketConnect,
+  getLocalStream,
+  getDevices,
   handleChatRoomLeave,
+  handleMicMuteClick,
+  handleVolumeMuteClick,
   handleTitleClick,
   handleUserProfileOpen,
-  handleModalOpen,
 }: ChatSocketProps) => {
   const iceCandidateRef = useRef<{ [ket: string]: Array<RTCIceCandidate> }>({});
-  const {
-    localStreamRef,
-    getLocalStream,
-    handleMicMuteClick,
-    handleVolumeMuteClick,
-  } = useMediaDevice();
+  const [isShow, setIsShow] = useState(false);
 
   const processAddCandidate = (
     socketId: string,
@@ -212,7 +211,7 @@ const ChatSocket = ({
           bgColor="transparent"
           width={2.5}
           height={2.5}
-          onClick={handleModalOpen}
+          onClick={() => setIsShow((prev) => !prev)}
         >
           <SettingIcon>{getIcons("setting", 24)}</SettingIcon>
         </Setting>
@@ -246,6 +245,15 @@ const ChatSocket = ({
           ></Audio>
         );
       })}
+      {isShow && (
+        <DeviceSetting
+          isChatRoom={isChatRoom}
+          peerConnectionsRef={peerConnectionsRef}
+          localStreamRef={localStreamRef}
+          getLocalStream={getLocalStream}
+          getDevices={getDevices}
+        />
+      )}
     </ChatSocketContainer>
   );
 };
