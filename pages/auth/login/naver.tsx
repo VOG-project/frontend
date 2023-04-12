@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import customAxios from "@/utils/customAxios";
+import Loading from "@/components/common/Loading";
 
 const NaverLogin = () => {
   interface NaverLoginQuery extends ParsedUrlQuery {
@@ -18,7 +19,7 @@ const NaverLogin = () => {
       })
       .then((res) => console.log(res));
   }
-  return <div>loading</div>;
+  return <Loading />;
 };
 
 export default NaverLogin;
