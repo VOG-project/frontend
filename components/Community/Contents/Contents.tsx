@@ -21,12 +21,12 @@ const Contents = ({ contents, handleContentClick }: ContentsProps) => {
               {getIcons("thumb", 18)}
               {content.likeCount}
             </ContentLikeCount>
-            <ContentGame>리그오브레전드</ContentGame>
+            <ContentGame>발로란트</ContentGame>
             <ContentTitle>
               {content.title}
               <CommentCount>[0]</CommentCount>
             </ContentTitle>
-            <ContentAuthor>{content.id}</ContentAuthor>
+            <ContentAuthor>{content.user.nickname}</ContentAuthor>
             <ContentHit>
               {getIcons("thumb", 18)}
               {content.likeCount}
