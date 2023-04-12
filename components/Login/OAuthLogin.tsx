@@ -10,7 +10,7 @@ const OAuthLogin = () => {
   return (
     <OAuthContainer>
       <NaverLogin
-        href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_STATE}&redirect_uri=http://localhost:3000/auth/login/naver`}
+        href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_STATE}&redirect_uri=http://localhost:3002/auth/login/naver`}
       >
         <NaverIcon
           src={"/image/naver.png"}
