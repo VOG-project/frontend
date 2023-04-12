@@ -20,6 +20,7 @@ import {
   getChatRoomCountRequest,
 } from "@/apis/chat";
 import { ChatProps, ChatEditValue } from "@/types/chat";
+import { getAccessToken } from "@/utils/tokenManager";
 
 const Chat = ({ data }: ChatProps) => {
   const router = useRouter();
@@ -124,9 +125,11 @@ const Chat = ({ data }: ChatProps) => {
 
 export default Chat;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await getChatRoomsRequest(1);
-  const chatRoomCountRes = await getChatRoomCountRequest();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const req = context.req;
+  const accessToken = getAccessToken(req);
+  const res = await getChatRoomsRequest(1, accessToken);
+  const chatRoomCountRes = await getChatRoomCountRequest(accessToken);
   return {
     props: {
       data: { ...res, chatRoomCount: chatRoomCountRes.result.chatRoomCount },
