@@ -1,24 +1,41 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import customAxios from "@/utils/customAxios";
+import useUserState from "@/hooks/useUserState";
+import useToast from "@/hooks/useToast";
 import Loading from "@/components/common/Loading";
+import { naverLoginRequest } from "@/apis/auth";
+import { NaverLoginQuery } from "@/types/auth";
 
 const NaverLogin = () => {
-  interface NaverLoginQuery extends ParsedUrlQuery {
-    code: string;
-    state: string;
-  }
-
   const router = useRouter();
-  const query = router.query as NaverLoginQuery;
-  if (query.code && query.state) {
-    customAxios()
-      .post("/auth/login/naver", {
-        code: query.code,
-        state: query.state,
-      })
-      .then((res) => console.log(res));
-  }
+  const { setUser } = useUserState();
+  const { toast } = useToast();
+  useEffect(() => {
+    const query = router.query as NaverLoginQuery;
+    if (query.code && query.state) {
+      (async () => {
+        const code = query.code;
+        const state = query.state;
+        const res = await naverLoginRequest(code, state);
+
+        if (res.success) {
+          const result = res.result;
+          const oauthId = result.oauthId;
+          const provider = "naver";
+          setUser((prev) => {
+            return { ...prev, oauthId: oauthId, provider: provider };
+          });
+          if (result.redirectUrl) {
+            const redirectUrl = result.redirectUrl;
+            router.replace(redirectUrl);
+          }
+        } else {
+          toast.alert(res.error);
+        }
+      })();
+    }
+  }, [router]);
+
   return <Loading />;
 };
 
