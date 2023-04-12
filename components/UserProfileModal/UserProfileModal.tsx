@@ -28,7 +28,6 @@ const UserProfileModal = () => {
           alt="userProfilePic"
         />
         <UserNickname>{userProfile.nickname}</UserNickname>
-        <UserEmail>{userProfile.email}</UserEmail>
         {friendIds.includes(userProfile.id!) ? (
           <Button
             bgColor="secondary"
@@ -61,10 +60,6 @@ const UserProfilePic = tw(Image)`
 
 const UserNickname = tw.span`
   text-2xl
-`;
-
-const UserEmail = tw.span`
-  font-bold text-primary/80
 `;
 
 const ButtonIcon = tw.div`

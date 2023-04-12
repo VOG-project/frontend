@@ -1,13 +1,11 @@
 import customAxios from "@/utils/customAxios";
 
 const signUpRequest = async (
-  email: string,
   password: string,
   nickname: string,
   gender: string
 ) => {
   const res = await customAxios().post("/users/register", {
-    email,
     password,
     nickname,
     sex: gender,
@@ -61,7 +59,6 @@ const withdrawalRequest = async (userId: number, password: string) => {
       password,
     },
   });
-  console.log(res);
 
   return res.data;
 };

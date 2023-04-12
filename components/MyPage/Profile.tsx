@@ -12,7 +12,6 @@ const Profile = ({ user }: ProfileProps) => {
         height={800}
       />
       <ProfileInfo>
-        <Email>{user.email}</Email>
         <Nickname>{user.nickname}</Nickname>
       </ProfileInfo>
     </ProfileContainer>
@@ -30,9 +29,6 @@ const ProfilePic = tw(Image)`
 `;
 
 const ProfileInfo = tw.div``;
-
-const Email = tw.p`
-`;
 
 const Nickname = tw.p`
   text-2xl
