@@ -8,7 +8,8 @@ export interface SignUpValue {
   gender: string;
 }
 
-export interface NaverLoginQuery extends ParsedUrlQuery {
+export interface AuthQuery extends ParsedUrlQuery {
   code: string;
   state: string;
+  provider: string;
 }
