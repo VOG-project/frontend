@@ -1,14 +1,16 @@
 import customAxios from "@/utils/customAxios";
 
 const signUpRequest = async (
-  password: string,
+  oauthId: string,
+  provider: string,
   nickname: string,
-  gender: string
+  sex: string
 ) => {
   const res = await customAxios().post("/users/register", {
-    password,
+    oauthId,
+    provider,
     nickname,
-    sex: gender,
+    sex,
   });
 
   return res.data;
