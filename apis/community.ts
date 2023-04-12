@@ -1,4 +1,5 @@
 import customAxios from "@/utils/customAxios";
+import { CookieValueTypes } from "cookies-next";
 
 interface PostData {
   writerId: number;
@@ -19,8 +20,17 @@ const createPostRequest = async (data: PostData) => {
   return res.data;
 };
 
-const getPostsRequest = async (category: string, page: number) => {
+const getPostsRequest = async (
+  category: string,
+  page: number,
+  accessToken?: CookieValueTypes
+) => {
   const res = await customAxios().get("/posts", {
+    headers: accessToken
+      ? {
+          Authorization: `bearer ${accessToken}`,
+        }
+      : undefined,
     params: {
       board: category,
       page,
@@ -36,8 +46,16 @@ const getPostRequest = async (postId: number) => {
   return res.data;
 };
 
-const getPostCount = async (category: string) => {
+const getPostCount = async (
+  category: string,
+  accessToken?: CookieValueTypes
+) => {
   const res = await customAxios().get(`/posts/count`, {
+    headers: accessToken
+      ? {
+          Authorization: `bearer ${accessToken}`,
+        }
+      : undefined,
     params: {
       category: category,
     },
