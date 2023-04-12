@@ -3,12 +3,14 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useUserProfileState from "@/hooks/useUserProfileState";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import Post from "./Post";
+import Loading from "@/components/common/Loading";
 import { getPostRequest } from "@/apis/community";
 import { getCommentsRequest, createCommentRequest } from "@/apis/comment";
 import {
@@ -28,18 +30,26 @@ const Detail = () => {
   const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
+  const { targetRef, cursor, isLoading, setIsLoading } = useInfiniteScroll();
   const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
 
-  const updateComments = async (postId: number) => {
-    const res = await getCommentsRequest(postId);
+  const updateComments = async (postId: number, cursor?: number) => {
+    setIsLoading(true);
+    const res = await getCommentsRequest(postId, cursor);
 
     if (res.success) {
-      setComments(res.result);
+      setComments((prev) => {
+        if (!cursor) {
+          return res.result;
+        }
+        return [...prev, ...res.result];
+      });
     } else {
       toast.alert(res.error);
     }
+    setIsLoading(false);
   };
 
   const updateLikes = async (postId: number) => {
@@ -63,13 +73,21 @@ const Detail = () => {
   };
 
   useEffect(() => {
+    if (!query.id) return;
     const postId = Number(query.id);
     setCategory(query.category);
     setTitle(getTitle(category));
     updatePostDetail(postId);
-    updateLikes(postId);
     updateComments(postId);
+    updateLikes(postId);
   }, [query, category]);
+
+  useEffect(() => {
+    if (cursor === 1) return;
+    if (!query.id) return;
+    const postId = Number(query.id);
+    updateComments(postId, cursor);
+  }, [cursor]);
 
   const handleListButtonClick = () => {
     category ? router.push(`${category}`) : router.push("/community");
@@ -143,6 +161,9 @@ const Detail = () => {
             handleUserProfileOpen={handleUserProfileOpen}
           />
         </DetailContainer>
+        <Observer ref={isLoading ? undefined : targetRef}>
+          {isLoading ? <Loading /> : "댓글 더보기"}
+        </Observer>
       </DetailWrapper>
     </MainLayout>
   );
@@ -160,4 +181,8 @@ const DetailContainer = tw.section`
 
 const ListButton = tw.div`
   flex items-center justify-center
+`;
+
+const Observer = tw.div`
+  flex items-center justify-center w-full h-32 text-center
 `;
