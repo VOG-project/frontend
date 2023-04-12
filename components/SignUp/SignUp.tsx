@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
+import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
 import Input from "../common/Input";
 import Button from "../common/Button";
@@ -9,24 +10,22 @@ import { signUpRequest } from "@/apis/user";
 import { SignUpValue } from "@/types/auth";
 
 const SignUp = () => {
-  const {
-    watchEmail,
-    watchNickname,
-    watchPassword,
-    watchConfirmPassword,
-    emailError,
-    nicknameError,
-    passwordError,
-    confirmPasswordError,
-    register,
-    handleSubmit,
-  } = useSignUpForm();
+  const { watchNickname, nicknameError, register, handleSubmit } =
+    useSignUpForm();
+  const { user, setUser } = useUserState();
   const { toast } = useToast();
   const router = useRouter();
-  const handleSignUp = async ({ password, nickname, gender }: SignUpValue) => {
-    const res = await signUpRequest(password, nickname, gender);
+  const oauthId = user.oauthId;
+  const provider = user.provider;
+  const handleSignUp = async ({ nickname, gender }: SignUpValue) => {
+    const res = await signUpRequest(oauthId, provider, nickname, gender);
     if (res.success) {
-      router.push("/login");
+      const nickname = res.result.nickname;
+      const sex = res.result.sex;
+      setUser((prev) => {
+        return { ...prev, nickname: nickname, sex: sex };
+      });
+      router.replace("/");
     } else {
       toast.alert(res.error);
     }
@@ -36,17 +35,6 @@ const SignUp = () => {
       <SignUpContainer>
         <SignUpForm onSubmit={handleSubmit(handleSignUp)}>
           <SignUpTitle>회원가입</SignUpTitle>
-          <SignUpInputContainer>
-            <Input
-              register={register("email")}
-              placeholder="이메일"
-              height={3}
-              bgColor="gray"
-            />
-            {watchEmail && emailError && (
-              <ErrorMessage>유효한 이메일을 입력하세요.</ErrorMessage>
-            )}
-          </SignUpInputContainer>
           <SignUpInputContainer>
             <Input
               register={register("nickname")}
@@ -74,34 +62,7 @@ const SignUp = () => {
             />
             여자
           </RadioContainer>
-          <SignUpInputContainer>
-            <Input
-              register={register("password")}
-              type="password"
-              placeholder="비밀번호 입력"
-              height={3}
-              bgColor="gray"
-            />
-            {watchPassword && passwordError && (
-              <ErrorMessage>유효한 비밀번호를 입력하세요.</ErrorMessage>
-            )}
-          </SignUpInputContainer>
-          <SignUpInputContainer>
-            <Input
-              register={register("confirmPassword")}
-              type="password"
-              placeholder="비밀번호 재입력"
-              height={3}
-              bgColor="gray"
-            />
-            {watchConfirmPassword && confirmPasswordError && (
-              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-            )}
-          </SignUpInputContainer>
-          <SignUpText>
-            비밀번호는 8~16자리의 영문 대소문자, 숫자, 특수문자를 조합하여
-            설정해 주세요.
-          </SignUpText>
+          <SignUpText>닉네임은 2~10자리로 설정해 주세요.</SignUpText>
           <Button type="submit" bgColor="secondary">
             회원가입
           </Button>
