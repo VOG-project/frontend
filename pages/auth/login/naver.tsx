@@ -5,6 +5,7 @@ import useToast from "@/hooks/useToast";
 import Loading from "@/components/common/Loading";
 import { naverLoginRequest } from "@/apis/auth";
 import { NaverLoginQuery } from "@/types/auth";
+import { setAccessToken } from "@/utils/tokenManager";
 
 const NaverLogin = () => {
   const router = useRouter();
@@ -22,6 +23,12 @@ const NaverLogin = () => {
           const result = res.result;
           const oauthId = result.oauthId;
           const provider = "naver";
+          const id = result.id;
+          const nickname = result.nickname;
+          const profileUrl = result.profileUrl;
+          const sex = result.sex;
+          const accessToken = result.jwtAccessToken;
+          setAccessToken(accessToken);
           setUser((prev) => {
             return { ...prev, oauthId: oauthId, provider: provider };
           });
@@ -29,6 +36,16 @@ const NaverLogin = () => {
             const redirectUrl = result.redirectUrl;
             router.replace(redirectUrl);
           }
+          setUser((prev) => {
+            return {
+              ...prev,
+              id: id,
+              nickname: nickname,
+              profileUrl: profileUrl,
+              sex: sex,
+            };
+          });
+          router.replace("/");
         } else {
           toast.alert(res.error);
         }
