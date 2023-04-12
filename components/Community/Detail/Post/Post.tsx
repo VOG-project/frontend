@@ -33,7 +33,7 @@ const Post = ({
           </PostInfo>
           <PostInfo>
             {getIcons("eye", 16)}
-            <PostInfoText>18992</PostInfoText>
+            <PostInfoText>{content.view}</PostInfoText>
           </PostInfo>
           <PostInfo>
             {getIcons("time", 16)}

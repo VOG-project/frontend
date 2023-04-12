@@ -28,8 +28,8 @@ const Contents = ({ contents, handleContentClick }: ContentsProps) => {
             </ContentTitle>
             <ContentAuthor>{content.user.nickname}</ContentAuthor>
             <ContentHit>
-              {getIcons("thumb", 18)}
-              {content.likeCount}
+              {getIcons("eye", 18)}
+              {content.view}
             </ContentHit>
             <ContentTime>
               {getIcons("time", 18)}
