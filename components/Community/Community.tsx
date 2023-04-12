@@ -12,6 +12,7 @@ import Button from "../common/Button";
 import { getPostsRequest, getPostCount } from "@/apis/community";
 import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
+import { getAccessToken } from "@/utils/tokenManager";
 
 const Community = ({ data }: CommunityProps) => {
   const [curPage, setCurPage] = useState(1);
@@ -82,11 +83,13 @@ const Community = ({ data }: CommunityProps) => {
 export default Community;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const req = context.req;
+  const accessToken = getAccessToken(req);
   const query = context.query as CommunityQuery;
   const category = query.category;
 
-  const res = await getPostsRequest(category, 1);
-  const postCountRes = await getPostCount(category);
+  const res = await getPostsRequest(category, 1, accessToken);
+  const postCountRes = await getPostCount(category, accessToken);
 
   return {
     props: {
