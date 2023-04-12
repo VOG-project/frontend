@@ -8,9 +8,10 @@ interface UserProfileState extends UserState {
 export const userProfileState = atom<UserProfileState>({
   key: "UserProfile",
   default: {
+    oauthId: "",
+    provider: "",
     isOpen: false,
     nickname: "",
-    email: "",
     profileUrl: "/image/blank_profile.png",
     id: null,
     sex: "",
