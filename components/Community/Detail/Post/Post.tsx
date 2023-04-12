@@ -18,7 +18,7 @@ const Post = ({
     <PostContainer>
       <PostTitle>
         <PostSubject>
-          <PostGame>[리그오브레전드]</PostGame>
+          <PostGame>[발로란트]</PostGame>
           {content.title}
         </PostSubject>
       </PostTitle>
