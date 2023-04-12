@@ -23,13 +23,8 @@ const SignUp = () => {
   } = useSignUpForm();
   const { toast } = useToast();
   const router = useRouter();
-  const handleSignUp = async ({
-    email,
-    password,
-    nickname,
-    gender,
-  }: SignUpValue) => {
-    const res = await signUpRequest(email, password, nickname, gender);
+  const handleSignUp = async ({ password, nickname, gender }: SignUpValue) => {
+    const res = await signUpRequest(password, nickname, gender);
     if (res.success) {
       router.push("/login");
     } else {
