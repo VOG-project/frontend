@@ -3,9 +3,10 @@ import { recoilPersist } from "recoil-persist";
 import { sessionStorage } from "@/utils/sessionStorage";
 
 export interface UserState {
+  oauthId: string;
+  provider: string;
   id: number | null;
   nickname: string;
-  email: string;
   profileUrl: string;
   sex: string;
 }
@@ -18,9 +19,10 @@ const { persistAtom } = recoilPersist({
 export const userState = atom<UserState>({
   key: "User",
   default: {
+    oauthId: "",
+    provider: "",
     id: null,
     nickname: "",
-    email: "",
     profileUrl: "/image/blank_profile.png",
     sex: "",
   },
