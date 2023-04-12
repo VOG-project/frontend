@@ -11,19 +11,13 @@ import Modal from "../common/Modal";
 import Input from "../common/Input";
 import ProfilePicEdit from "./MyPageCards/ProfilePicEdit";
 import NicknameEdit from "./MyPageCards/NicknameEdit";
-import PasswordEdit from "./MyPageCards/PasswordEdit";
 import DeleteAccount from "./MyPageCards/DeleteAccount";
 import {
   uploadProfilePicRequest,
   changeNicknameRequest,
-  changePasswordRequest,
   withdrawalRequest,
 } from "@/apis/user";
-import {
-  PasswordEditValue,
-  NicknameEditValue,
-  ProfilePicEditValue,
-} from "@/types/myPage";
+import { NicknameEditValue, ProfilePicEditValue } from "@/types/myPage";
 import imageResize from "@/utils/imageResize";
 
 const MyPage = () => {
@@ -72,19 +66,6 @@ const MyPage = () => {
     }
   };
 
-  const handlePasswordChangeSubmit = async (data: PasswordEditValue) => {
-    if (!userId) return;
-
-    const { currentPassword, password } = data;
-    const res = await changePasswordRequest(userId, currentPassword, password);
-    if (res.success) {
-      resetUser();
-      router.replace("/");
-    } else {
-      toast.alert(res.error);
-    }
-  };
-
   const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value;
     setPassword(password);
@@ -114,7 +95,6 @@ const MyPage = () => {
           <Profile user={user} />
           <ProfilePicEdit handleProfilePicUpload={handleProfilePicUpload} />
           <NicknameEdit handleNicknameEditSubmit={handleNicknameChangeSubmit} />
-          <PasswordEdit handlePasswordEditSubmit={handlePasswordChangeSubmit} />
           <DeleteAccount handleModalOpen={handleModalOpen} />
         </MyPageContainer>
       </MyPageWrapper>
