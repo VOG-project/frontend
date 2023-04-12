@@ -30,7 +30,7 @@ const MyPage = () => {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const { toast } = useToast();
-  const { user, userId, resetUser } = useUserState();
+  const { user, userId, resetUser, setUser } = useUserState();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
 
   const handleProfilePicUpload = async (data: ProfilePicEditValue) => {
@@ -42,14 +42,19 @@ const MyPage = () => {
       (await imageResize(image)
         .then(async (image) => {
           const res = image && (await uploadProfilePicRequest(userId, image));
-          console.log(res);
+          if (res.success) {
+            const uploadedProfileUrl = res.result.profileUrl;
+            setUser((prev) => {
+              return { ...prev, profileUrl: uploadedProfileUrl };
+            });
+          } else {
+            toast.alert(res.error);
+          }
         })
         .catch((error) => {
           console.error(error);
           toast.alert("이미지 압축에 실패하였습니다.");
         }));
-    // const res = image && (await uploadProfilePicRequest(userId, image));
-    // console.log(res);
   };
 
   const handleNicknameChangeSubmit = async (data: NicknameEditValue) => {
@@ -57,8 +62,14 @@ const MyPage = () => {
 
     const { nickname } = data;
     const res = await changeNicknameRequest(userId, nickname);
-
-    console.log(res);
+    if (res.success) {
+      const changedNickname = res.result.nickname;
+      setUser((prev) => {
+        return { ...prev, nickname: changedNickname };
+      });
+    } else {
+      toast.alert(res.error);
+    }
   };
 
   const handlePasswordChangeSubmit = async (data: PasswordEditValue) => {
