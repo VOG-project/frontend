@@ -42,19 +42,6 @@ const changeNicknameRequest = async (userId: number, newNickname: string) => {
   return res.data;
 };
 
-const changePasswordRequest = async (
-  userId: number,
-  currentPassword: string,
-  newPassword: string
-) => {
-  const res = await customAxios().patch(`/users/${userId}/password`, {
-    currentPassword,
-    newPassword,
-  });
-
-  return res.data;
-};
-
 const withdrawalRequest = async (userId: number, password: string) => {
   const res = await customAxios().delete(`/users/${userId}/withdrawal`, {
     data: {
@@ -70,6 +57,18 @@ export {
   getUserInfoRequest,
   uploadProfilePicRequest,
   changeNicknameRequest,
-  changePasswordRequest,
   withdrawalRequest,
 };
+
+// const changePasswordRequest = async (
+//   userId: number,
+//   currentPassword: string,
+//   newPassword: string
+// ) => {
+//   const res = await customAxios().patch(`/users/${userId}/password`, {
+//     currentPassword,
+//     newPassword,
+//   });
+
+//   return res.data;
+// };
