@@ -8,6 +8,7 @@ import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
 import { signUpRequest } from "@/apis/user";
 import { SignUpValue } from "@/types/auth";
+import { setAccessToken } from "@/utils/tokenManager";
 
 const SignUp = () => {
   const { watchNickname, nicknameError, register, handleSubmit } =
@@ -20,10 +21,20 @@ const SignUp = () => {
   const handleSignUp = async ({ nickname, gender }: SignUpValue) => {
     const res = await signUpRequest(oauthId, provider, nickname, gender);
     if (res.success) {
+      const id = res.result.id;
       const nickname = res.result.nickname;
+      const profileUrl = res.result.profileUrl;
       const sex = res.result.sex;
+      const accessToken = res.result.jwtAccessToken;
+      setAccessToken(accessToken);
       setUser((prev) => {
-        return { ...prev, nickname: nickname, sex: sex };
+        return {
+          ...prev,
+          id: id,
+          profileUrl: profileUrl,
+          nickname: nickname,
+          sex: sex,
+        };
       });
       router.replace("/");
     } else {
