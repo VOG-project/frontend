@@ -10,7 +10,13 @@ const Comments = ({
 }: CommentsProps) => {
   return (
     <CommentsContainer>
-      <CommentsTitle>댓글 {comments.length}</CommentsTitle>
+      <CommentsTitle>댓글</CommentsTitle>
+      <CommentEdit
+        isReply={false}
+        group={undefined}
+        sequence={0}
+        handleCommentSubmit={handleCommentSubmit}
+      />
       {comments.map((comment) => {
         return (
           <Comment
@@ -26,12 +32,6 @@ const Comments = ({
           />
         );
       })}
-      <CommentEdit
-        isReply={false}
-        group={undefined}
-        sequence={0}
-        handleCommentSubmit={handleCommentSubmit}
-      />
     </CommentsContainer>
   );
 };
