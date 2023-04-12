@@ -39,9 +39,14 @@ const CommentEdit = ({
 
             <CommentSubmitBtn
               ref={buttonRef}
-              onClick={() =>
-                handleCommentSubmit(textareaRef.current?.value, group, sequence)
-              }
+              onClick={() => {
+                handleCommentSubmit(
+                  textareaRef.current?.value,
+                  group,
+                  sequence
+                );
+                if (textareaRef.current) textareaRef.current.value = "";
+              }}
             >
               댓글
             </CommentSubmitBtn>
