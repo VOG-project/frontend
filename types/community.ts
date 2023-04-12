@@ -17,6 +17,7 @@ export interface Content {
     id: number;
     nickname: string;
   };
+  view: number;
 }
 
 export interface ContentDetail {
@@ -31,6 +32,7 @@ export interface ContentDetail {
     id: number;
     nickname: string;
   };
+  view: number;
 }
 
 export interface Comment {
