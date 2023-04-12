@@ -1,55 +1,23 @@
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useLoginForm from "@/hooks/useLoginForm";
-import useUserState from "@/hooks/useUserState";
-import useFriendState from "@/hooks/useFriendState";
-import useToast from "@/hooks/useToast";
 import OAuthLogin from "./OAuthLogin";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
-import { loginRequest, LoginRequest } from "@/apis/auth";
 
 const Login = () => {
-  const { setUser } = useUserState();
-  const { updateFriendList } = useFriendState();
   const router = useRouter();
-  const { toast } = useToast();
-  const {
-    watchEmail,
-    watchPassword,
-    emailError,
-    passwordError,
-    register,
-    handleSubmit,
-  } = useLoginForm();
+  const { watchEmail, watchPassword, emailError, passwordError, register } =
+    useLoginForm();
   const handleSignUpClick = () => {
     router.push("/sign-up");
   };
 
-  const handleLogin = async ({ email, password }: LoginRequest) => {
-    const res = await loginRequest({ email, password });
-    if (res.success) {
-      setUser((prev) => {
-        return {
-          ...prev,
-          id: res.result.id,
-          email: res.result.email,
-          nickname: res.result.nickname,
-          profileUrl: res.result.profileUrl,
-          sex: res.result.sex,
-        };
-      });
-      router.push("/select-game");
-      await updateFriendList(res.result.id);
-    } else {
-      toast.alert(res.error);
-    }
-  };
   return (
     <LoginWrapper>
       <LoginContainer>
-        <LoginForm onSubmit={handleSubmit(handleLogin)}>
+        <LoginForm>
           <LoginTitle>VOG 로그인</LoginTitle>
           <LoginInputContainer>
             <Input
@@ -77,9 +45,6 @@ const Login = () => {
               </ErrorMessage>
             )}
           </LoginInputContainer>
-          <Button type="submit" bgColor="primary">
-            로그인
-          </Button>
         </LoginForm>
         <Or>or</Or>
         <OAuthLogin />
