@@ -22,4 +22,15 @@ const removeFriendRequest = async (userId: number, targetId: number) => {
   return res.data;
 };
 
-export { addFriendRequest, getFriendsRequest, removeFriendRequest };
+const searchFriendRequest = async (nickname: string) => {
+  const res = await customAxios().get(`/friend/search/${nickname}`);
+
+  return res.data;
+};
+
+export {
+  addFriendRequest,
+  getFriendsRequest,
+  removeFriendRequest,
+  searchFriendRequest,
+};

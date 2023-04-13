@@ -1,13 +1,16 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, FormEvent, useState } from "react";
 import tw, { styled, css } from "twin.macro";
+import useToast from "@/hooks/useToast";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getIcons } from "../icons";
+import { searchFriendRequest } from "@/apis/friend";
 import { CONTEXT_MENU_WIDTH } from "@/constants/friend";
 
 const Friend = () => {
+  const { toast } = useToast();
   const { friends, isShow, handleFriendToggle, handleRemoveFriendClick } =
     useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
@@ -17,6 +20,25 @@ const Friend = () => {
     y: 0,
     reverse: false,
   });
+
+  const handleNicknameSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      nickname: { value: string };
+    };
+    const nickname = target.nickname.value;
+    if (!nickname) return;
+
+    const res = await searchFriendRequest(nickname);
+    if (res.success) {
+      res.result
+        ? handleUserProfileOpen(res.result.id)
+        : toast.alert("해당 닉네임을 가진 유저가 없습니다.");
+    } else {
+      toast.alert(res.error);
+    }
+    target.nickname.value = "";
+  };
 
   const handleRightClick = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -41,8 +63,6 @@ const Friend = () => {
       });
     }
   };
-
-  console.log(contextMenuState);
 
   return (
     <FriendContainer isShow={isShow}>
@@ -85,7 +105,10 @@ const Friend = () => {
           );
         })}
       </FriendList>
-      <FriendAddBtn>{getIcons("addFriend", 32)}</FriendAddBtn>
+      <FriendSearch onSubmit={handleNicknameSubmit}>
+        <FriendSearchInput name="nickname" placeholder="닉네임을 입력하세요." />
+        <FriendAddBtn type="submit">{getIcons("addFriend", 32)}</FriendAddBtn>
+      </FriendSearch>
       <FriendToggle onClick={handleFriendToggle}>{"<"}</FriendToggle>
     </FriendContainer>
   );
@@ -135,4 +158,11 @@ const ContextMenus = styled.ul<{ x: number; y: number; reverse: boolean }>(
 const ContextMenu = tw.li`
   p-2 cursor-pointer
   hover:(bg-primary text-white)
+`;
+
+const FriendSearch = tw.form`
+`;
+
+const FriendSearchInput = tw.input`
+  w-full h-12 px-4 bg-neutral-700 outline-none
 `;
