@@ -11,7 +11,7 @@ import Header from "../common/Header";
 import UserCard from "../common/UserCard";
 import { getGameLogo } from "@/utils/getGameLogo";
 import { getIcons } from "../icons";
-import { logoutRequest } from "@/apis/auth";
+import { deleteAccessToken } from "@/utils/tokenManager";
 import { selectedGameState } from "@/recoil/atoms/selectedGameState";
 import { NAV_MENU } from "@/constants/nav";
 
@@ -35,12 +35,11 @@ const Sidebar = () => {
   };
 
   const handleLogout = async () => {
-    const res = await logoutRequest();
-    if (res.success) {
-      resetUser();
-      router.replace("/login");
-    }
+    deleteAccessToken();
+    resetUser();
+    router.replace("/login");
   };
+
   return (
     <SidebarContainer>
       <VogLogo onClick={handleVogClick}>
