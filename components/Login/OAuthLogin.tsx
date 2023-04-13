@@ -42,7 +42,7 @@ const OAuthLogin = () => {
         href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=https://talkgg.online/auth/login/kakao&state=${KAKAO_CLIENT_STATE}`}
       >
         <LogoIcon
-          src={"/image/logo_google.png"}
+          src={"/image/logo_kakao.png"}
           width={200}
           height={200}
           quality={100}
