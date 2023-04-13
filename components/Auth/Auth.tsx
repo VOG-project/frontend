@@ -30,6 +30,8 @@ const Auth = () => {
           const profileUrl = result.profileUrl;
           const sex = result.sex;
           const accessToken = result.jwtAccessToken;
+          console.log(result);
+          console.log(result.redirectUrl);
           setAccessToken(accessToken);
           setUser((prev) => {
             return { ...prev, oauthId: oauthId, provider: provider };
