@@ -28,6 +28,11 @@ const UserProfileModal = () => {
           alt="userProfilePic"
         />
         <UserNickname>{userProfile.nickname}</UserNickname>
+        <UserGender>
+          {userProfile.sex === "남"
+            ? getIcons("male", 16)
+            : getIcons("female", 16)}
+        </UserGender>
         {friendIds.includes(userProfile.id!) ? (
           <Button
             bgColor="secondary"
@@ -51,7 +56,7 @@ const UserProfileModal = () => {
 export default UserProfileModal;
 
 const UserProfile = tw.div`
-  flex flex-col items-center justify-center
+  flex flex-col items-center justify-center gap-2
 `;
 
 const UserProfilePic = tw(Image)`
@@ -59,7 +64,11 @@ const UserProfilePic = tw(Image)`
 `;
 
 const UserNickname = tw.span`
-  text-2xl
+  flex text-2xl
+`;
+
+const UserGender = tw.div`
+  
 `;
 
 const ButtonIcon = tw.div`
