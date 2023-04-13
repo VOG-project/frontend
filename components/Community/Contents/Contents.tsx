@@ -28,7 +28,7 @@ const Contents = ({ contents, handleContentClick }: ContentsProps) => {
             </ContentTitle>
             <ContentAuthor>{content.user.nickname}</ContentAuthor>
             <ContentHit>
-              {getIcons("eye", 18)}
+              {getIcons("eye", 14)}
               {content.view}
             </ContentHit>
             <ContentTime>
@@ -73,7 +73,7 @@ const ContentLikeCount = tw.span`
 `;
 
 const ContentHit = tw.span`
-  flex justify-center items-center px-2
+  flex w-[8%] justify-center items-center gap-1 px-2
 `;
 
 const ContentTime = tw.div`
