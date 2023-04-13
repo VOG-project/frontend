@@ -20,10 +20,12 @@ import {
   BsVolumeMuteFill,
   BsVolumeUpFill,
   BsGearFill,
+  BsGenderFemale,
+  BsGenderMale,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoReload } from "react-icons/io5";
 
 export function getIcons(name: string, size: number, color?: string) {
   switch (name) {
@@ -83,6 +85,12 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsVolumeUpFill size={size} color={color} />;
     case "setting":
       return <BsGearFill size={size} color={color} />;
+    case "reload":
+      return <IoReload size={size} color={color} />;
+    case "male":
+      return <BsGenderMale size={size} color={color} />;
+    case "female":
+      return <BsGenderFemale size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
