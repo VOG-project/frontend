@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
+import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
@@ -21,11 +22,16 @@ const CATEGORY = [
 ];
 
 const Edit = () => {
-  const [post, setPost] = useState({ title: "", content: "" });
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const { toast } = useToast();
   const { category } = router.query as CommunityQuery;
   const { userId } = useUserState();
+  const [post, setPost] = useState({
+    title: "",
+    content: "",
+    category: category,
+  });
 
   const handleImageInputClick = () => {
     if (inputRef.current) {
@@ -39,16 +45,34 @@ const Edit = () => {
       writerId: userId,
       title: post.title,
       content: post.content,
-      postCategory: category,
+      postCategory: post.category,
     });
-    console.log(res);
+    if (res.success) {
+      const postId = res.result.id;
+      const postCategory = res.result.postCategory;
+      router.replace({
+        pathname: `/community/${postId}`,
+        query: {
+          category: postCategory,
+        },
+      });
+    } else {
+      toast.alert(res.error);
+    }
   };
 
   return (
     <MainLayout>
       <EditWrapper>
         <EditContainer>
-          <EditCategory defaultValue={router.query.category}>
+          <EditCategory
+            defaultValue={router.query.category}
+            onChange={(e) =>
+              setPost((prev) => {
+                return { ...prev, category: e.target.value };
+              })
+            }
+          >
             {CATEGORY.map((item) => {
               return (
                 <option key={item.value} value={item.value}>
@@ -90,7 +114,12 @@ const Edit = () => {
             >
               글쓰기
             </Button>
-            <Button type="button" width={8} bgColor="secondary">
+            <Button
+              type="button"
+              width={8}
+              bgColor="secondary"
+              onClick={router.back}
+            >
               취소
             </Button>
           </EditButtonContainer>
