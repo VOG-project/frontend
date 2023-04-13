@@ -18,8 +18,10 @@ const Auth = () => {
         const code = query.code;
         const state = query.state;
         const provider = query.provider;
-        const res = await oauthLoginRequest(code, state, provider);
+        console.log("code : ", code, "state: ", state, "provider: ", provider);
 
+        const res = await oauthLoginRequest(code, state, provider);
+        console.log(res);
         if (res.success) {
           const result = res.result;
           const oauthId = result.oauthId;
