@@ -21,7 +21,6 @@ const Auth = () => {
         console.log("code : ", code, "state: ", state, "provider: ", provider);
 
         const res = await oauthLoginRequest(code, state, provider);
-        console.log(res);
         if (res.success) {
           const result = res.result;
           const oauthId = result.oauthId;
@@ -30,8 +29,6 @@ const Auth = () => {
           const profileUrl = result.profileUrl;
           const sex = result.sex;
           const accessToken = result.jwtAccessToken;
-          console.log(result);
-          console.log(result.redirectUrl);
           setAccessToken(accessToken);
           setUser((prev) => {
             return { ...prev, oauthId: oauthId, provider: provider };
@@ -49,6 +46,7 @@ const Auth = () => {
               sex: sex,
             };
           });
+          router.replace("/");
         } else {
           toast.alert(res.error);
         }
