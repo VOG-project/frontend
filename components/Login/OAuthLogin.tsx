@@ -24,7 +24,7 @@ const OAuthLogin = () => {
         <LoginText>Sign in with Naver</LoginText>
       </NaverLogin>
       <GoogleLogin
-        href={`https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/drive.metadata.readonly&access_type=online&response_type=code&state=${GOOGLE_CLIENT_STATE}&redirect_uri=https://talkgg.online/auth/login/google&client_id=${GOOGLE_CLIENT_ID}`}
+        href={`https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&response_type=code&state=${GOOGLE_CLIENT_STATE}&redirect_uri=https://talkgg.online/auth/login/google&client_id=${GOOGLE_CLIENT_ID}`}
       >
         <LogoIcon
           src={"/image/logo_google.png"}
