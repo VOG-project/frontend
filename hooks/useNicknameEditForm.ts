@@ -15,6 +15,7 @@ const useNicknameEditForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: "onChange",
@@ -30,6 +31,7 @@ const useNicknameEditForm = () => {
     errorsNickname,
     isDirty,
     isValid,
+    reset,
     register,
     handleSubmit,
   };
