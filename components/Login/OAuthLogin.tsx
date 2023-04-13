@@ -6,9 +6,6 @@ const OAuthLogin = () => {
   const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
   const NAVER_CLIENT_STATE = process.env.NEXT_PUBLIC_NAVER_CLIENT_STATE;
 
-  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const GOOGLE_CLIENT_STATE = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_STATE;
-
   const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
   const KAKAO_CLIENT_STATE = process.env.NEXT_PUBLIC_KAKAO_CLIENT_STATE;
 
@@ -26,18 +23,6 @@ const OAuthLogin = () => {
         />
         <LoginText>Sign in with Naver</LoginText>
       </NaverLogin>
-      <GoogleLogin
-        href={`https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&response_type=code&state=${GOOGLE_CLIENT_STATE}&redirect_uri=https://talkgg.online/auth/login/google&client_id=${GOOGLE_CLIENT_ID}`}
-      >
-        <LogoIcon
-          src={"/image/logo_google.png"}
-          width={200}
-          height={200}
-          quality={100}
-          alt="naver"
-        />
-        <LoginText>Sign in with Google</LoginText>
-      </GoogleLogin>
       <KakaoLogin
         href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=https://talkgg.online/auth/login/kakao&state=${KAKAO_CLIENT_STATE}`}
       >
@@ -66,10 +51,6 @@ const LogoIcon = tw(Image)`
 
 const NaverLogin = tw(Link)`
   flex items-center justify-center w-3/6 h-12 rounded bg-[#03c75a]
-`;
-
-const GoogleLogin = tw(Link)`
-  flex items-center justify-center w-3/6 h-12 rounded bg-white text-black
 `;
 
 const KakaoLogin = tw(Link)`
