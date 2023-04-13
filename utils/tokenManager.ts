@@ -1,4 +1,4 @@
-import { setCookie, getCookie } from "cookies-next";
+import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { IncomingMessage } from "http";
 
 const ACCESS_TOKEN = "ACCESS_TOKEN";
@@ -17,4 +17,8 @@ const getAccessToken = (
   return getCookie(ACCESS_TOKEN, { req });
 };
 
-export { setAccessToken, getAccessToken };
+const deleteAccessToken = () => {
+  deleteCookie(ACCESS_TOKEN);
+};
+
+export { setAccessToken, getAccessToken, deleteAccessToken };
