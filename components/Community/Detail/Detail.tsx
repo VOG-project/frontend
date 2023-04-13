@@ -10,7 +10,7 @@ import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import Post from "./Post";
-import Loading from "@/components/common/Loading";
+import Circle from "@/components/common/Loading/Circle";
 import { getPostRequest } from "@/apis/community";
 import { getCommentsRequest, createCommentRequest } from "@/apis/comment";
 import {
@@ -162,7 +162,7 @@ const Detail = () => {
           />
         </DetailContainer>
         <Observer ref={isLoading ? undefined : targetRef}>
-          {isLoading ? <Loading /> : "댓글 더보기"}
+          {isLoading ? <Circle /> : "댓글 더보기"}
         </Observer>
       </DetailWrapper>
     </MainLayout>
