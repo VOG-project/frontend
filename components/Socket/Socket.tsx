@@ -5,7 +5,6 @@ import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import ChatSocket from "./ChatSocket";
-import { socketClient } from "@/utils/socketClient";
 import { enterRoomEmit, leaveRoomEmit } from "@/utils/socketClient";
 import useMediaDevice from "@/hooks/useMediaDevice";
 
@@ -57,7 +56,6 @@ const Socket = () => {
   const socketConnect = () => {
     if (!userId) return;
 
-    socketClient.connect();
     enterRoomEmit(userId, user.nickname, roomId);
   };
 
