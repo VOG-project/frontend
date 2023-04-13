@@ -41,7 +41,10 @@ const ProfilePicEdit = ({ handleProfilePicUpload }: ProfilePicEditProps) => {
       <Right>
         <ProfilePicEditForm
           acceptCharset="UTF-8"
-          onSubmit={handleSubmit(handleProfilePicUpload)}
+          onSubmit={async (e) => {
+            await handleSubmit(handleProfilePicUpload)(e);
+            reset();
+          }}
         >
           <ProfilePicUpload preview={preview}>
             <ProfilePicInput

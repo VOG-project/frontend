@@ -8,14 +8,19 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import { NicknameEditProps } from "@/types/myPage";
 
 const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
-  const { errorsNickname, isDirty, isValid, register, handleSubmit } =
+  const { errorsNickname, isDirty, isValid, reset, register, handleSubmit } =
     useNicknameEditForm();
 
   return (
     <NicknameEditContainer>
       <Left title="닉네임 변경" />
       <Right>
-        <NicknameEditForm onSubmit={handleSubmit(handleNicknameEditSubmit)}>
+        <NicknameEditForm
+          onSubmit={async (e) => {
+            await handleSubmit(handleNicknameEditSubmit)(e);
+            reset();
+          }}
+        >
           <NicknameEditInput>
             <NicknameEditLabel>
               새 닉네임
