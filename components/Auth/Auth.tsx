@@ -38,7 +38,7 @@ const Auth = () => {
           });
           if (result.redirectUrl) {
             const redirectUrl = result.redirectUrl;
-            router.replace(redirectUrl);
+            return router.replace(redirectUrl);
           }
           setUser((prev) => {
             return {
@@ -49,7 +49,6 @@ const Auth = () => {
               sex: sex,
             };
           });
-          router.replace("/");
         } else {
           toast.alert(res.error);
         }
