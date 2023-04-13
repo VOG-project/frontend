@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import tw from "twin.macro";
+import tw, { styled } from "twin.macro";
 import useModal from "@/hooks/useModal";
 import useUserState from "@/hooks/useUserState";
 import useChatState from "@/hooks/useChatState";
+import useLoadingState from "@/hooks/useLoadingState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "../layout/MainLayout";
 import RoomList from "./RoomList";
@@ -21,6 +22,7 @@ import {
 } from "@/apis/chat";
 import { ChatProps, ChatEditValue } from "@/types/chat";
 import { getAccessToken } from "@/utils/tokenManager";
+import { getIcons } from "../icons";
 
 const Chat = ({ data }: ChatProps) => {
   const router = useRouter();
@@ -30,6 +32,7 @@ const Chat = ({ data }: ChatProps) => {
   const [totalCount, setTotalCount] = useState(chatRoomCount);
   const { userId } = useUserState();
   const { chat, setChat } = useChatState();
+  const { setLoadingTrue, setLoadingFalse } = useLoadingState();
   const { toast } = useToast();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
 
@@ -40,15 +43,19 @@ const Chat = ({ data }: ChatProps) => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const res = await getChatRoomsRequest(curPage);
-      setRoomList(res.result);
-      await getChatRoomCountRequest().then((res) => {
-        const chatRoomCount = res.result.chatRoomCount;
-        setTotalCount(chatRoomCount);
-      });
-    })();
+    (async () => await updateChatRooms(curPage))();
   }, [curPage]);
+
+  const updateChatRooms = async (curPage: number) => {
+    setLoadingTrue();
+    const res = await getChatRoomsRequest(curPage);
+    setRoomList(res.result);
+    await getChatRoomCountRequest().then((res) => {
+      const chatRoomCount = res.result.chatRoomCount;
+      setTotalCount(chatRoomCount);
+    });
+    setLoadingFalse();
+  };
 
   const handleChatRoomCreate = async (data: ChatEditValue) => {
     if (!userId) {
@@ -99,20 +106,25 @@ const Chat = ({ data }: ChatProps) => {
         <Header title="채팅" />
         <ChatContainer>
           <SearchContainer>
-            <Button width={6} bgColor="primary" onClick={handleModalOpen}>
-              방생성
-            </Button>
+            <ChatButtonContainer>
+              <Button width={6} bgColor="primary" onClick={handleModalOpen}>
+                방생성
+              </Button>
+              <RefreshButton onClick={() => updateChatRooms(curPage)}>
+                <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
+              </RefreshButton>
+            </ChatButtonContainer>
             <Search />
           </SearchContainer>
           <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
         </ChatContainer>
-        <ChatButtonContainer>
+        <PaginationContainer>
           <Pagination
             curPage={curPage}
             count={totalCount}
             setCurPage={setCurPage}
           />
-        </ChatButtonContainer>
+        </PaginationContainer>
       </ChatWrapper>
       <ChatEdit
         isOpen={isOpen}
@@ -145,10 +157,21 @@ const ChatContainer = tw.div`
   w-full px-10
 `;
 
+const ChatButtonContainer = tw.div`
+  flex items-center gap-4
+`;
+
+const RefreshButton = tw.button`
+  flex items-center justify-center w-10 h-10 rounded
+  hover:bg-white/30
+`;
+
+const RefreshIcon = tw.div``;
+
 const SearchContainer = tw.div`
   flex items-center justify-between py-4
 `;
 
-const ChatButtonContainer = tw.div`
+const PaginationContainer = tw.div`
   relative p-4 clear-both
 `;
