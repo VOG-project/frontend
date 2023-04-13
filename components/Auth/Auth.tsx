@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
-import Loading from "@/components/common/Loading";
+import Circle from "@/components/common/Loading/Circle";
 import { oauthLoginRequest } from "@/apis/auth";
 import { AuthQuery } from "@/types/auth";
 import { setAccessToken } from "@/utils/tokenManager";
@@ -53,7 +53,7 @@ const Auth = () => {
     }
   }, [router]);
 
-  return <Loading />;
+  return <Circle />;
 };
 
 export default Auth;
