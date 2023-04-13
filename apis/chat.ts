@@ -29,7 +29,7 @@ const getChatRoomsRequest = async (
   page: number,
   accessToken?: CookieValueTypes
 ) => {
-  const res = await customAxios().get("/chats/rooms", {
+  const res = await customAxios().get("/chats/rooms/list", {
     headers: accessToken
       ? { Authorization: `bearer ${accessToken}` }
       : undefined,
