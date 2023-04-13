@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import tw, { styled } from "twin.macro";
+import tw from "twin.macro";
 import useModal from "@/hooks/useModal";
 import useUserState from "@/hooks/useUserState";
 import useChatState from "@/hooks/useChatState";
