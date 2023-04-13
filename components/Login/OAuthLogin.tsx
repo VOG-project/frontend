@@ -9,6 +9,9 @@ const OAuthLogin = () => {
   const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const GOOGLE_CLIENT_STATE = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_STATE;
 
+  const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+  const KAKAO_CLIENT_STATE = process.env.NEXT_PUBLIC_KAKAO_CLIENT_STATE;
+
   return (
     <OAuthContainer>
       <NaverLogin
@@ -35,6 +38,18 @@ const OAuthLogin = () => {
         />
         <LoginText>Sign in with Google</LoginText>
       </GoogleLogin>
+      <KakaoLogin
+        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=https://talkgg.online/auth/login/kakao&state=${KAKAO_CLIENT_STATE}`}
+      >
+        <LogoIcon
+          src={"/image/logo_google.png"}
+          width={200}
+          height={200}
+          quality={100}
+          alt="naver"
+        />
+        <LoginText>Sign in with Kakao</LoginText>
+      </KakaoLogin>
     </OAuthContainer>
   );
 };
@@ -55,6 +70,10 @@ const NaverLogin = tw(Link)`
 
 const GoogleLogin = tw(Link)`
   flex items-center justify-center w-3/6 h-12 rounded bg-white text-black
+`;
+
+const KakaoLogin = tw(Link)`
+  flex items-center justify-center w-3/6 h-12 rounded bg-[#FEE500] text-black
 `;
 
 const LoginText = tw.span`
