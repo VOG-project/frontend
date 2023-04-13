@@ -41,6 +41,7 @@ const MyPage = () => {
             setUser((prev) => {
               return { ...prev, profileUrl: uploadedProfileUrl };
             });
+            toast.success("프로필이미지가 변경되었습니다.");
           } else {
             toast.alert(res.error);
           }
@@ -61,6 +62,7 @@ const MyPage = () => {
       setUser((prev) => {
         return { ...prev, nickname: changedNickname };
       });
+      toast.success("닉네임이 변경되었습니다.");
     } else {
       toast.alert(res.error);
     }
