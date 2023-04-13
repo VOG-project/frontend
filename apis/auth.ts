@@ -18,10 +18,4 @@ const oauthLoginRequest = async (
   return res.data;
 };
 
-const logoutRequest = async () => {
-  const res = await customAxios().delete("/auth/logout");
-
-  return res.data;
-};
-
-export { oauthLoginRequest, logoutRequest };
+export { oauthLoginRequest };
