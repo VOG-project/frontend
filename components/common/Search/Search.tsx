@@ -4,10 +4,14 @@ import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
 import { getIcons } from "@/components/icons";
 
-const Search = () => {
+interface SearchProps {
+  options: { value: string; text: string }[];
+}
+
+const Search = ({ options }: SearchProps) => {
   const router = useRouter();
   const [search, setSearch] = useState({
-    type: "title",
+    type: options[0].value,
     keyword: "",
   });
   const { toast } = useToast();
@@ -37,8 +41,13 @@ const Search = () => {
           })
         }
       >
-        <SearchOption value="title">제목</SearchOption>
-        <SearchOption value="nickname">작성자</SearchOption>
+        {options.map((option) => {
+          return (
+            <SearchOption key={option.value} value={option.value}>
+              {option.text}
+            </SearchOption>
+          );
+        })}
       </SearchCategory>
       <SearchInput
         onChange={(e) =>
