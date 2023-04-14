@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
+import useLoadingState from "@/hooks/useLoadingState";
 import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
 import Search from "../common/Search";
@@ -18,6 +19,7 @@ import {
 import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 import { getAccessToken } from "@/utils/tokenManager";
+import { COMMUNITY_SEARCH_OPTION } from "@/constants/search";
 
 const Community = ({ data }: CommunityProps) => {
   const [curPage, setCurPage] = useState(1);
@@ -25,15 +27,18 @@ const Community = ({ data }: CommunityProps) => {
   const [totalCount, setTotalCount] = useState(data.postCount);
   const router = useRouter();
   const { toast } = useToast();
+  const { setLoadingFalse, setLoadingTrue } = useLoadingState();
   const query = router.query as CommunityQuery;
   const category = query.category;
   const title = getTitle(category || "");
 
   useEffect(() => {
     (async () => {
+      setLoadingTrue();
       const res = await getPostsRequest(category, 1);
       setContents(res.result);
       await getPostCount(category).then((res) => setTotalCount(res.result));
+      setLoadingFalse();
     })();
   }, [category]);
 
@@ -42,6 +47,7 @@ const Community = ({ data }: CommunityProps) => {
     const keyword = query.keyword;
     if (searchType && keyword) {
       (async () => {
+        setLoadingTrue();
         setCurPage(1);
         const res = await searchPostRequest(
           category,
@@ -59,6 +65,7 @@ const Community = ({ data }: CommunityProps) => {
         } else {
           toast.alert(res.error);
         }
+        setLoadingFalse();
       })();
     }
   }, [query, curPage]);
@@ -85,7 +92,7 @@ const Community = ({ data }: CommunityProps) => {
         <Navigation category={category} />
         <CommunityContainer>
           <Header title={title ? title : ""}>
-            <Search />
+            <Search options={COMMUNITY_SEARCH_OPTION} />
           </Header>
           <Contents
             contents={contents}
