@@ -8,10 +8,11 @@ const CommentEdit = ({
   isReply,
   value,
   commentId,
+  setIsEditing,
   handleCommentSubmit,
   handleEditCommentSubmit,
 }: CommentEditProps) => {
-  const [isEditing, setIsEditing] = useState(!setReply);
+  const [isShow, setIsShow] = useState(!setReply);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -21,8 +22,8 @@ const CommentEdit = ({
     }
   }, []);
 
-  const handleIsEditingToggle = () => {
-    setIsEditing((prev) => !prev);
+  const handleIsShowToggle = () => {
+    setIsShow((prev) => !prev);
   };
 
   if (textareaRef.current && value) textareaRef.current.value = value;
@@ -30,9 +31,9 @@ const CommentEdit = ({
   return (
     <CommentEditContainer>
       {setReply && (
-        <CommentEditBtn onClick={handleIsEditingToggle}>답글</CommentEditBtn>
+        <CommentEditBtn onClick={handleIsShowToggle}>답글</CommentEditBtn>
       )}
-      {isEditing && (
+      {isShow && (
         <CommentTextarea>
           <Textarea
             placeholder="댓글을 입력하세요."
@@ -41,7 +42,7 @@ const CommentEdit = ({
           />
           <CommentBntContainer>
             {setReply && (
-              <CommentCancelBtn onClick={handleIsEditingToggle}>
+              <CommentCancelBtn onClick={handleIsShowToggle}>
                 취소
               </CommentCancelBtn>
             )}
@@ -53,6 +54,7 @@ const CommentEdit = ({
                   ? await handleEditCommentSubmit(
                       isReply,
                       textareaRef.current?.value,
+                      setIsEditing,
                       commentId
                     )
                   : await handleCommentSubmit(
