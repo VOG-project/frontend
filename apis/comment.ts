@@ -1,9 +1,10 @@
 import customAxios from "@/utils/customAxios";
 
-const getCommentsRequest = async (postId: number, cursor: number = 1) => {
-  const res = await customAxios().get(`/comments/${postId}`, {
+const getCommentsRequest = async (postId: number, page: number = 1) => {
+  const res = await customAxios().get(`/comments`, {
     params: {
-      cursor: cursor,
+      postId: postId,
+      page: page,
     },
   });
 
@@ -13,33 +14,19 @@ const getCommentsRequest = async (postId: number, cursor: number = 1) => {
 const createCommentRequest = async (
   userId: number,
   postId: number,
-  content: string,
-  group: number,
-  sequence: number
+  content: string
 ) => {
   const res = await customAxios().post("/comments", {
-    userId,
+    writerId: userId,
     postId,
     content,
-    group,
-    sequence,
   });
 
   return res.data;
 };
 
-const deleteCommentRequest = async (
-  group: number,
-  sequence: number,
-  postId: number
-) => {
-  const res = await customAxios().delete("/comments", {
-    params: {
-      group,
-      sequence,
-      postId,
-    },
-  });
+const deleteCommentRequest = async (commentId: number) => {
+  const res = await customAxios().delete(`/comments/${commentId}`);
 
   return res.data;
 };
