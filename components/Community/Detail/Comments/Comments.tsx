@@ -4,30 +4,24 @@ import CommentEdit from "./CommentEdit";
 import { CommentsProps } from "@/types/community";
 
 const Comments = ({
+  userId,
   comments,
   handleCommentSubmit,
+  handleRemoveCommentClick,
   handleUserProfileOpen,
 }: CommentsProps) => {
   return (
     <CommentsContainer>
       <CommentsTitle>댓글</CommentsTitle>
-      <CommentEdit
-        isReply={false}
-        group={undefined}
-        sequence={0}
-        handleCommentSubmit={handleCommentSubmit}
-      />
+      <CommentEdit isReply={false} handleCommentSubmit={handleCommentSubmit} />
       {comments.map((comment) => {
         return (
           <Comment
             key={comment.id}
-            id={comment.id}
-            author={comment.user.nickname}
-            createdAt={comment.createdAt}
-            content={comment.content}
-            group={comment.group}
-            reply={comment.reply}
+            comment={comment}
+            userId={userId}
             handleCommentSubmit={handleCommentSubmit}
+            handleRemoveCommentClick={handleRemoveCommentClick}
             handleUserProfileOpen={handleUserProfileOpen}
           />
         );
