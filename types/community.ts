@@ -1,4 +1,5 @@
 import { ParsedUrlQuery } from "querystring";
+import { Dispatch, SetStateAction } from "react";
 
 export type HandleUserProfileOpen = (userId: number | null) => Promise<void>;
 
@@ -15,6 +16,7 @@ export type HandleRemoveCommentClick = (
 export type HandleEditCommentSubmit = (
   isReply: boolean,
   content: string | undefined,
+  setIsEditing: Dispatch<SetStateAction<boolean>> | undefined,
   commentId?: number
 ) => Promise<void>;
 
@@ -104,6 +106,7 @@ export interface CommentEditProps {
   isReply: boolean;
   value?: string;
   commentId?: number;
+  setIsEditing?: Dispatch<SetStateAction<boolean>>;
   handleCommentSubmit: HandleCommentSubmit;
   handleEditCommentSubmit?: HandleEditCommentSubmit;
 }
