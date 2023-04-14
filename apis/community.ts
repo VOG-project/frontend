@@ -86,19 +86,14 @@ const searchPostRequest = async (
   keyword: string,
   page: number
 ) => {
-  const res = await customAxios().post(
-    "/posts/search",
-    {
+  const res = await customAxios().get("/posts/search", {
+    params: {
+      board: board,
+      searchType: searchType,
       keyword: keyword,
+      page: page,
     },
-    {
-      params: {
-        board: board,
-        searchType: searchType,
-        page: page,
-      },
-    }
-  );
+  });
 
   return res.data;
 };
