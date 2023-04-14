@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 
 export const socketClient = io(`${process.env.NEXT_PUBLIC_SOCKET}/chat`, {
   transports: ["websocket"],
-  autoConnect: true,
+  autoConnect: false,
   closeOnBeforeunload: false,
 });
 
