@@ -1,62 +1,83 @@
 import { useState } from "react";
 import tw from "twin.macro";
 import CommentEdit from "./CommentEdit";
+import Button from "@/components/common/Button";
 import { CommentProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 import { getIcons } from "@/components/icons";
 
 const Comment = ({
-  id,
-  author,
-  createdAt,
-  content,
-  group,
-  reply,
+  comment,
+  userId,
   handleCommentSubmit,
+  handleRemoveCommentClick,
   handleUserProfileOpen,
 }: CommentProps) => {
   const [replyToggle, setReplyToggle] = useState(false);
-
+  const replies = comment.replies;
+  const isOwner = userId === comment.user.id;
   return (
     <CommentContainer>
       <CommentAuthor>
-        <CommentNickname onClick={() => handleUserProfileOpen(id)}>
-          {author}
+        <CommentNickname onClick={() => handleUserProfileOpen(comment.user.id)}>
+          {comment.user.nickname}
         </CommentNickname>
-        <CommentTime>{timeDifference(createdAt)}</CommentTime>
+        <CommentTime>{timeDifference(comment.createdAt)}</CommentTime>
+        {isOwner && (
+          <CommentButtonContainer>
+            <Button bgColor="transparent" width={4} height={2}>
+              수정
+            </Button>
+            <Button
+              bgColor="transparent"
+              width={4}
+              height={2}
+              onClick={() => handleRemoveCommentClick(comment.id)}
+            >
+              삭제
+            </Button>
+          </CommentButtonContainer>
+        )}
       </CommentAuthor>
-      <CommentText>{content}</CommentText>
-      <CommentEdit
-        isReply={true}
-        group={group}
-        sequence={reply.length}
-        handleCommentSubmit={handleCommentSubmit}
-      />
-      {reply.length > 1 && (
+      <CommentText>{comment.content}</CommentText>
+      <CommentEdit isReply={true} handleCommentSubmit={handleCommentSubmit} />
+      {replies.length > 0 && (
         <ReplyToggle onClick={() => setReplyToggle((prev) => !prev)}>
           {replyToggle ? getIcons("on", 24) : getIcons("off", 24)}답글
-          {reply.length - 1}개
+          {replies.length}개
         </ReplyToggle>
       )}
       {replyToggle &&
-        reply
-          .filter((reply) => reply.sequence > 0)
-          .map((reply) => {
-            return (
-              <CommentReply key={reply.id}>
-                <ReturnIcon>{getIcons("return", 24)}</ReturnIcon>
-                <CommentAuthor>
-                  <CommentNickname
-                    onClick={() => handleUserProfileOpen(reply.user.id)}
-                  >
-                    {reply.user.nickname}
-                  </CommentNickname>
-                  <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
-                </CommentAuthor>
-                <CommentText>{reply.content}</CommentText>
-              </CommentReply>
-            );
-          })}
+        replies.map((reply) => {
+          return (
+            <CommentReply key={reply.id}>
+              <CommentAuthor>
+                <CommentNickname
+                  onClick={() => handleUserProfileOpen(reply.user.id)}
+                >
+                  {reply.user.nickname}
+                </CommentNickname>
+                <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
+                {userId === reply.user.id && (
+                  <CommentButtonContainer>
+                    <Button bgColor="transparent" width={4} height={2}>
+                      수정
+                    </Button>
+                    <Button
+                      bgColor="transparent"
+                      width={4}
+                      height={2}
+                      onClick={() => handleRemoveCommentClick(reply.id)}
+                    >
+                      삭제
+                    </Button>
+                  </CommentButtonContainer>
+                )}
+              </CommentAuthor>
+              <CommentText>{reply.content}</CommentText>
+            </CommentReply>
+          );
+        })}
     </CommentContainer>
   );
 };
@@ -68,7 +89,7 @@ const CommentContainer = tw.div`
 `;
 
 const CommentAuthor = tw.div`
-  flex
+  flex items-center w-full px-4 h-8 bg-zinc-900
 `;
 
 const CommentNickname = tw.span`
@@ -83,14 +104,15 @@ const CommentText = tw.p`
   my-2 px-2
 `;
 
+const CommentButtonContainer = tw.div`
+  flex gap-2 ml-auto text-blue-500
+`;
+
 const CommentReply = tw.div`
-  relative px-8
+  relative px-8 mb-2
+  before:(content-[""] absolute top-4 left-2 w-6 h-8 border-l border-b border-neutral-700)
 `;
 
 const ReplyToggle = tw.div`
   flex gap-1 text-primary cursor-pointer
-`;
-
-const ReturnIcon = tw.div`
-  absolute left-0 top-8
 `;
