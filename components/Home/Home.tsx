@@ -1,8 +1,10 @@
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import MainLayout from "../layout/MainLayout";
 import Button from "../common/Button";
 
 const Home = () => {
+  const router = useRouter();
   return (
     <MainLayout>
       <HomeContainer>
@@ -14,10 +16,27 @@ const Home = () => {
             커뮤니티에서 여러 정보를 공유하세요.
           </HomeText>
           <ButtonContainer>
-            <Button bgColor="primary" width={5}>
+            <Button
+              bgColor="primary"
+              width={5}
+              onClick={() => {
+                router.push("/chat");
+              }}
+            >
               채팅
             </Button>
-            <Button bgColor="primary" width={5}>
+            <Button
+              bgColor="primary"
+              width={5}
+              onClick={() => {
+                router.push({
+                  pathname: "/community",
+                  query: {
+                    category: "free",
+                  },
+                });
+              }}
+            >
               커뮤니티
             </Button>
           </ButtonContainer>
