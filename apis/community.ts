@@ -80,6 +80,29 @@ const deletePostRequest = async (postId: number) => {
   return res.data;
 };
 
+const searchPostRequest = async (
+  board: string,
+  searchType: string,
+  keyword: string,
+  page: number
+) => {
+  const res = await customAxios().post(
+    "/posts/search",
+    {
+      keyword: keyword,
+    },
+    {
+      params: {
+        board: board,
+        searchType: searchType,
+        page: page,
+      },
+    }
+  );
+
+  return res.data;
+};
+
 export {
   createPostRequest,
   getPostsRequest,
@@ -87,4 +110,5 @@ export {
   getPostCount,
   updatePostRequest,
   deletePostRequest,
+  searchPostRequest,
 };
