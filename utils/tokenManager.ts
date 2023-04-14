@@ -4,7 +4,7 @@ import { IncomingMessage } from "http";
 const ACCESS_TOKEN = "ACCESS_TOKEN";
 
 const setAccessToken = (accessToken: string) => {
-  setCookie(ACCESS_TOKEN, accessToken);
+  setCookie(ACCESS_TOKEN, accessToken, { maxAge: 60 * 60 * 24 * 1000 });
 };
 
 const getAccessToken = (
