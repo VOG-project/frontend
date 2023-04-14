@@ -8,18 +8,14 @@ import UserCard from "../common/UserCard";
 import { getIcons } from "../icons";
 import { searchFriendRequest } from "@/apis/friend";
 import { CONTEXT_MENU_WIDTH } from "@/constants/friend";
+import { INITIAL_STATE } from "@/types/friend";
 
 const Friend = () => {
   const { toast } = useToast();
   const { friends, isShow, handleFriendToggle, handleRemoveFriendClick } =
     useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
-  const [contextMenuState, setContextMenuState] = useState({
-    isShow: false,
-    x: 0,
-    y: 0,
-    reverse: false,
-  });
+  const [contextMenuState, setContextMenuState] = useState(INITIAL_STATE);
 
   const handleNicknameSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,6 +60,10 @@ const Friend = () => {
     }
   };
 
+  const resetContextMenuState = () => {
+    setContextMenuState(INITIAL_STATE);
+  };
+
   return (
     <FriendContainer isShow={isShow}>
       <Header title="친구목록" />
@@ -79,18 +79,22 @@ const Friend = () => {
                     reverse={contextMenuState.reverse}
                   >
                     <ContextMenu
-                      onClick={() => handleUserProfileOpen(friend.userId)}
+                      onClick={async () => {
+                        await handleUserProfileOpen(friend.userId);
+                        resetContextMenuState();
+                      }}
                     >
                       프로필
                     </ContextMenu>
                     <ContextMenu>채팅방 초대</ContextMenu>
                     <ContextMenu
-                      onClick={() =>
-                        handleRemoveFriendClick(
+                      onClick={async () => {
+                        await handleRemoveFriendClick(
                           friend.userId,
                           friend.following.id
-                        )
-                      }
+                        );
+                        resetContextMenuState();
+                      }}
                     >
                       친구 삭제
                     </ContextMenu>
@@ -109,7 +113,9 @@ const Friend = () => {
         <FriendSearchInput name="nickname" placeholder="닉네임을 입력하세요." />
         <FriendAddBtn type="submit">{getIcons("addFriend", 32)}</FriendAddBtn>
       </FriendSearch>
-      <FriendToggle onClick={handleFriendToggle}>{"<"}</FriendToggle>
+      <FriendToggle onClick={handleFriendToggle}>
+        {getIcons("left", 20)}
+      </FriendToggle>
     </FriendContainer>
   );
 };
