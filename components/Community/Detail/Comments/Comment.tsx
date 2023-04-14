@@ -32,7 +32,9 @@ const Comment = ({
               bgColor="transparent"
               width={4}
               height={2}
-              onClick={() => handleRemoveCommentClick(comment.id)}
+              onClick={async () =>
+                await handleRemoveCommentClick(false, comment.id)
+              }
             >
               삭제
             </Button>
@@ -40,7 +42,11 @@ const Comment = ({
         )}
       </CommentAuthor>
       <CommentText>{comment.content}</CommentText>
-      <CommentEdit isReply={true} handleCommentSubmit={handleCommentSubmit} />
+      <CommentEdit
+        isReply={true}
+        commentId={comment.id}
+        handleCommentSubmit={handleCommentSubmit}
+      />
       {replies.length > 0 && (
         <ReplyToggle onClick={() => setReplyToggle((prev) => !prev)}>
           {replyToggle ? getIcons("on", 24) : getIcons("off", 24)}답글
@@ -67,7 +73,9 @@ const Comment = ({
                       bgColor="transparent"
                       width={4}
                       height={2}
-                      onClick={() => handleRemoveCommentClick(reply.id)}
+                      onClick={async () =>
+                        await handleRemoveCommentClick(true, reply.id)
+                      }
                     >
                       삭제
                     </Button>
