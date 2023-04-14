@@ -1,10 +1,16 @@
 import { ParsedUrlQuery } from "querystring";
 
-type HandleCommentSubmit = (content: string | undefined) => Promise<void>;
+export type HandleCommentSubmit = (
+  content: string | undefined,
+  commentId?: number
+) => Promise<void>;
 
-type HandleUserProfileOpen = (userId: number | null) => Promise<void>;
+export type HandleUserProfileOpen = (userId: number | null) => Promise<void>;
 
-export type HandleRemoveCommentClick = (commentId: number) => Promise<void>;
+export type HandleRemoveCommentClick = (
+  isReply: boolean,
+  commentId: number
+) => Promise<void>;
 
 export interface Content {
   createdAt: string;
@@ -86,6 +92,7 @@ export interface CommentProps {
 
 export interface CommentEditProps {
   isReply: boolean;
+  commentId?: number;
   handleCommentSubmit: HandleCommentSubmit;
 }
 
