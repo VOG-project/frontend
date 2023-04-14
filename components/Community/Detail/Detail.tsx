@@ -44,13 +44,14 @@ const Detail = () => {
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
   const { setLoadingFalse, setLoadingTrue } = useLoadingState();
-
   const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
-  const postId = Number(query.id);
 
   const updateComments = async (page: number) => {
+    if (!query.id) return;
+
+    const postId = Number(query.id);
     setLoadingTrue();
     const res = await getCommentsRequest(postId, page);
     if (res.success) {
@@ -104,20 +105,18 @@ const Detail = () => {
     commentId
   ) => {
     if (!userId) return;
+    if (!query.id) return;
     if (!content) {
       toast.alert("댓글을 입력해주세요.");
       return;
     }
-    if (commentId) {
-      const res = await createReplyRequest(userId, commentId, content);
-      if (res.success) {
-        updateComments(curPage);
-      }
-    } else {
-      const res = await createCommentRequest(userId, postId, content);
-      if (res.success) {
-        updateComments(curPage);
-      }
+
+    const postId = Number(query.id);
+    const res = commentId
+      ? await createReplyRequest(userId, commentId, content)
+      : await createCommentRequest(userId, postId, content);
+    if (res.success) {
+      updateComments(curPage);
     }
   };
 
@@ -129,7 +128,7 @@ const Detail = () => {
       ? await deleteReplyRequest(commentId)
       : await deleteCommentRequest(commentId);
     if (res.success) {
-      updateLikes(postId);
+      updateComments(curPage);
     } else {
       toast.alert(res.error);
     }
