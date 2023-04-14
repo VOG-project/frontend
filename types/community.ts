@@ -8,7 +8,7 @@ export type HandleCommentSubmit = (
   commentId?: number
 ) => Promise<void>;
 
-export type HandleRemoveCommentClick = (
+export type HandleDeleteCommentClick = (
   isReply: boolean,
   commentId: number
 ) => Promise<void>;
@@ -76,8 +76,9 @@ export interface PostProps {
   content?: ContentDetail;
   comments: Comment[];
   likes: Number[];
+  handleDeletePostClick: (postId: number) => Promise<void>;
   handleCommentSubmit: HandleCommentSubmit;
-  handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleDeleteCommentClick: HandleDeleteCommentClick;
   handleEditCommentSubmit: HandleEditCommentSubmit;
   handleLikeButtonClick: () => void;
   handleUserProfileOpen: HandleUserProfileOpen;
@@ -87,7 +88,7 @@ export interface CommentsProps {
   userId: number | null;
   comments: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
-  handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleDeleteCommentClick: HandleDeleteCommentClick;
   handleEditCommentSubmit: HandleEditCommentSubmit;
   handleUserProfileOpen: HandleUserProfileOpen;
 }
@@ -96,7 +97,7 @@ export interface CommentProps {
   comment: Comment;
   userId: number | null;
   handleCommentSubmit: HandleCommentSubmit;
-  handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleDeleteCommentClick: HandleDeleteCommentClick;
   handleEditCommentSubmit: HandleEditCommentSubmit;
   handleUserProfileOpen: HandleUserProfileOpen;
 }

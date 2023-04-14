@@ -7,7 +7,7 @@ const Comments = ({
   userId,
   comments,
   handleCommentSubmit,
-  handleRemoveCommentClick,
+  handleDeleteCommentClick,
   handleEditCommentSubmit,
   handleUserProfileOpen,
 }: CommentsProps) => {
@@ -26,7 +26,7 @@ const Comments = ({
             comment={comment}
             userId={userId}
             handleCommentSubmit={handleCommentSubmit}
-            handleRemoveCommentClick={handleRemoveCommentClick}
+            handleDeleteCommentClick={handleDeleteCommentClick}
             handleEditCommentSubmit={handleEditCommentSubmit}
             handleUserProfileOpen={handleUserProfileOpen}
           />

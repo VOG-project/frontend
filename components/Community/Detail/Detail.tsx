@@ -11,7 +11,7 @@ import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import Pagination from "@/components/Pagination/Pagination";
 import Post from "./Post";
-import { getPostRequest } from "@/apis/community";
+import { getPostRequest, deletePostRequest } from "@/apis/community";
 import {
   getCommentsRequest,
   createCommentRequest,
@@ -32,7 +32,7 @@ import {
   CommunityQuery,
   ContentDetail,
   Comment,
-  HandleRemoveCommentClick,
+  HandleDeleteCommentClick,
   HandleCommentSubmit,
   HandleEditCommentSubmit,
 } from "@/types/community";
@@ -50,6 +50,20 @@ const Detail = () => {
   const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
+
+  useEffect(() => {
+    if (!query.id) return;
+    const postId = Number(query.id);
+    setCategory(query.category);
+    setTitle(getTitle(category));
+    updatePostDetail(postId);
+    updateComments(1);
+    updateLikes(postId);
+  }, [query, category]);
+
+  useEffect(() => {
+    updateComments(curPage);
+  }, [curPage]);
 
   const updateComments = async (page: number) => {
     if (!query.id) return;
@@ -85,19 +99,20 @@ const Detail = () => {
     }
   };
 
-  useEffect(() => {
-    if (!query.id) return;
-    const postId = Number(query.id);
-    setCategory(query.category);
-    setTitle(getTitle(category));
-    updatePostDetail(postId);
-    updateComments(1);
-    updateLikes(postId);
-  }, [query, category]);
+  const handleDeletePostClick = async (postId: number) => {
+    const res = await deletePostRequest(postId);
 
-  useEffect(() => {
-    updateComments(curPage);
-  }, [curPage]);
+    if (res.success) {
+      router.push({
+        pathname: "/community",
+        query: {
+          category: category,
+        },
+      });
+    } else {
+      toast.alert(res.error);
+    }
+  };
 
   const handleListButtonClick = () => {
     category ? router.push(`${category}`) : router.push("/community");
@@ -123,7 +138,7 @@ const Detail = () => {
     }
   };
 
-  const handleRemoveCommentClick: HandleRemoveCommentClick = async (
+  const handleDeleteCommentClick: HandleDeleteCommentClick = async (
     isReply,
     commentId
   ) => {
@@ -200,8 +215,9 @@ const Detail = () => {
             content={content}
             comments={comments}
             likes={likes}
+            handleDeletePostClick={handleDeletePostClick}
             handleCommentSubmit={handleCommentSubmit}
-            handleRemoveCommentClick={handleRemoveCommentClick}
+            handleDeleteCommentClick={handleDeleteCommentClick}
             handleEditCommentSubmit={handleEditCommentSubmit}
             handleLikeButtonClick={handleLikeButtonClick}
             handleUserProfileOpen={handleUserProfileOpen}

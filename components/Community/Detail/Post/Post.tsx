@@ -10,8 +10,9 @@ const Post = ({
   content,
   comments,
   likes,
+  handleDeletePostClick,
   handleCommentSubmit,
-  handleRemoveCommentClick,
+  handleDeleteCommentClick,
   handleEditCommentSubmit,
   handleLikeButtonClick,
   handleUserProfileOpen,
@@ -24,6 +25,20 @@ const Post = ({
           <PostGame>[발로란트]</PostGame>
           {content.title}
         </PostSubject>
+        {userId === content.user.id && (
+          <PostEditButtonContainer>
+            <Button bgColor="primary" width={4}>
+              수정
+            </Button>
+            <Button
+              bgColor="secondary"
+              width={4}
+              onClick={() => handleDeletePostClick(content.id)}
+            >
+              삭제
+            </Button>
+          </PostEditButtonContainer>
+        )}
       </PostTitle>
       <PostAuthor>
         <PostNickname onClick={() => handleUserProfileOpen(content.user.id)}>
@@ -59,7 +74,7 @@ const Post = ({
         userId={userId}
         comments={comments}
         handleCommentSubmit={handleCommentSubmit}
-        handleRemoveCommentClick={handleRemoveCommentClick}
+        handleDeleteCommentClick={handleDeleteCommentClick}
         handleEditCommentSubmit={handleEditCommentSubmit}
         handleUserProfileOpen={handleUserProfileOpen}
       />
@@ -119,4 +134,8 @@ const PostInfo = tw.div`
 
 const PostInfoText = tw.span`
   text-white
+`;
+
+const PostEditButtonContainer = tw.div`
+  flex gap-4 ml-auto
 `;

@@ -9,7 +9,7 @@ const Reply = ({
   userId,
   comment: reply,
   handleCommentSubmit,
-  handleRemoveCommentClick,
+  handleDeleteCommentClick,
   handleEditCommentSubmit,
   handleUserProfileOpen,
 }: CommentProps) => {
@@ -37,7 +37,7 @@ const Reply = ({
               width={4}
               height={2}
               onClick={async () =>
-                await handleRemoveCommentClick(true, reply.id)
+                await handleDeleteCommentClick(true, reply.id)
               }
             >
               삭제

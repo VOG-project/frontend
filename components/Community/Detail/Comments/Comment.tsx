@@ -11,7 +11,7 @@ const Comment = ({
   comment,
   userId,
   handleCommentSubmit,
-  handleRemoveCommentClick,
+  handleDeleteCommentClick,
   handleEditCommentSubmit,
   handleUserProfileOpen,
 }: CommentProps) => {
@@ -41,7 +41,7 @@ const Comment = ({
               width={4}
               height={2}
               onClick={async () =>
-                await handleRemoveCommentClick(false, comment.id)
+                await handleDeleteCommentClick(false, comment.id)
               }
             >
               삭제
@@ -82,7 +82,7 @@ const Comment = ({
               userId={userId}
               comment={reply}
               handleCommentSubmit={handleCommentSubmit}
-              handleRemoveCommentClick={handleRemoveCommentClick}
+              handleDeleteCommentClick={handleDeleteCommentClick}
               handleEditCommentSubmit={handleEditCommentSubmit}
               handleUserProfileOpen={handleUserProfileOpen}
             />
