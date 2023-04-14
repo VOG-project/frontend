@@ -71,7 +71,7 @@ const Friend = () => {
         {friends.map((friend) => {
           return (
             <FriendProfile key={friend.following.id}>
-              <ContextWrapper onClick={(e) => handleRightClick(e)}>
+              <ContextWrapper onContextMenu={(e) => handleRightClick(e)}>
                 {contextMenuState.isShow && (
                   <ContextMenus
                     x={contextMenuState.x}
