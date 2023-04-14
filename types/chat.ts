@@ -4,6 +4,8 @@ import { SetterOrUpdater } from "recoil";
 
 export interface ChatQuery extends ParsedUrlQuery {
   id: string;
+  type?: string;
+  keyword?: string;
 }
 
 interface ChatParticipant {
