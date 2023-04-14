@@ -19,10 +19,12 @@ import {
   joinChatRoomRequest,
   getChatRoomsRequest,
   getChatRoomCountRequest,
+  searchChatRoomsRequest,
 } from "@/apis/chat";
-import { ChatProps, ChatEditValue } from "@/types/chat";
+import { ChatProps, ChatEditValue, ChatQuery } from "@/types/chat";
 import { getAccessToken } from "@/utils/tokenManager";
 import { getIcons } from "../icons";
+import { CHAT_SEARCH_OPTION } from "@/constants/search";
 
 const Chat = ({ data }: ChatProps) => {
   const router = useRouter();
@@ -35,6 +37,7 @@ const Chat = ({ data }: ChatProps) => {
   const { setLoadingTrue, setLoadingFalse } = useLoadingState();
   const { toast } = useToast();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
+  const query = router.query as ChatQuery;
 
   useEffect(() => {
     if (chat.roomId) {
@@ -43,8 +46,28 @@ const Chat = ({ data }: ChatProps) => {
   }, []);
 
   useEffect(() => {
-    (async () => await updateChatRooms(curPage))();
-  }, [curPage]);
+    const keyword = query.keyword;
+    if (keyword) {
+      (async () => {
+        setLoadingTrue();
+        setCurPage(1);
+        const res = await searchChatRoomsRequest(keyword, curPage);
+        if (res.success) {
+          if (res.result.totalCount === 0) {
+            toast.success("검색 결과가 없습니다.");
+          } else {
+            setRoomList(res.result.searchedResult);
+            setTotalCount(res.result.totalCount);
+          }
+        } else {
+          toast.alert(res.error);
+        }
+        setLoadingFalse();
+      })();
+    } else {
+      (async () => await updateChatRooms(curPage))();
+    }
+  }, [query, curPage]);
 
   const updateChatRooms = async (curPage: number) => {
     setLoadingTrue();
@@ -114,7 +137,7 @@ const Chat = ({ data }: ChatProps) => {
                 <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
               </RefreshButton>
             </ChatButtonContainer>
-            <Search />
+            <Search options={CHAT_SEARCH_OPTION} />
           </SearchContainer>
           <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
         </ChatContainer>
