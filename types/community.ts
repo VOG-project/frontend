@@ -1,10 +1,10 @@
 import { ParsedUrlQuery } from "querystring";
 
-type HandleCommentSubmit = (
-  content: string | undefined,
-  group: number | undefined,
-  sequence: number
-) => Promise<void>;
+type HandleCommentSubmit = (content: string | undefined) => Promise<void>;
+
+type HandleUserProfileOpen = (userId: number | null) => Promise<void>;
+
+export type HandleRemoveCommentClick = (commentId: number) => Promise<void>;
 
 export interface Content {
   createdAt: string;
@@ -38,16 +38,15 @@ export interface ContentDetail {
 export interface Comment {
   content: string;
   createdAt: string;
-  group: number;
   id: number;
-  sequence: number;
   updatedAt: string;
-  userId: number;
   user: {
     id: number;
     nickname: string;
+    profileUrl: string;
+    sex: string;
   };
-  reply: Comment[];
+  replies: Comment[];
 }
 
 export interface CommunityProps {
@@ -59,35 +58,34 @@ export interface CommunityProps {
 }
 
 export interface PostProps {
+  userId: number | null;
   content?: ContentDetail;
   comments: Comment[];
   likes: Number[];
   handleCommentSubmit: HandleCommentSubmit;
+  handleRemoveCommentClick: HandleRemoveCommentClick;
   handleLikeButtonClick: () => void;
-  handleUserProfileOpen: (userId: number | null) => Promise<void>;
+  handleUserProfileOpen: HandleUserProfileOpen;
 }
 
 export interface CommentsProps {
+  userId: number | null;
   comments: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
-  handleUserProfileOpen: (userId: number | null) => Promise<void>;
+  handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleUserProfileOpen: HandleUserProfileOpen;
 }
 
 export interface CommentProps {
-  id: number;
-  author: string;
-  createdAt: string;
-  content: string;
-  group: number | undefined;
-  reply: Comment[];
+  comment: Comment;
+  userId: number | null;
   handleCommentSubmit: HandleCommentSubmit;
-  handleUserProfileOpen: (userId: number | null) => Promise<void>;
+  handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleUserProfileOpen: HandleUserProfileOpen;
 }
 
 export interface CommentEditProps {
   isReply: boolean;
-  group: number | undefined;
-  sequence: number;
   handleCommentSubmit: HandleCommentSubmit;
 }
 
