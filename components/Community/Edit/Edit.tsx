@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
@@ -6,7 +6,6 @@ import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Button from "@/components/common/Button";
-import { getIcons } from "@/components/icons";
 import { createPostRequest } from "@/apis/community";
 import { CommunityQuery } from "@/types/community";
 import "react-quill/dist/quill.snow.css";
@@ -22,7 +21,6 @@ const CATEGORY = [
 ];
 
 const Edit = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { toast } = useToast();
   const { category } = router.query as CommunityQuery;
@@ -33,14 +31,9 @@ const Edit = () => {
     category: category,
   });
 
-  const handleImageInputClick = () => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  };
-
   const handleSumbit = async () => {
     if (!userId) return;
+
     const res = await createPostRequest({
       writerId: userId,
       title: post.title,
@@ -101,10 +94,6 @@ const Edit = () => {
               }}
             />
           </Editor>
-          <EditInputButton onClick={handleImageInputClick}>
-            {getIcons("plus", 128, "gray")}
-          </EditInputButton>
-          <EditImageInput type={"file"} ref={inputRef}></EditImageInput>
           <EditButtonContainer>
             <Button
               type="button"
@@ -157,14 +146,6 @@ const EditTitle = tw.input`
 const EditCategory = tw.select`
   w-32 mb-4 bg-secondary rounded p-2 text-xl
   [& option]:bg-black
-`;
-
-const EditImageInput = tw.input`
-  hidden
-`;
-
-const EditInputButton = tw.div`
-  absolute flex items-center justify-center w-[140px] h-[140px] -bottom-16 rounded bg-zinc-800 cursor-pointer
 `;
 
 const EditButtonContainer = tw.div`
