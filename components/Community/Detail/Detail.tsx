@@ -3,16 +3,20 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import useLoadingState from "@/hooks/useLoadingState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
+import Pagination from "@/components/Pagination/Pagination";
 import Post from "./Post";
-import Circle from "@/components/common/Loading/Circle";
 import { getPostRequest } from "@/apis/community";
-import { getCommentsRequest, createCommentRequest } from "@/apis/comment";
+import {
+  getCommentsRequest,
+  createCommentRequest,
+  deleteCommentRequest,
+} from "@/apis/comment";
 import {
   getLikeListRequest,
   addLikePostRequest,
@@ -20,9 +24,15 @@ import {
 } from "@/apis/like";
 import { getTitle } from "@/utils/getTitle";
 import { getIcons } from "@/components/icons";
-import { CommunityQuery, ContentDetail, Comment } from "@/types/community";
+import {
+  CommunityQuery,
+  ContentDetail,
+  Comment,
+  HandleRemoveCommentClick,
+} from "@/types/community";
 
 const Detail = () => {
+  const [curPage, setCurPage] = useState(1);
   const [content, setContent] = useState<ContentDetail>();
   const [comments, setComments] = useState<Comment[]>([]);
   const [category, setCategory] = useState("");
@@ -30,26 +40,22 @@ const Detail = () => {
   const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
-  const { targetRef, cursor, isLoading, setIsLoading } = useInfiniteScroll();
+  const { setLoadingFalse, setLoadingTrue } = useLoadingState();
+
   const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
 
-  const updateComments = async (postId: number, cursor?: number) => {
-    setIsLoading(true);
-    const res = await getCommentsRequest(postId, cursor);
+  const updateComments = async (postId: number, page: number) => {
+    setLoadingTrue();
+    const res = await getCommentsRequest(postId, page);
 
     if (res.success) {
-      setComments((prev) => {
-        if (!cursor) {
-          return res.result;
-        }
-        return [...prev, ...res.result];
-      });
+      setComments(res.result);
     } else {
       toast.alert(res.error);
     }
-    setIsLoading(false);
+    setLoadingFalse();
   };
 
   const updateLikes = async (postId: number) => {
@@ -78,26 +84,21 @@ const Detail = () => {
     setCategory(query.category);
     setTitle(getTitle(category));
     updatePostDetail(postId);
-    updateComments(postId);
+    updateComments(postId, 1);
     updateLikes(postId);
   }, [query, category]);
 
   useEffect(() => {
-    if (cursor === 1) return;
     if (!query.id) return;
     const postId = Number(query.id);
-    updateComments(postId, cursor);
-  }, [cursor]);
+    updateComments(postId, curPage);
+  }, [curPage]);
 
   const handleListButtonClick = () => {
     category ? router.push(`${category}`) : router.push("/community");
   };
 
-  const handleCommentSubmit = async (
-    content: string | undefined,
-    group: number | undefined,
-    sequence: number
-  ) => {
+  const handleCommentSubmit = async (content: string | undefined) => {
     if (!userId) return;
     if (!content) {
       toast.alert("댓글을 입력해주세요.");
@@ -105,15 +106,20 @@ const Detail = () => {
     }
 
     const postId = Number(query.id);
-    const res = await createCommentRequest(
-      userId,
-      postId,
-      content,
-      group || userId,
-      sequence
-    );
+    const res = await createCommentRequest(userId, postId, content);
     if (res.success) {
-      updateComments(postId);
+      updateComments(postId, 1);
+    }
+  };
+
+  const handleRemoveCommentClick: HandleRemoveCommentClick = async (
+    commentId
+  ) => {
+    const res = await deleteCommentRequest(commentId);
+    if (res.success) {
+      console.log(res);
+    } else {
+      toast.alert(res.error);
     }
   };
 
@@ -153,17 +159,17 @@ const Detail = () => {
             </Button>
           </Header>
           <Post
+            userId={userId}
             content={content}
             comments={comments}
             likes={likes}
             handleCommentSubmit={handleCommentSubmit}
+            handleRemoveCommentClick={handleRemoveCommentClick}
             handleLikeButtonClick={handleLikeButtonClick}
             handleUserProfileOpen={handleUserProfileOpen}
           />
         </DetailContainer>
-        <Observer ref={isLoading ? undefined : targetRef}>
-          {isLoading ? <Circle /> : "댓글 더보기"}
-        </Observer>
+        <Pagination count={40} curPage={curPage} setCurPage={setCurPage} />
       </DetailWrapper>
     </MainLayout>
   );
@@ -181,8 +187,4 @@ const DetailContainer = tw.section`
 
 const ListButton = tw.div`
   flex items-center justify-center
-`;
-
-const Observer = tw.div`
-  flex items-center justify-center w-full h-32 text-center
 `;
