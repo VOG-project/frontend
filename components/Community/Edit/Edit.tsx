@@ -107,7 +107,12 @@ const Edit = () => {
               type="button"
               width={8}
               bgColor="secondary"
-              onClick={router.back}
+              onClick={() => {
+                router.push({
+                  pathname: "/community",
+                  query: { category: category },
+                });
+              }}
             >
               취소
             </Button>
