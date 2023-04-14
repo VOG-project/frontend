@@ -16,8 +16,10 @@ import {
   getCommentsRequest,
   createCommentRequest,
   deleteCommentRequest,
+  editCommentRequest,
   createReplyRequest,
   deleteReplyRequest,
+  editReplyRequest,
 } from "@/apis/comment";
 import {
   getLikeListRequest,
@@ -32,6 +34,7 @@ import {
   Comment,
   HandleRemoveCommentClick,
   HandleCommentSubmit,
+  HandleEditCommentSubmit,
 } from "@/types/community";
 
 const Detail = () => {
@@ -134,6 +137,27 @@ const Detail = () => {
     }
   };
 
+  const handleEditCommentSubmit: HandleEditCommentSubmit = async (
+    isReply,
+    content,
+    commentId
+  ) => {
+    if (!commentId) return;
+    if (!content) {
+      toast.alert("댓글을 입력해주세요.");
+      return;
+    }
+
+    const res = isReply
+      ? await editReplyRequest(commentId, content)
+      : await editCommentRequest(commentId, content);
+    if (res.success) {
+      updateComments(curPage);
+    } else {
+      toast.alert(res.error);
+    }
+  };
+
   const handleLikeButtonClick = async () => {
     if (!userId) return;
     const postId = Number(query.id);
@@ -176,6 +200,7 @@ const Detail = () => {
             likes={likes}
             handleCommentSubmit={handleCommentSubmit}
             handleRemoveCommentClick={handleRemoveCommentClick}
+            handleEditCommentSubmit={handleEditCommentSubmit}
             handleLikeButtonClick={handleLikeButtonClick}
             handleUserProfileOpen={handleUserProfileOpen}
           />
