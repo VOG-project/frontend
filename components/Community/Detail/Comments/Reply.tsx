@@ -51,6 +51,7 @@ const Reply = ({
           isReply={true}
           value={reply.content}
           commentId={reply.id}
+          setIsEditing={setIsEditing}
           handleCommentSubmit={handleCommentSubmit}
           handleEditCommentSubmit={handleEditCommentSubmit}
         />
