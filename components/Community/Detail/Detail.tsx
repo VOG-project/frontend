@@ -140,6 +140,7 @@ const Detail = () => {
   const handleEditCommentSubmit: HandleEditCommentSubmit = async (
     isReply,
     content,
+    setIsEditing,
     commentId
   ) => {
     if (!commentId) return;
@@ -153,6 +154,7 @@ const Detail = () => {
       : await editCommentRequest(commentId, content);
     if (res.success) {
       updateComments(curPage);
+      if (setIsEditing) setIsEditing(false);
     } else {
       toast.alert(res.error);
     }
