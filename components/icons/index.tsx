@@ -13,7 +13,6 @@ import {
   BsExclamationTriangle,
   BsToggleOff,
   BsToggleOn,
-  BsArrowReturnRight,
   BsPeople,
   BsMicFill,
   BsMicMuteFill,
@@ -22,6 +21,7 @@ import {
   BsGearFill,
   BsGenderFemale,
   BsGenderMale,
+  BsSearch,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
@@ -67,8 +67,6 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsToggleOff size={size} color={color} />;
     case "on":
       return <BsToggleOn size={size} color={color} />;
-    case "return":
-      return <BsArrowReturnRight size={size} color={color} />;
     case "addFriend":
       return <BiUserPlus size={size} color={color} />;
     case "removeFriend":
@@ -91,6 +89,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsGenderMale size={size} color={color} />;
     case "female":
       return <BsGenderFemale size={size} color={color} />;
+    case "search":
+      return <BsSearch size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;
