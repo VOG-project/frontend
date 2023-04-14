@@ -5,6 +5,7 @@ interface ButtonProps {
   type?: "button" | "submit";
   width?: number;
   height?: number;
+  margin?: number;
   bgColor: "primary" | "secondary" | "transparent";
   position?: {
     type: "relative" | "absolute";
@@ -22,6 +23,7 @@ const Button = ({
   type = "button",
   width,
   height,
+  margin,
   bgColor = "primary",
   position,
   disabled,
@@ -34,6 +36,7 @@ const Button = ({
         type={type}
         width={width}
         height={height}
+        margin={margin}
         bgColor={bgColor}
         position={position}
         disabled={disabled}
@@ -50,6 +53,7 @@ export default Button;
 const StyledButton = styled.button<{
   width?: number;
   height?: number;
+  margin?: number;
   bgColor: "primary" | "secondary" | "transparent";
   position?: {
     type: "relative" | "absolute";
@@ -58,8 +62,8 @@ const StyledButton = styled.button<{
     left?: string;
     right?: string;
   };
-}>(({ width, height, bgColor, position }) => [
-  tw`my-4 h-10 w-full rounded text-white
+}>(({ width, height, margin, bgColor, position }) => [
+  tw`my-4 h-10 w-full rounded
     disabled:(bg-stone-500 text-stone-400)
   `,
   width &&
@@ -69,6 +73,12 @@ const StyledButton = styled.button<{
   height &&
     css`
       height: ${height}rem;
+    `,
+  margin &&
+    typeof margin === "number" &&
+    css`
+      margin-top: ${margin}rem;
+      margin-bottom: ${margin}rem;
     `,
   bgColor &&
     (bgColor === "primary"
