@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
-import { sessionStorage } from "@/utils/sessionStorage";
+import { localStorage } from "@/utils/localStorage";
 
 export interface UserState {
   oauthId: string;
@@ -13,7 +13,7 @@ export interface UserState {
 
 const { persistAtom } = recoilPersist({
   key: "User",
-  storage: sessionStorage,
+  storage: localStorage,
 });
 
 export const userState = atom<UserState>({
