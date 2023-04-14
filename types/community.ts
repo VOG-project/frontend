@@ -1,15 +1,21 @@
 import { ParsedUrlQuery } from "querystring";
 
+export type HandleUserProfileOpen = (userId: number | null) => Promise<void>;
+
 export type HandleCommentSubmit = (
   content: string | undefined,
   commentId?: number
 ) => Promise<void>;
 
-export type HandleUserProfileOpen = (userId: number | null) => Promise<void>;
-
 export type HandleRemoveCommentClick = (
   isReply: boolean,
   commentId: number
+) => Promise<void>;
+
+export type HandleEditCommentSubmit = (
+  isReply: boolean,
+  content: string | undefined,
+  commentId?: number
 ) => Promise<void>;
 
 export interface Content {
@@ -70,6 +76,7 @@ export interface PostProps {
   likes: Number[];
   handleCommentSubmit: HandleCommentSubmit;
   handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleEditCommentSubmit: HandleEditCommentSubmit;
   handleLikeButtonClick: () => void;
   handleUserProfileOpen: HandleUserProfileOpen;
 }
@@ -79,6 +86,7 @@ export interface CommentsProps {
   comments: Comment[];
   handleCommentSubmit: HandleCommentSubmit;
   handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleEditCommentSubmit: HandleEditCommentSubmit;
   handleUserProfileOpen: HandleUserProfileOpen;
 }
 
@@ -87,13 +95,17 @@ export interface CommentProps {
   userId: number | null;
   handleCommentSubmit: HandleCommentSubmit;
   handleRemoveCommentClick: HandleRemoveCommentClick;
+  handleEditCommentSubmit: HandleEditCommentSubmit;
   handleUserProfileOpen: HandleUserProfileOpen;
 }
 
 export interface CommentEditProps {
+  setReply: boolean;
   isReply: boolean;
+  value?: string;
   commentId?: number;
   handleCommentSubmit: HandleCommentSubmit;
+  handleEditCommentSubmit?: HandleEditCommentSubmit;
 }
 
 export interface CommunityQuery extends ParsedUrlQuery {
