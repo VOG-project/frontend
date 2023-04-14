@@ -115,4 +115,6 @@ export interface CommentEditProps {
 export interface CommunityQuery extends ParsedUrlQuery {
   category: string;
   id: string;
+  type?: string;
+  keyword?: string;
 }
