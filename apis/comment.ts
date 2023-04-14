@@ -60,7 +60,7 @@ const deleteReplyRequest = async (replyId: number) => {
 };
 
 const editReplyRequest = async (replyId: number, content: string) => {
-  const res = await customAxios().patch(`/comments/${replyId}`, {
+  const res = await customAxios().patch(`/replies/${replyId}`, {
     content: content,
   });
 
