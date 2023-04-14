@@ -1,13 +1,12 @@
 import { selector } from "recoil";
-import { userState } from "../atoms/userState";
+import { getAccessToken } from "@/utils/tokenManager";
 
 export const loginState = selector({
   key: "IsLogin",
-  get: ({ get }) => {
-    const user = get(userState);
-    const userId = user.id;
+  get: () => {
+    const accessToken = getAccessToken();
 
-    if (userId) {
+    if (accessToken) {
       return true;
     } else {
       return false;
