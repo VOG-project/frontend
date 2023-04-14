@@ -16,6 +16,8 @@ import {
   getCommentsRequest,
   createCommentRequest,
   deleteCommentRequest,
+  createReplyRequest,
+  deleteReplyRequest,
 } from "@/apis/comment";
 import {
   getLikeListRequest,
@@ -29,6 +31,7 @@ import {
   ContentDetail,
   Comment,
   HandleRemoveCommentClick,
+  HandleCommentSubmit,
 } from "@/types/community";
 
 const Detail = () => {
@@ -45,11 +48,11 @@ const Detail = () => {
   const { toast } = useToast();
   const router = useRouter();
   const query = router.query as CommunityQuery;
+  const postId = Number(query.id);
 
-  const updateComments = async (postId: number, page: number) => {
+  const updateComments = async (page: number) => {
     setLoadingTrue();
     const res = await getCommentsRequest(postId, page);
-
     if (res.success) {
       setComments(res.result);
     } else {
@@ -84,40 +87,49 @@ const Detail = () => {
     setCategory(query.category);
     setTitle(getTitle(category));
     updatePostDetail(postId);
-    updateComments(postId, 1);
+    updateComments(1);
     updateLikes(postId);
   }, [query, category]);
 
   useEffect(() => {
-    if (!query.id) return;
-    const postId = Number(query.id);
-    updateComments(postId, curPage);
+    updateComments(curPage);
   }, [curPage]);
 
   const handleListButtonClick = () => {
     category ? router.push(`${category}`) : router.push("/community");
   };
 
-  const handleCommentSubmit = async (content: string | undefined) => {
+  const handleCommentSubmit: HandleCommentSubmit = async (
+    content,
+    commentId
+  ) => {
     if (!userId) return;
     if (!content) {
       toast.alert("댓글을 입력해주세요.");
       return;
     }
-
-    const postId = Number(query.id);
-    const res = await createCommentRequest(userId, postId, content);
-    if (res.success) {
-      updateComments(postId, 1);
+    if (commentId) {
+      const res = await createReplyRequest(userId, commentId, content);
+      if (res.success) {
+        updateComments(curPage);
+      }
+    } else {
+      const res = await createCommentRequest(userId, postId, content);
+      if (res.success) {
+        updateComments(curPage);
+      }
     }
   };
 
   const handleRemoveCommentClick: HandleRemoveCommentClick = async (
+    isReply,
     commentId
   ) => {
-    const res = await deleteCommentRequest(commentId);
+    const res = isReply
+      ? await deleteReplyRequest(commentId)
+      : await deleteCommentRequest(commentId);
     if (res.success) {
-      console.log(res);
+      updateLikes(postId);
     } else {
       toast.alert(res.error);
     }
