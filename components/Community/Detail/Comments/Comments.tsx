@@ -8,12 +8,17 @@ const Comments = ({
   comments,
   handleCommentSubmit,
   handleRemoveCommentClick,
+  handleEditCommentSubmit,
   handleUserProfileOpen,
 }: CommentsProps) => {
   return (
     <CommentsContainer>
       <CommentsTitle>댓글</CommentsTitle>
-      <CommentEdit isReply={false} handleCommentSubmit={handleCommentSubmit} />
+      <CommentEdit
+        setReply={false}
+        isReply={false}
+        handleCommentSubmit={handleCommentSubmit}
+      />
       {comments.map((comment) => {
         return (
           <Comment
@@ -22,6 +27,7 @@ const Comments = ({
             userId={userId}
             handleCommentSubmit={handleCommentSubmit}
             handleRemoveCommentClick={handleRemoveCommentClick}
+            handleEditCommentSubmit={handleEditCommentSubmit}
             handleUserProfileOpen={handleUserProfileOpen}
           />
         );

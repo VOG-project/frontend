@@ -12,6 +12,7 @@ const Post = ({
   likes,
   handleCommentSubmit,
   handleRemoveCommentClick,
+  handleEditCommentSubmit,
   handleLikeButtonClick,
   handleUserProfileOpen,
 }: PostProps) => {
@@ -59,6 +60,7 @@ const Post = ({
         comments={comments}
         handleCommentSubmit={handleCommentSubmit}
         handleRemoveCommentClick={handleRemoveCommentClick}
+        handleEditCommentSubmit={handleEditCommentSubmit}
         handleUserProfileOpen={handleUserProfileOpen}
       />
     </PostContainer>

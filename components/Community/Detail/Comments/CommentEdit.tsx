@@ -4,11 +4,14 @@ import Textarea from "@/components/common/Textarea";
 import { CommentEditProps } from "@/types/community";
 
 const CommentEdit = ({
+  setReply,
   isReply,
+  value,
   commentId,
   handleCommentSubmit,
+  handleEditCommentSubmit,
 }: CommentEditProps) => {
-  const [isEditing, setIsEditing] = useState(!isReply);
+  const [isEditing, setIsEditing] = useState(!setReply);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -16,9 +19,11 @@ const CommentEdit = ({
     setIsEditing((prev) => !prev);
   };
 
+  if (textareaRef.current && value) textareaRef.current.value = value;
+
   return (
     <CommentEditContainer>
-      {isReply && (
+      {setReply && (
         <CommentEditBtn onClick={handleIsEditingToggle}>답글</CommentEditBtn>
       )}
       {isEditing && (
@@ -28,9 +33,8 @@ const CommentEdit = ({
             textareaRef={textareaRef}
             buttonRef={buttonRef}
           />
-
           <CommentBntContainer>
-            {isReply && (
+            {setReply && (
               <CommentCancelBtn onClick={handleIsEditingToggle}>
                 취소
               </CommentCancelBtn>
@@ -39,10 +43,16 @@ const CommentEdit = ({
             <CommentSubmitBtn
               ref={buttonRef}
               onClick={async () => {
-                await handleCommentSubmit(
-                  textareaRef.current?.value,
-                  commentId
-                );
+                handleEditCommentSubmit
+                  ? await handleEditCommentSubmit(
+                      isReply,
+                      textareaRef.current?.value,
+                      commentId
+                    )
+                  : await handleCommentSubmit(
+                      textareaRef.current?.value,
+                      commentId
+                    );
                 if (textareaRef.current) textareaRef.current.value = "";
               }}
             >

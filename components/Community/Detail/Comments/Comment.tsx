@@ -2,6 +2,7 @@ import { useState } from "react";
 import tw from "twin.macro";
 import CommentEdit from "./CommentEdit";
 import Button from "@/components/common/Button";
+import Reply from "./Reply";
 import { CommentProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 import { getIcons } from "@/components/icons";
@@ -11,9 +12,11 @@ const Comment = ({
   userId,
   handleCommentSubmit,
   handleRemoveCommentClick,
+  handleEditCommentSubmit,
   handleUserProfileOpen,
 }: CommentProps) => {
   const [replyToggle, setReplyToggle] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const replies = comment.replies;
   const isOwner = userId === comment.user.id;
   return (
@@ -25,7 +28,12 @@ const Comment = ({
         <CommentTime>{timeDifference(comment.createdAt)}</CommentTime>
         {isOwner && (
           <CommentButtonContainer>
-            <Button bgColor="transparent" width={4} height={2}>
+            <Button
+              bgColor="transparent"
+              width={4}
+              height={2}
+              onClick={() => setIsEditing((prev) => !prev)}
+            >
               수정
             </Button>
             <Button
@@ -41,8 +49,20 @@ const Comment = ({
           </CommentButtonContainer>
         )}
       </CommentAuthor>
-      <CommentText>{comment.content}</CommentText>
+      {isEditing ? (
+        <CommentEdit
+          setReply={false}
+          isReply={false}
+          value={comment.content}
+          commentId={comment.id}
+          handleCommentSubmit={handleCommentSubmit}
+          handleEditCommentSubmit={handleEditCommentSubmit}
+        />
+      ) : (
+        <CommentText>{comment.content}</CommentText>
+      )}
       <CommentEdit
+        setReply={true}
         isReply={true}
         commentId={comment.id}
         handleCommentSubmit={handleCommentSubmit}
@@ -56,34 +76,15 @@ const Comment = ({
       {replyToggle &&
         replies.map((reply) => {
           return (
-            <CommentReply key={reply.id}>
-              <CommentAuthor>
-                <CommentNickname
-                  onClick={() => handleUserProfileOpen(reply.user.id)}
-                >
-                  {reply.user.nickname}
-                </CommentNickname>
-                <CommentTime>{timeDifference(reply.createdAt)}</CommentTime>
-                {userId === reply.user.id && (
-                  <CommentButtonContainer>
-                    <Button bgColor="transparent" width={4} height={2}>
-                      수정
-                    </Button>
-                    <Button
-                      bgColor="transparent"
-                      width={4}
-                      height={2}
-                      onClick={async () =>
-                        await handleRemoveCommentClick(true, reply.id)
-                      }
-                    >
-                      삭제
-                    </Button>
-                  </CommentButtonContainer>
-                )}
-              </CommentAuthor>
-              <CommentText>{reply.content}</CommentText>
-            </CommentReply>
+            <Reply
+              key={reply.id}
+              userId={userId}
+              comment={reply}
+              handleCommentSubmit={handleCommentSubmit}
+              handleRemoveCommentClick={handleRemoveCommentClick}
+              handleEditCommentSubmit={handleEditCommentSubmit}
+              handleUserProfileOpen={handleUserProfileOpen}
+            />
           );
         })}
     </CommentContainer>
@@ -114,11 +115,6 @@ const CommentText = tw.p`
 
 const CommentButtonContainer = tw.div`
   flex gap-2 ml-auto text-blue-500
-`;
-
-const CommentReply = tw.div`
-  relative px-8 mb-2
-  before:(content-[""] absolute top-4 left-2 w-6 h-8 border-l border-b border-neutral-700)
 `;
 
 const ReplyToggle = tw.div`
