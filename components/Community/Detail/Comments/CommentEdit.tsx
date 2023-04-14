@@ -3,12 +3,7 @@ import tw from "twin.macro";
 import Textarea from "@/components/common/Textarea";
 import { CommentEditProps } from "@/types/community";
 
-const CommentEdit = ({
-  isReply,
-  group,
-  sequence,
-  handleCommentSubmit,
-}: CommentEditProps) => {
+const CommentEdit = ({ isReply, handleCommentSubmit }: CommentEditProps) => {
   const [isEditing, setIsEditing] = useState(!isReply);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -40,11 +35,7 @@ const CommentEdit = ({
             <CommentSubmitBtn
               ref={buttonRef}
               onClick={() => {
-                handleCommentSubmit(
-                  textareaRef.current?.value,
-                  group,
-                  sequence
-                );
+                handleCommentSubmit(textareaRef.current?.value);
                 if (textareaRef.current) textareaRef.current.value = "";
               }}
             >
