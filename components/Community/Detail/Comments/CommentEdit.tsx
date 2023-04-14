@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import tw from "twin.macro";
 import Textarea from "@/components/common/Textarea";
 import { CommentEditProps } from "@/types/community";
@@ -14,6 +14,12 @@ const CommentEdit = ({
   const [isEditing, setIsEditing] = useState(!setReply);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current && value) {
+      textareaRef.current.value = value;
+    }
+  }, []);
 
   const handleIsEditingToggle = () => {
     setIsEditing((prev) => !prev);
