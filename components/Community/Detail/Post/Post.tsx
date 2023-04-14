@@ -6,10 +6,12 @@ import { PostProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 
 const Post = ({
+  userId,
   content,
   comments,
   likes,
   handleCommentSubmit,
+  handleRemoveCommentClick,
   handleLikeButtonClick,
   handleUserProfileOpen,
 }: PostProps) => {
@@ -53,8 +55,10 @@ const Post = ({
         </PostLike>
       </PostTextContainer>
       <Comments
+        userId={userId}
         comments={comments}
         handleCommentSubmit={handleCommentSubmit}
+        handleRemoveCommentClick={handleRemoveCommentClick}
         handleUserProfileOpen={handleUserProfileOpen}
       />
     </PostContainer>
