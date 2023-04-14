@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
+import useToast from "@/hooks/useToast";
 import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
 import Search from "../common/Search";
@@ -9,7 +10,11 @@ import Navigation from "./Navigation";
 import Contents from "./Contents";
 import Pagination from "../Pagination";
 import Button from "../common/Button";
-import { getPostsRequest, getPostCount } from "@/apis/community";
+import {
+  getPostsRequest,
+  getPostCount,
+  searchPostRequest,
+} from "@/apis/community";
 import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 import { getAccessToken } from "@/utils/tokenManager";
@@ -19,6 +24,7 @@ const Community = ({ data }: CommunityProps) => {
   const [contents, setContents] = useState(data.result);
   const [totalCount, setTotalCount] = useState(data.postCount);
   const router = useRouter();
+  const { toast } = useToast();
   const query = router.query as CommunityQuery;
   const category = query.category;
   const title = getTitle(category || "");
@@ -30,6 +36,32 @@ const Community = ({ data }: CommunityProps) => {
       await getPostCount(category).then((res) => setTotalCount(res.result));
     })();
   }, [category]);
+
+  useEffect(() => {
+    const searchType = query.type;
+    const keyword = query.keyword;
+    if (searchType && keyword) {
+      (async () => {
+        setCurPage(1);
+        const res = await searchPostRequest(
+          category,
+          searchType,
+          keyword,
+          curPage
+        );
+        if (res.success) {
+          if (res.result.totalCount === 0) {
+            toast.success("검색결과가 없습니다.");
+          } else {
+            setContents(res.result.searchedResult);
+            setTotalCount(res.result.totalCount);
+          }
+        } else {
+          toast.alert(res.error);
+        }
+      })();
+    }
+  }, [query, curPage]);
 
   const handleEditButtonClick = () => {
     router.push({
