@@ -19,7 +19,7 @@ const Contents = ({ contents, handleContentClick }: ContentsProps) => {
           >
             <ContentLikeCount>
               {getIcons("thumb", 18)}
-              {content.likeCount}
+              {content.userIds.length}
             </ContentLikeCount>
             <ContentGame>발로란트</ContentGame>
             <ContentTitle>
