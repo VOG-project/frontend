@@ -3,6 +3,7 @@ import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
 import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
+import useFriendState from "@/hooks/useFriendState";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
@@ -15,18 +16,16 @@ const SignUp = () => {
     useSignUpForm();
   const { user, setUser } = useUserState();
   const { toast } = useToast();
+  const { updateFriendList } = useFriendState();
   const router = useRouter();
   const oauthId = user.oauthId;
   const provider = user.provider;
   const handleSignUp = async ({ nickname, gender }: SignUpValue) => {
     const res = await signUpRequest(oauthId, provider, nickname, gender);
     if (res.success) {
-      const id = res.result.id;
-      const nickname = res.result.nickname;
-      const profileUrl = res.result.profileUrl;
-      const sex = res.result.sex;
-      const accessToken = res.result.jwtAccessToken;
-      setAccessToken(accessToken);
+      const { id, nickname, profileUrl, sex, jwtAccessToken } = res.result;
+      setAccessToken(jwtAccessToken);
+      await updateFriendList(id);
       setUser((prev) => {
         return {
           ...prev,
