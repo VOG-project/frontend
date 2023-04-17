@@ -42,12 +42,8 @@ const changeNicknameRequest = async (userId: number, newNickname: string) => {
   return res.data;
 };
 
-const withdrawalRequest = async (userId: number, password: string) => {
-  const res = await customAxios.delete(`/users/${userId}/withdrawal`, {
-    data: {
-      password,
-    },
-  });
+const withdrawalRequest = async (userId: number) => {
+  const res = await customAxios.delete(`/users/${userId}`);
 
   return res.data;
 };
