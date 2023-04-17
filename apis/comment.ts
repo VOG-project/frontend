@@ -67,6 +67,14 @@ const editReplyRequest = async (replyId: number, content: string) => {
   return res.data;
 };
 
+const getCommentCountRequest = async (postId: number) => {
+  const res = await customAxios().get("/comments/count", {
+    params: { postId: postId },
+  });
+
+  return res.data;
+};
+
 export {
   getCommentsRequest,
   createCommentRequest,
@@ -75,4 +83,5 @@ export {
   createReplyRequest,
   deleteReplyRequest,
   editReplyRequest,
+  getCommentCountRequest,
 };
