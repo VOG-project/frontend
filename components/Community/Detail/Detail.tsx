@@ -120,7 +120,12 @@ const Detail = () => {
   };
 
   const handleListButtonClick = () => {
-    category ? router.push(`${category}`) : router.push("/community");
+    router.push({
+      pathname: "/community",
+      query: {
+        category: category,
+      },
+    });
   };
 
   const handleCommentSubmit: HandleCommentSubmit = async (
@@ -208,6 +213,7 @@ const Detail = () => {
         <DetailContainer>
           <Header title={getTitle(query.category)}>
             <Button
+              type="button"
               width={5}
               bgColor="transparent"
               onClick={handleListButtonClick}
