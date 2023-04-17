@@ -80,7 +80,7 @@ const ContextWrapper = tw.div``;
 
 const ContextMenus = styled.ul<{ x: number; y: number; reverse: boolean }>(
   ({ x, y, reverse }) => [
-    tw`fixed w-24 divide-y bg-white text-black `,
+    tw`fixed w-24 divide-y bg-white text-black z-50`,
     reverse
       ? css`
           top: ${y}px;
