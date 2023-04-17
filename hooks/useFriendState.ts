@@ -1,4 +1,4 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { friendState } from "@/recoil/atoms/friendState";
 import useToast from "./useToast";
 import {
@@ -9,6 +9,7 @@ import {
 
 const useFriendState = () => {
   const [friend, setFriend] = useRecoilState(friendState);
+  const resetFriend = useResetRecoilState(friendState);
   const { toast } = useToast();
 
   const handleFriendToggle = () => {
@@ -68,6 +69,7 @@ const useFriendState = () => {
     friendIds,
     isShow,
     setFriend,
+    resetFriend,
     updateFriendList,
     handleFriendToggle,
     handleRemoveFriendClick,
