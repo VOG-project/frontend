@@ -103,7 +103,7 @@ const Detail = () => {
 
   const updatePostDetail = async (postId: number) => {
     const res = await getPostRequest(postId);
-    console.log(res);
+
     if (res.success) {
       setContent(res.result);
     } else {
