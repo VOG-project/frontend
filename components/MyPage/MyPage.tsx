@@ -76,7 +76,7 @@ const MyPage = () => {
       resetUser();
       resetFriend();
       deleteAccessToken();
-      router.replace("/");
+      router.replace("/login", undefined, { shallow: true });
     } else {
       toast.alert(res.error);
     }
