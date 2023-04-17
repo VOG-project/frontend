@@ -1,9 +1,8 @@
-import { FormEvent, useEffect } from "react";
+import { FormEvent } from "react";
 import tw, { styled } from "twin.macro";
 import useToast from "@/hooks/useToast";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import useUserState from "@/hooks/useUserState";
 import Header from "../common/Header";
 import FriendContext from "./FriendContext";
 import { getIcons } from "../icons";
@@ -11,14 +10,8 @@ import { searchFriendRequest } from "@/apis/friend";
 
 const Friend = () => {
   const { toast } = useToast();
-  const { friends, isShow, handleFriendToggle, updateFriendList } =
-    useFriendState();
+  const { friends, isShow, handleFriendToggle } = useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
-  const { userId } = useUserState();
-
-  useEffect(() => {
-    if (userId) updateFriendList(userId);
-  }, []);
 
   const handleNicknameSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
