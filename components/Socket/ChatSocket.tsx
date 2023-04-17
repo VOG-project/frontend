@@ -240,6 +240,7 @@ const ChatSocket = ({
       })}
       {isShow && (
         <DeviceSetting
+          setIsShow={setIsShow}
           isChatRoom={isChatRoom}
           peerConnectionsRef={peerConnectionsRef}
           localStreamRef={localStreamRef}
