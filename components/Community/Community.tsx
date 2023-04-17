@@ -129,12 +129,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const res = await getPostsRequest(category, 1, accessToken);
   const postCountRes = await getPostCount(category, accessToken);
-
-  return {
-    props: {
-      data: { ...res, postCount: postCountRes },
-    },
-  };
+  if (res.success && postCountRes.success) {
+    return {
+      props: {
+        data: { ...res, postCount: postCountRes },
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/login?authorized=false",
+        permanvet: false,
+      },
+      props: {},
+    };
+  }
 };
 
 const CommunityWrapper = tw.article`

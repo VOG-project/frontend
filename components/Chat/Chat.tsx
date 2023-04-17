@@ -165,11 +165,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const accessToken = getAccessToken(req);
   const res = await getChatRoomsRequest(1, accessToken);
   const chatRoomCountRes = await getChatRoomCountRequest(accessToken);
-  return {
-    props: {
-      data: { ...res, chatRoomCount: chatRoomCountRes.result.chatRoomCount },
-    },
-  };
+
+  if (res.success && chatRoomCountRes.success) {
+    return {
+      props: {
+        data: { ...res, chatRoomCount: chatRoomCountRes.result.chatRoomCount },
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/login?authorized=false",
+        permanvet: false,
+      },
+      props: {},
+    };
+  }
 };
 
 const ChatWrapper = tw.article`
