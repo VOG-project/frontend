@@ -43,7 +43,6 @@ const Detail = () => {
   const [content, setContent] = useState<ContentDetail>();
   const [comments, setComments] = useState<Comment[]>([]);
   const [category, setCategory] = useState("");
-  const [title, setTitle] = useState("");
   const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
@@ -53,13 +52,9 @@ const Detail = () => {
   const query = router.query as CommunityQuery;
 
   useEffect(() => {
-    setCategory(query.category);
-  }, [query]);
-
-  useEffect(() => {
     if (!query.id) return;
     const postId = Number(query.id);
-    setTitle(getTitle(category));
+    setCategory(query.category);
     updatePostDetail(postId);
     getTotalCount(postId);
     updateComments(1);
@@ -108,7 +103,7 @@ const Detail = () => {
 
   const updatePostDetail = async (postId: number) => {
     const res = await getPostRequest(postId);
-
+    console.log(res);
     if (res.success) {
       setContent(res.result);
     } else {
@@ -218,7 +213,7 @@ const Detail = () => {
       <DetailWrapper>
         <Navigation category={category} />
         <DetailContainer>
-          <Header title={title}>
+          <Header title={getTitle(query.category)}>
             <Button
               width={5}
               bgColor="transparent"
