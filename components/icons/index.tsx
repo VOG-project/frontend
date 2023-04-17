@@ -22,6 +22,7 @@ import {
   BsGenderFemale,
   BsGenderMale,
   BsSearch,
+  BsHandThumbsUpFill,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
@@ -41,6 +42,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BiTime size={size} color={color} />;
     case "thumb":
       return <BsHandThumbsUp size={size} color={color} />;
+    case "thumbFill":
+      return <BsHandThumbsUpFill size={size} color={color} />;
     case "list":
       return <BsList size={size} color={color} />;
     case "left":
