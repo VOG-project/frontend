@@ -71,7 +71,6 @@ const Chat = ({ data }: ChatProps) => {
   const updateChatRooms = async (curPage: number) => {
     setLoadingTrue();
     const res = await getChatRoomsRequest(curPage);
-    console.log(res);
     setRoomList(res.result.result);
     setTotalCount(res.result.totalCount);
     setLoadingFalse();

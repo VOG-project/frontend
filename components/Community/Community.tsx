@@ -59,7 +59,6 @@ const Community = ({ data }: CommunityProps) => {
             setTotalCount(res.result.totalCount);
           }
         } else {
-          console.log(res);
           toast.alert(res.error);
         }
         setLoadingFalse();
