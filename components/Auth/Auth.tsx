@@ -29,20 +29,21 @@ const Auth = () => {
           });
           if (redirectUrl) {
             const redirectUrl = result.redirectUrl;
-            return router.replace(redirectUrl);
+            router.replace(redirectUrl);
+          } else {
+            const { id, nickname, profileUrl, sex, accessToken } = result;
+            setAccessToken(accessToken);
+            await updateFriendList(id);
+            setUser((prev) => {
+              return {
+                ...prev,
+                id: id,
+                nickname: nickname,
+                profileUrl: profileUrl,
+                sex: sex,
+              };
+            });
           }
-          const { id, nickname, profileUrl, sex, accessToken } = result;
-          setAccessToken(accessToken);
-          await updateFriendList(id);
-          setUser((prev) => {
-            return {
-              ...prev,
-              id: id,
-              nickname: nickname,
-              profileUrl: profileUrl,
-              sex: sex,
-            };
-          });
           router.replace("/");
         } else {
           toast.alert(res.error);
