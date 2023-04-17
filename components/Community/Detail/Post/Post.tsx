@@ -76,9 +76,15 @@ const Post = ({
       <PostTextContainer>
         <PostText dangerouslySetInnerHTML={{ __html: content.content }} />
         <PostLike>
-          <Button bgColor="primary" width={6} onClick={handleLikeButtonClick}>
+          <Button
+            bgColor={userId && likes.includes(userId) ? "secondary" : "primary"}
+            width={6}
+            onClick={handleLikeButtonClick}
+          >
             <LikeButton>
-              {getIcons("thumb", 16)}
+              {userId && likes.includes(userId)
+                ? getIcons("thumbFill", 16)
+                : getIcons("thumb", 16)}
               <LikeCount>{likes.length}</LikeCount>
             </LikeButton>
           </Button>
