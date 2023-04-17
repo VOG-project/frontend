@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
 import useUserState from "@/hooks/useUserState";
+import useFriendState from "@/hooks/useFriendState";
 import useModal from "@/hooks/useModal";
 import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
@@ -18,6 +19,7 @@ import {
   withdrawalRequest,
 } from "@/apis/user";
 import { NicknameEditValue, ProfilePicEditValue } from "@/types/myPage";
+import { deleteAccessToken } from "@/utils/tokenManager";
 import imageResize from "@/utils/imageResize";
 
 const MyPage = () => {
@@ -25,6 +27,7 @@ const MyPage = () => {
   const [password, setPassword] = useState("");
   const { toast } = useToast();
   const { user, userId, resetUser, setUser } = useUserState();
+  const { resetFriend } = useFriendState();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
 
   const handleProfilePicUpload = async (data: ProfilePicEditValue) => {
@@ -80,9 +83,11 @@ const MyPage = () => {
       return;
     }
 
-    const res = await withdrawalRequest(userId, password);
+    const res = await withdrawalRequest(userId);
     if (res.success) {
       resetUser();
+      resetFriend();
+      deleteAccessToken();
       router.replace("/");
     } else {
       toast.alert(res.error);
@@ -106,14 +111,7 @@ const MyPage = () => {
         content="정말로 탈퇴하시겠습까?"
         handleClose={handleModalClose}
         handleConfirm={handleDeleteAccount}
-      >
-        <Input
-          type="password"
-          bgColor="gray"
-          placeholder="비밀번호를 입력하세요."
-          onChange={handlePasswordInputChange}
-        ></Input>
-      </Modal>
+      ></Modal>
     </MainLayout>
   );
 };
