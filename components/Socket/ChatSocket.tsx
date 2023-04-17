@@ -118,13 +118,6 @@ const ChatSocket = ({
       });
     });
 
-    socketClient.on("leaveChat", (data) => {
-      const { exit } = data;
-      if (exit) {
-        console.log(data);
-      }
-    });
-
     socketClient.on("leaveMember", (data) => {
       const { socketId } = data;
       console.log("유저나감", socketId, peerConnectionsRef.current);
