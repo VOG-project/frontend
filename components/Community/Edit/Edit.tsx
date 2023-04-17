@@ -62,6 +62,8 @@ const Edit = () => {
 
   const handlePostSumbit = async () => {
     if (!userId) return;
+    if (!post.content) return toast.alert("내용을 입력해주세요.");
+    if (!post.title) return toast.alert("제목을 입력해주세요.");
 
     const res = editMode
       ? await editPostRequest(Number(query.id), post.title, post.content)
