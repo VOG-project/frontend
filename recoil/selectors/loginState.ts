@@ -7,7 +7,7 @@ export const loginState = selector({
   get: ({ get }) => {
     const user = get(userState);
     const accessToken = getAccessToken();
-    if (user.id && accessToken) {
+    if (user && accessToken) {
       return true;
     } else {
       return false;
