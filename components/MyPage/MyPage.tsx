@@ -1,4 +1,3 @@
-import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
@@ -9,7 +8,6 @@ import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
 import Profile from "./Profile";
 import Modal from "../common/Modal";
-import Input from "../common/Input";
 import ProfilePicEdit from "./MyPageCards/ProfilePicEdit";
 import NicknameEdit from "./MyPageCards/NicknameEdit";
 import DeleteAccount from "./MyPageCards/DeleteAccount";
@@ -24,7 +22,6 @@ import imageResize from "@/utils/imageResize";
 
 const MyPage = () => {
   const router = useRouter();
-  const [password, setPassword] = useState("");
   const { toast } = useToast();
   const { user, userId, resetUser, setUser } = useUserState();
   const { resetFriend } = useFriendState();
@@ -71,17 +68,8 @@ const MyPage = () => {
     }
   };
 
-  const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
-
   const handleDeleteAccount = async () => {
     if (!userId) return;
-    if (!password) {
-      toast.alert("비밀번호를 입력하세요.");
-      return;
-    }
 
     const res = await withdrawalRequest(userId);
     if (res.success) {
