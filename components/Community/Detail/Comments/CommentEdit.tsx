@@ -26,8 +26,6 @@ const CommentEdit = ({
     setIsShow((prev) => !prev);
   };
 
-  if (textareaRef.current && value) textareaRef.current.value = value;
-
   return (
     <CommentEditContainer>
       {setReply && (
