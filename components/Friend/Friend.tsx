@@ -19,7 +19,7 @@ const Friend = () => {
       nickname: { value: string };
     };
     const nickname = target.nickname.value;
-    if (!nickname) return;
+    if (!nickname) return toast.alert("검색할 닉네임을 입력해주세요.");
 
     const res = await searchFriendRequest(nickname);
     if (res.success) {
