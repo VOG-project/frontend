@@ -1,7 +1,7 @@
 import customAxios from "@/utils/customAxios";
 
 const getCommentsRequest = async (postId: number, page: number) => {
-  const res = await customAxios().get(`/comments`, {
+  const res = await customAxios.get(`/comments`, {
     params: {
       postId: postId,
       page: page,
@@ -16,7 +16,7 @@ const createCommentRequest = async (
   postId: number,
   content: string
 ) => {
-  const res = await customAxios().post("/comments", {
+  const res = await customAxios.post("/comments", {
     writerId: userId,
     postId,
     content,
@@ -26,13 +26,13 @@ const createCommentRequest = async (
 };
 
 const deleteCommentRequest = async (commentId: number) => {
-  const res = await customAxios().delete(`/comments/${commentId}`);
+  const res = await customAxios.delete(`/comments/${commentId}`);
 
   return res.data;
 };
 
 const editCommentRequest = async (commentId: number, content: string) => {
-  const res = await customAxios().patch(`/comments/${commentId}`, {
+  const res = await customAxios.patch(`/comments/${commentId}`, {
     content: content,
   });
 
@@ -44,7 +44,7 @@ const createReplyRequest = async (
   commentId: number,
   content: string
 ) => {
-  const res = await customAxios().post("/replies", {
+  const res = await customAxios.post("/replies", {
     writerId: userId,
     commentId,
     content,
@@ -54,13 +54,13 @@ const createReplyRequest = async (
 };
 
 const deleteReplyRequest = async (replyId: number) => {
-  const res = await customAxios().delete(`/replies/${replyId}`);
+  const res = await customAxios.delete(`/replies/${replyId}`);
 
   return res.data;
 };
 
 const editReplyRequest = async (replyId: number, content: string) => {
-  const res = await customAxios().patch(`/replies/${replyId}`, {
+  const res = await customAxios.patch(`/replies/${replyId}`, {
     content: content,
   });
 
@@ -68,7 +68,7 @@ const editReplyRequest = async (replyId: number, content: string) => {
 };
 
 const getCommentCountRequest = async (postId: number) => {
-  const res = await customAxios().get("/comments/count", {
+  const res = await customAxios.get("/comments/count", {
     params: { postId: postId },
   });
 

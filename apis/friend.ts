@@ -1,7 +1,7 @@
 import customAxios from "@/utils/customAxios";
 
 const addFriendRequest = async (userId: number, targetId: number) => {
-  const res = await customAxios().post(`/friend/${userId}`, {
+  const res = await customAxios.post(`/friend/${userId}`, {
     targetId: targetId,
   });
 
@@ -9,13 +9,13 @@ const addFriendRequest = async (userId: number, targetId: number) => {
 };
 
 const getFriendsRequest = async (userId: number) => {
-  const res = await customAxios().get(`/friend/${userId}`);
+  const res = await customAxios.get(`/friend/${userId}`);
 
   return res.data;
 };
 
 const removeFriendRequest = async (userId: number, targetId: number) => {
-  const res = await customAxios().patch(`/friend/${userId}`, {
+  const res = await customAxios.patch(`/friend/${userId}`, {
     targetId: targetId,
   });
 
@@ -23,7 +23,7 @@ const removeFriendRequest = async (userId: number, targetId: number) => {
 };
 
 const searchFriendRequest = async (nickname: string) => {
-  const res = await customAxios().get(`/friend/search/${nickname}`);
+  const res = await customAxios.get(`/friend/search/${nickname}`);
 
   return res.data;
 };

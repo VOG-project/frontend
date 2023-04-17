@@ -6,7 +6,7 @@ const signUpRequest = async (
   nickname: string,
   sex: string
 ) => {
-  const res = await customAxios().post("/users/register", {
+  const res = await customAxios.post("/users/register", {
     oauthId,
     provider,
     nickname,
@@ -17,7 +17,7 @@ const signUpRequest = async (
 };
 
 const getUserInfoRequest = async (userId: number) => {
-  const res = await customAxios().get(`/users/${userId}`);
+  const res = await customAxios.get(`/users/${userId}`);
 
   return res.data;
 };
@@ -25,7 +25,7 @@ const getUserInfoRequest = async (userId: number) => {
 const uploadProfilePicRequest = async (userId: number, profilePic: File) => {
   const formData = new FormData();
   formData.append("image", profilePic, profilePic.name);
-  const res = await customAxios().patch(`/uploads/users/${userId}`, formData, {
+  const res = await customAxios.patch(`/uploads/users/${userId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -35,7 +35,7 @@ const uploadProfilePicRequest = async (userId: number, profilePic: File) => {
 };
 
 const changeNicknameRequest = async (userId: number, newNickname: string) => {
-  const res = await customAxios().patch(`/users/${userId}/nickname`, {
+  const res = await customAxios.patch(`/users/${userId}/nickname`, {
     newNickname,
   });
 
@@ -43,7 +43,7 @@ const changeNicknameRequest = async (userId: number, newNickname: string) => {
 };
 
 const withdrawalRequest = async (userId: number, password: string) => {
-  const res = await customAxios().delete(`/users/${userId}/withdrawal`, {
+  const res = await customAxios.delete(`/users/${userId}/withdrawal`, {
     data: {
       password,
     },

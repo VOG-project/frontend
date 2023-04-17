@@ -10,7 +10,7 @@ interface PostData {
 
 const createPostRequest = async (data: PostData) => {
   const { writerId, title, content, postCategory } = data;
-  const res = await customAxios().post(`/posts`, {
+  const res = await customAxios.post(`/posts`, {
     writerId,
     title,
     content,
@@ -25,7 +25,7 @@ const getPostsRequest = async (
   page: number,
   accessToken?: CookieValueTypes
 ) => {
-  const res = await customAxios().get("/posts", {
+  const res = await customAxios.get("/posts", {
     headers: accessToken
       ? {
           Authorization: `bearer ${accessToken}`,
@@ -41,7 +41,7 @@ const getPostsRequest = async (
 };
 
 const getPostRequest = async (postId: number) => {
-  const res = await customAxios().get(`/posts/${postId}`);
+  const res = await customAxios.get(`/posts/${postId}`);
 
   return res.data;
 };
@@ -50,7 +50,7 @@ const getPostCount = async (
   category: string,
   accessToken?: CookieValueTypes
 ) => {
-  const res = await customAxios().get(`/posts/count`, {
+  const res = await customAxios.get(`/posts/count`, {
     headers: accessToken
       ? {
           Authorization: `bearer ${accessToken}`,
@@ -66,7 +66,7 @@ const getPostCount = async (
 
 const updatePostRequest = async (postId: number, data: PostData) => {
   const { title, content } = data;
-  const res = await customAxios().patch(`/posts/${postId}`, {
+  const res = await customAxios.patch(`/posts/${postId}`, {
     title,
     content,
   });
@@ -75,7 +75,7 @@ const updatePostRequest = async (postId: number, data: PostData) => {
 };
 
 const deletePostRequest = async (postId: number) => {
-  const res = await customAxios().delete(`/posts/${postId}`);
+  const res = await customAxios.delete(`/posts/${postId}`);
 
   return res.data;
 };
@@ -86,7 +86,7 @@ const searchPostRequest = async (
   keyword: string,
   page: number
 ) => {
-  const res = await customAxios().get("/posts/search", {
+  const res = await customAxios.get("/posts/search", {
     params: {
       board: board,
       searchType: searchType,

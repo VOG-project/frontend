@@ -7,7 +7,7 @@ const createChatRoomRequest = async (
   description: string,
   maximumMember: number
 ) => {
-  const res = await customAxios().post("/chats/rooms", {
+  const res = await customAxios.post("/chats/rooms", {
     userId,
     title,
     description,
@@ -18,7 +18,7 @@ const createChatRoomRequest = async (
 };
 
 const joinChatRoomRequest = async (roomId: string, userId: number) => {
-  const res = await customAxios().get(`/chats/rooms/${roomId}`, {
+  const res = await customAxios.get(`/chats/rooms/${roomId}`, {
     params: { userId: userId },
   });
 
@@ -29,7 +29,7 @@ const getChatRoomsRequest = async (
   page: number,
   accessToken?: CookieValueTypes
 ) => {
-  const res = await customAxios().get("/chats/rooms/list", {
+  const res = await customAxios.get("/chats/rooms/list", {
     headers: accessToken
       ? { Authorization: `bearer ${accessToken}` }
       : undefined,
@@ -42,7 +42,7 @@ const getChatRoomsRequest = async (
 };
 
 const getChatRoomCountRequest = async (accessToken?: CookieValueTypes) => {
-  const res = await customAxios().get("/chats/rooms/count", {
+  const res = await customAxios.get("/chats/rooms/count", {
     headers: accessToken
       ? { Authorization: `bearer ${accessToken}` }
       : undefined,
@@ -52,7 +52,7 @@ const getChatRoomCountRequest = async (accessToken?: CookieValueTypes) => {
 };
 
 const searchChatRoomsRequest = async (title: string, page: number) => {
-  const res = await customAxios().get("/chats/rooms", {
+  const res = await customAxios.get("/chats/rooms", {
     params: {
       title: title,
       page: page,

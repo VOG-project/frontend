@@ -10,7 +10,7 @@ const oauthLoginRequest = async (
   state: string,
   provider: string
 ) => {
-  const res = await customAxios().post(`/auth/login/${provider}`, {
+  const res = await customAxios.post(`/auth/login/${provider}`, {
     code,
     state,
   });
