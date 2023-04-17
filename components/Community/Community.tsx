@@ -64,6 +64,15 @@ const Community = ({ data }: CommunityProps) => {
     if (res.success) {
       if (res.result.totalCount === 0) {
         toast.success("검색결과가 없습니다.");
+        router.push(
+          {
+            query: {
+              category: category,
+            },
+          },
+          undefined,
+          { shallow: true }
+        );
       } else {
         setContents(res.result.result);
         setTotalCount(res.result.totalCount);
