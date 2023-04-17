@@ -1,11 +1,11 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
-import { sessionStorage } from "@/utils/sessionStorage";
+import { localStorage } from "@/utils/localStorage";
 import { FriendState } from "@/types/friend";
 
 const { persistAtom } = recoilPersist({
   key: "FRIENDS",
-  storage: sessionStorage,
+  storage: localStorage,
 });
 
 export const friendState = atom<FriendState>({
