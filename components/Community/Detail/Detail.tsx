@@ -20,6 +20,7 @@ import {
   createReplyRequest,
   deleteReplyRequest,
   editReplyRequest,
+  getCommentCountRequest,
 } from "@/apis/comment";
 import {
   getLikeListRequest,
@@ -52,14 +53,18 @@ const Detail = () => {
   const query = router.query as CommunityQuery;
 
   useEffect(() => {
+    setCategory(query.category);
+  }, [query]);
+
+  useEffect(() => {
     if (!query.id) return;
     const postId = Number(query.id);
-    setCategory(query.category);
     setTitle(getTitle(category));
     updatePostDetail(postId);
+    getTotalCount(postId);
     updateComments(1);
     updateLikes(postId);
-  }, [query, category]);
+  }, [query]);
 
   useEffect(() => {
     updateComments(curPage);
@@ -70,13 +75,25 @@ const Detail = () => {
 
     const postId = Number(query.id);
     setLoadingTrue();
-    const res = await getCommentsRequest(postId, page);
-    if (res.success) {
-      setComments(res.result);
-    } else {
-      toast.alert(res.error);
+    try {
+      const res = await getCommentsRequest(postId, page);
+      if (res.success) {
+        setComments(res.result);
+      } else {
+        toast.alert(res.error);
+      }
+    } catch (error) {
+      console.error(error);
     }
+
     setLoadingFalse();
+  };
+
+  const getTotalCount = async (postId: number) => {
+    const countRes = await getCommentCountRequest(postId);
+    if (countRes.success) {
+      console.log(countRes);
+    }
   };
 
   const updateLikes = async (postId: number) => {
