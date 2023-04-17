@@ -20,7 +20,6 @@ import {
   createReplyRequest,
   deleteReplyRequest,
   editReplyRequest,
-  getCommentCountRequest,
 } from "@/apis/comment";
 import {
   getLikeListRequest,
@@ -42,6 +41,7 @@ const Detail = () => {
   const [curPage, setCurPage] = useState(1);
   const [content, setContent] = useState<ContentDetail>();
   const [comments, setComments] = useState<Comment[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [category, setCategory] = useState("");
   const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
@@ -56,7 +56,6 @@ const Detail = () => {
     const postId = Number(query.id);
     setCategory(query.category);
     updatePostDetail(postId);
-    getTotalCount(postId);
     updateComments(1);
     updateLikes(postId);
   }, [query]);
@@ -73,7 +72,8 @@ const Detail = () => {
     try {
       const res = await getCommentsRequest(postId, page);
       if (res.success) {
-        setComments(res.result);
+        setComments(res.result.result);
+        setTotalCount(res.result.totalCount);
       } else {
         toast.alert(res.error);
       }
@@ -82,13 +82,6 @@ const Detail = () => {
     }
 
     setLoadingFalse();
-  };
-
-  const getTotalCount = async (postId: number) => {
-    const countRes = await getCommentCountRequest(postId);
-    if (countRes.success) {
-      console.log(countRes);
-    }
   };
 
   const updateLikes = async (postId: number) => {
@@ -235,7 +228,11 @@ const Detail = () => {
             handleUserProfileOpen={handleUserProfileOpen}
           />
         </DetailContainer>
-        <Pagination count={40} curPage={curPage} setCurPage={setCurPage} />
+        <Pagination
+          count={totalCount}
+          curPage={curPage}
+          setCurPage={setCurPage}
+        />
       </DetailWrapper>
     </MainLayout>
   );
