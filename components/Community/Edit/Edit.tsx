@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
@@ -6,7 +6,11 @@ import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Button from "@/components/common/Button";
-import { createPostRequest } from "@/apis/community";
+import {
+  createPostRequest,
+  getPostRequest,
+  editPostRequest,
+} from "@/apis/community";
 import { CommunityQuery } from "@/types/community";
 import "react-quill/dist/quill.snow.css";
 
@@ -23,23 +27,50 @@ const CATEGORY = [
 const Edit = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const { category } = router.query as CommunityQuery;
+  const query = router.query as CommunityQuery;
   const { userId } = useUserState();
   const [post, setPost] = useState({
     title: "",
     content: "",
-    category: category,
+    category: query.category,
   });
+  const [editMode, setEditMode] = useState(false);
 
-  const handleSumbit = async () => {
+  useEffect(() => {
+    if (query.editMode === "true") {
+      setEditMode(true);
+      const postId = Number(query.id);
+      (async () => {
+        const res = await getPostRequest(postId);
+
+        if (res.success) {
+          const title = res.result.title;
+          const content = res.result.content;
+          setPost((prev) => {
+            return {
+              ...prev,
+              title: title,
+              content: content,
+            };
+          });
+        } else {
+          router.back();
+        }
+      })();
+    }
+  }, []);
+
+  const handlePostSumbit = async () => {
     if (!userId) return;
 
-    const res = await createPostRequest({
-      writerId: userId,
-      title: post.title,
-      content: post.content,
-      postCategory: post.category,
-    });
+    const res = editMode
+      ? await editPostRequest(Number(query.id), post.title, post.content)
+      : await createPostRequest({
+          writerId: userId,
+          title: post.title,
+          content: post.content,
+          postCategory: post.category,
+        });
     if (res.success) {
       const postId = res.result.id;
       const postCategory = res.result.postCategory;
@@ -60,6 +91,7 @@ const Edit = () => {
         <EditContainer>
           <EditCategory
             defaultValue={router.query.category}
+            disabled={editMode ? true : false}
             onChange={(e) =>
               setPost((prev) => {
                 return { ...prev, category: e.target.value };
@@ -77,6 +109,7 @@ const Edit = () => {
           <EditTitle
             width={32}
             placeholder="제목을 입력하세요"
+            value={post.title}
             onChange={(e) => {
               return setPost((prev) => {
                 return { ...prev, title: e.target.value };
@@ -99,7 +132,7 @@ const Edit = () => {
               type="button"
               width={8}
               bgColor="primary"
-              onClick={handleSumbit}
+              onClick={handlePostSumbit}
             >
               글쓰기
             </Button>
@@ -110,7 +143,7 @@ const Edit = () => {
               onClick={() => {
                 router.push({
                   pathname: "/community",
-                  query: { category: category },
+                  query: { category: query.category },
                 });
               }}
             >
