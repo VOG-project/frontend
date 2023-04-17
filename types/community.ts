@@ -66,8 +66,10 @@ export interface Comment {
 export interface CommunityProps {
   data: {
     success: boolean;
-    result: Content[];
-    postCount: number;
+    result: {
+      totalCount: number;
+      result: Content[];
+    };
   };
 }
 

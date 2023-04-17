@@ -11,11 +11,7 @@ import Navigation from "./Navigation";
 import Contents from "./Contents";
 import Pagination from "../Pagination";
 import Button from "../common/Button";
-import {
-  getPostsRequest,
-  getPostCount,
-  searchPostRequest,
-} from "@/apis/community";
+import { getPostsRequest, searchPostRequest } from "@/apis/community";
 import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 import { getAccessToken } from "@/utils/tokenManager";
@@ -23,8 +19,8 @@ import { COMMUNITY_SEARCH_OPTION } from "@/constants/search";
 
 const Community = ({ data }: CommunityProps) => {
   const [curPage, setCurPage] = useState(1);
-  const [contents, setContents] = useState(data.result);
-  const [totalCount, setTotalCount] = useState(data.postCount);
+  const [contents, setContents] = useState(data.result.result);
+  const [totalCount, setTotalCount] = useState(data.result.totalCount);
   const router = useRouter();
   const { toast } = useToast();
   const { setLoadingFalse, setLoadingTrue } = useLoadingState();
@@ -36,8 +32,8 @@ const Community = ({ data }: CommunityProps) => {
     (async () => {
       setLoadingTrue();
       const res = await getPostsRequest(category, 1);
-      setContents(res.result);
-      await getPostCount(category).then((res) => setTotalCount(res.result));
+      setContents(res.result.result);
+      setTotalCount(res.result.totalCount);
       setLoadingFalse();
     })();
   }, [category]);
@@ -63,6 +59,7 @@ const Community = ({ data }: CommunityProps) => {
             setTotalCount(res.result.totalCount);
           }
         } else {
+          console.log(res);
           toast.alert(res.error);
         }
         setLoadingFalse();
@@ -128,11 +125,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const category = query.category;
 
   const res = await getPostsRequest(category, 1, accessToken);
-  const postCountRes = await getPostCount(category, accessToken);
-  if (res.success && postCountRes.success) {
+  if (res.success) {
     return {
       props: {
-        data: { ...res, postCount: postCountRes },
+        data: { ...res },
       },
     };
   } else {

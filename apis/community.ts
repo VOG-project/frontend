@@ -59,24 +59,6 @@ const getPostRequest = async (postId: number) => {
   return res.data;
 };
 
-const getPostCount = async (
-  category: string,
-  accessToken?: CookieValueTypes
-) => {
-  const res = await customAxios.get(`/posts/count`, {
-    headers: accessToken
-      ? {
-          Authorization: `bearer ${accessToken}`,
-        }
-      : undefined,
-    params: {
-      category: category,
-    },
-  });
-
-  return res.data;
-};
-
 const updatePostRequest = async (postId: number, data: PostData) => {
   const { title, content } = data;
   const res = await customAxios.patch(`/posts/${postId}`, {
@@ -116,7 +98,6 @@ export {
   editPostRequest,
   getPostsRequest,
   getPostRequest,
-  getPostCount,
   updatePostRequest,
   deletePostRequest,
   searchPostRequest,
