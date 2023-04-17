@@ -29,18 +29,25 @@ const Community = ({ data }: CommunityProps) => {
   const title = getTitle(category || "");
 
   useEffect(() => {
-    updatePosts(1);
-  }, [category]);
+    const searchType = query.type;
+    const keyword = query.keyword;
+    if (searchType && keyword) {
+      setCurPage(1);
+      searchPost(searchType, keyword, 1);
+    } else {
+      updatePosts(1);
+    }
+  }, [query]);
 
   useEffect(() => {
     const searchType = query.type;
     const keyword = query.keyword;
     if (searchType && keyword) {
-      searchPost(searchType, keyword);
+      searchPost(searchType, keyword, curPage);
     } else {
       updatePosts(curPage);
     }
-  }, [query, curPage]);
+  }, [curPage]);
 
   const updatePosts = async (page: number) => {
     setLoadingTrue();
@@ -56,10 +63,13 @@ const Community = ({ data }: CommunityProps) => {
     setLoadingFalse();
   };
 
-  const searchPost = async (searchType: string, keyword: string) => {
+  const searchPost = async (
+    searchType: string,
+    keyword: string,
+    page: number
+  ) => {
     setLoadingTrue();
-    setCurPage(1);
-    const res = await searchPostRequest(category, searchType, keyword, curPage);
+    const res = await searchPostRequest(category, searchType, keyword, page);
 
     if (res.success) {
       if (res.result.totalCount === 0) {
