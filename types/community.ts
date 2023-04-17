@@ -31,6 +31,7 @@ export interface Content {
     id: number;
     nickname: string;
   };
+  userIds: number[];
   view: number;
 }
 
