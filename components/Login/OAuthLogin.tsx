@@ -21,7 +21,7 @@ const OAuthLogin = () => {
           quality={100}
           alt="naver"
         />
-        <LoginText>Sign in with Naver</LoginText>
+        <LoginText>네이버로 로그인</LoginText>
       </NaverLogin>
       <KakaoLogin
         href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=https://talkgg.online/auth/login/kakao&state=${KAKAO_CLIENT_STATE}`}
@@ -33,7 +33,7 @@ const OAuthLogin = () => {
           quality={100}
           alt="naver"
         />
-        <LoginText>Sign in with Kakao</LoginText>
+        <LoginText>카카오로 로그인</LoginText>
       </KakaoLogin>
     </OAuthContainer>
   );
@@ -50,11 +50,11 @@ const LogoIcon = tw(Image)`
 `;
 
 const NaverLogin = tw(Link)`
-  flex items-center justify-center w-3/6 h-12 rounded bg-[#03c75a]
+  flex items-center justify-center w-full h-12 rounded bg-[#03c75a]
 `;
 
 const KakaoLogin = tw(Link)`
-  flex items-center justify-center w-3/6 h-12 rounded bg-[#FEE500] text-black
+  flex items-center justify-center w-full h-12 rounded bg-[#FEE500] text-black
 `;
 
 const LoginText = tw.span`
