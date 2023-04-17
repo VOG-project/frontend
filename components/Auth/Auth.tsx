@@ -30,8 +30,8 @@ const Auth = () => {
           if (redirectUrl) {
             return router.push(redirectUrl);
           } else {
-            const { id, nickname, profileUrl, sex, accessToken } = result;
-            setAccessToken(accessToken);
+            const { id, nickname, profileUrl, sex, jwtAccessToken } = result;
+            setAccessToken(jwtAccessToken);
             await updateFriendList(id);
             setUser((prev) => {
               return {
