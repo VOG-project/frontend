@@ -29,42 +29,50 @@ const Community = ({ data }: CommunityProps) => {
   const title = getTitle(category || "");
 
   useEffect(() => {
-    (async () => {
-      setLoadingTrue();
-      const res = await getPostsRequest(category, 1);
-      setContents(res.result.result);
-      setTotalCount(res.result.totalCount);
-      setLoadingFalse();
-    })();
+    updatePosts(1);
   }, [category]);
 
   useEffect(() => {
     const searchType = query.type;
     const keyword = query.keyword;
     if (searchType && keyword) {
-      (async () => {
-        setLoadingTrue();
-        setCurPage(1);
-        const res = await searchPostRequest(
-          category,
-          searchType,
-          keyword,
-          curPage
-        );
-        if (res.success) {
-          if (res.result.totalCount === 0) {
-            toast.success("검색결과가 없습니다.");
-          } else {
-            setContents(res.result.searchedResult);
-            setTotalCount(res.result.totalCount);
-          }
-        } else {
-          toast.alert(res.error);
-        }
-        setLoadingFalse();
-      })();
+      searchPost(searchType, keyword);
+    } else {
+      updatePosts(curPage);
     }
   }, [query, curPage]);
+
+  const updatePosts = async (page: number) => {
+    setLoadingTrue();
+    const res = await getPostsRequest(category, page);
+
+    if (res.success) {
+      setContents(res.result.result);
+      setTotalCount(res.result.totalCount);
+    } else {
+      toast.alert(res.error);
+    }
+
+    setLoadingFalse();
+  };
+
+  const searchPost = async (searchType: string, keyword: string) => {
+    setLoadingTrue();
+    setCurPage(1);
+    const res = await searchPostRequest(category, searchType, keyword, curPage);
+
+    if (res.success) {
+      if (res.result.totalCount === 0) {
+        toast.success("검색결과가 없습니다.");
+      } else {
+        setContents(res.result.result);
+        setTotalCount(res.result.totalCount);
+      }
+    } else {
+      toast.alert(res.error);
+    }
+    setLoadingFalse();
+  };
 
   const handleEditButtonClick = () => {
     router.push({
