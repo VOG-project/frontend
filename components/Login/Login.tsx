@@ -24,7 +24,11 @@ const Login = () => {
   return (
     <LoginWrapper>
       <LoginContainer>
-        <LoginTitle>VOG 로그인</LoginTitle>
+        <LoginTitle>TALKGG</LoginTitle>
+        <LoginText>
+          talkgg에 로그인하고 다른 사람들과 정보를 나누고 같이 협동할 사람들을
+          찾아보세요!
+        </LoginText>
         <OAuthLogin />
       </LoginContainer>
     </LoginWrapper>
@@ -43,5 +47,9 @@ const LoginContainer = tw.div`
 `;
 
 const LoginTitle = tw.h2`
-  w-full mb-4 text-3xl font-bold text-center
+  w-full mb-4 text-4xl font-bold text-center
+`;
+
+const LoginText = tw.p`
+  h-24 font-semibold text-center
 `;
