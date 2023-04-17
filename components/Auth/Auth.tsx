@@ -23,13 +23,12 @@ const Auth = () => {
         const res = await oauthLoginRequest(code, state, provider);
         if (res.success) {
           const result = res.result;
-          const { oauthId, redirectUrl } = result.redirectUrl;
+          const { oauthId, redirectUrl } = result;
           setUser((prev) => {
             return { ...prev, oauthId: oauthId, provider: provider };
           });
           if (redirectUrl) {
-            const redirectUrl = result.redirectUrl;
-            router.replace(redirectUrl);
+            return router.push(redirectUrl);
           } else {
             const { id, nickname, profileUrl, sex, accessToken } = result;
             setAccessToken(accessToken);
@@ -44,7 +43,7 @@ const Auth = () => {
               };
             });
           }
-          router.replace("/");
+          return router.replace("/");
         } else {
           toast.alert(res.error);
         }
