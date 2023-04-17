@@ -44,7 +44,7 @@ const Sidebar = () => {
   return (
     <SidebarContainer>
       <VogLogo onClick={handleVogClick}>
-        <Header title="VOG" />
+        <Header title="TALKGG" />
       </VogLogo>
       <Profile onClick={() => handleUserProfileOpen(user.id)}>
         <UserCard nickname={user.nickname} profilePic={user.profileUrl} />
