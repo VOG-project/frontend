@@ -41,13 +41,14 @@ const Socket = () => {
     window.addEventListener("beforeunload", handleUnload);
 
     return () => window.removeEventListener("beforeunload", handleUnload);
-  }, []);
+  }, [chat]);
 
   const handleUnload = (e: BeforeUnloadEvent) => {
-    if (roomId) {
+    if (chat.roomId) {
       e.preventDefault();
       e.returnValue = "";
       handleChatRoomLeave();
+      router.replace("/chat");
     }
   };
 
