@@ -20,6 +20,19 @@ const createPostRequest = async (data: PostData) => {
   return res.data;
 };
 
+const editPostRequest = async (
+  postId: number,
+  title: string,
+  content: string
+) => {
+  const res = await customAxios.patch(`/posts/${postId}`, {
+    title: title,
+    content: content,
+  });
+
+  return res.data;
+};
+
 const getPostsRequest = async (
   category: string,
   page: number,
@@ -100,6 +113,7 @@ const searchPostRequest = async (
 
 export {
   createPostRequest,
+  editPostRequest,
   getPostsRequest,
   getPostRequest,
   getPostCount,
