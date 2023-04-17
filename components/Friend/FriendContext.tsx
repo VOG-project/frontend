@@ -55,7 +55,7 @@ const FriendContext = ({ friend }: FriendContextProps) => {
           >
             프로필
           </ContextMenu>
-          <ContextMenu>채팅방 초대</ContextMenu>
+          {/* <ContextMenu>채팅방 초대</ContextMenu> */}
           <ContextMenu
             onClick={async () => {
               await handleRemoveFriendClick(friend.userId, friend.following.id);
