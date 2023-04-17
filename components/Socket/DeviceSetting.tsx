@@ -1,8 +1,15 @@
-import { useEffect, useState, MutableRefObject } from "react";
+import {
+  useEffect,
+  useState,
+  MutableRefObject,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import tw, { styled } from "twin.macro";
 import Button from "@/components/common/Button";
 
 interface DeviceSettingModalProps {
+  setIsShow: Dispatch<SetStateAction<boolean>>;
   isChatRoom: boolean;
   peerConnectionsRef: MutableRefObject<{ [key: string]: RTCPeerConnection }>;
   localStreamRef: MutableRefObject<MediaStream | undefined>;
@@ -11,6 +18,7 @@ interface DeviceSettingModalProps {
 }
 
 const DeviceSetting = ({
+  setIsShow,
   isChatRoom,
   peerConnectionsRef,
   localStreamRef,
@@ -69,7 +77,11 @@ const DeviceSetting = ({
         ))}
       </DevicesSelect>
       <Triangle></Triangle>
-      <Button type="button" bgColor="secondary">
+      <Button
+        type="button"
+        bgColor="secondary"
+        onClick={() => setIsShow(false)}
+      >
         닫기
       </Button>
     </DeviceSettingContainer>
