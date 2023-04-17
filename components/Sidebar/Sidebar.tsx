@@ -5,7 +5,7 @@ import Image, { StaticImageData } from "next/image";
 import { useRecoilValue } from "recoil";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
-import useFriendToggle from "@/hooks/useFriendState";
+import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import Header from "../common/Header";
 import UserCard from "../common/UserCard";
@@ -19,7 +19,7 @@ const Sidebar = () => {
   const router = useRouter();
   const game = useRecoilValue(selectedGameState);
   const { user, resetUser } = useUserState();
-  const { handleFriendToggle } = useFriendToggle();
+  const { resetFriend, handleFriendToggle } = useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
   const [gameLogo, setGameLogo] = useState<StaticImageData>();
   useEffect(() => {
@@ -37,6 +37,7 @@ const Sidebar = () => {
   const handleLogout = async () => {
     deleteAccessToken();
     resetUser();
+    resetFriend();
     router.replace("/login");
   };
 
