@@ -68,8 +68,10 @@ export interface RoomListProps {
 export interface ChatProps {
   data: {
     success: boolean;
-    result: ChatRoom[];
-    chatRoomCount: number;
+    result: {
+      result: ChatRoom[];
+      totalCount: number;
+    };
   };
 }
 

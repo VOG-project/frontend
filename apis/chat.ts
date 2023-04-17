@@ -41,16 +41,6 @@ const getChatRoomsRequest = async (
   return res.data;
 };
 
-const getChatRoomCountRequest = async (accessToken?: CookieValueTypes) => {
-  const res = await customAxios.get("/chats/rooms/count", {
-    headers: accessToken
-      ? { Authorization: `bearer ${accessToken}` }
-      : undefined,
-  });
-
-  return res.data;
-};
-
 const searchChatRoomsRequest = async (title: string, page: number) => {
   const res = await customAxios.get("/chats/rooms", {
     params: {
@@ -66,6 +56,5 @@ export {
   createChatRoomRequest,
   joinChatRoomRequest,
   getChatRoomsRequest,
-  getChatRoomCountRequest,
   searchChatRoomsRequest,
 };

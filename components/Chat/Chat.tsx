@@ -18,7 +18,6 @@ import {
   createChatRoomRequest,
   joinChatRoomRequest,
   getChatRoomsRequest,
-  getChatRoomCountRequest,
   searchChatRoomsRequest,
 } from "@/apis/chat";
 import { ChatProps, ChatEditValue, ChatQuery } from "@/types/chat";
@@ -28,10 +27,10 @@ import { CHAT_SEARCH_OPTION } from "@/constants/search";
 
 const Chat = ({ data }: ChatProps) => {
   const router = useRouter();
-  const { result, chatRoomCount } = data;
-  const [roomList, setRoomList] = useState(result);
+  const { result } = data;
+  const [roomList, setRoomList] = useState(result.result);
   const [curPage, setCurPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(chatRoomCount);
+  const [totalCount, setTotalCount] = useState(result.totalCount);
   const { userId } = useUserState();
   const { chat, setChat } = useChatState();
   const { setLoadingTrue, setLoadingFalse } = useLoadingState();
@@ -72,11 +71,9 @@ const Chat = ({ data }: ChatProps) => {
   const updateChatRooms = async (curPage: number) => {
     setLoadingTrue();
     const res = await getChatRoomsRequest(curPage);
-    setRoomList(res.result);
-    await getChatRoomCountRequest().then((res) => {
-      const chatRoomCount = res.result.chatRoomCount;
-      setTotalCount(chatRoomCount);
-    });
+    console.log(res);
+    setRoomList(res.result.result);
+    setTotalCount(res.result.totalCount);
     setLoadingFalse();
   };
 
@@ -164,12 +161,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const req = context.req;
   const accessToken = getAccessToken(req);
   const res = await getChatRoomsRequest(1, accessToken);
-  const chatRoomCountRes = await getChatRoomCountRequest(accessToken);
 
-  if (res.success && chatRoomCountRes.success) {
+  if (res.success) {
     return {
       props: {
-        data: { ...res, chatRoomCount: chatRoomCountRes.result.chatRoomCount },
+        data: res,
       },
     };
   } else {
