@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import Comments from "../Comments";
 import Button from "@/components/common/Button";
@@ -17,6 +18,7 @@ const Post = ({
   handleLikeButtonClick,
   handleUserProfileOpen,
 }: PostProps) => {
+  const router = useRouter();
   if (!content) return null;
   return (
     <PostContainer>
@@ -27,7 +29,19 @@ const Post = ({
         </PostSubject>
         {userId === content.user.id && (
           <PostEditButtonContainer>
-            <Button bgColor="primary" width={4}>
+            <Button
+              bgColor="primary"
+              width={4}
+              onClick={() => {
+                router.push({
+                  pathname: "/community/edit",
+                  query: {
+                    ...router.query,
+                    editMode: "true",
+                  },
+                });
+              }}
+            >
               수정
             </Button>
             <Button
