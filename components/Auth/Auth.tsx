@@ -23,21 +23,17 @@ const Auth = () => {
         const res = await oauthLoginRequest(code, state, provider);
         if (res.success) {
           const result = res.result;
-          const oauthId = result.oauthId;
-          const id = result.id;
-          const nickname = result.nickname;
-          const profileUrl = result.profileUrl;
-          const sex = result.sex;
-          const accessToken = result.jwtAccessToken;
-          setAccessToken(accessToken);
-          await updateFriendList(id);
+          const { oauthId, redirectUrl } = result.redirectUrl;
           setUser((prev) => {
             return { ...prev, oauthId: oauthId, provider: provider };
           });
-          if (result.redirectUrl) {
+          if (redirectUrl) {
             const redirectUrl = result.redirectUrl;
             return router.replace(redirectUrl);
           }
+          const { id, nickname, profileUrl, sex, accessToken } = result;
+          setAccessToken(accessToken);
+          await updateFriendList(id);
           setUser((prev) => {
             return {
               ...prev,
