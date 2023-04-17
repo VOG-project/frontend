@@ -1,42 +1,31 @@
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 import tw from "twin.macro";
-import useLoginForm from "@/hooks/useLoginForm";
+import { useRouter } from "next/router";
+import useUserState from "@/hooks/useUserState";
+import useFriendState from "@/hooks/useFriendState";
+import useToast from "@/hooks/useToast";
 import OAuthLogin from "./OAuthLogin";
-import Input from "../common/Input";
-import Button from "../common/Button";
+import { deleteAccessToken } from "@/utils/tokenManager";
 
 const Login = () => {
   const router = useRouter();
-  const { register } = useLoginForm();
+  const { resetUser } = useUserState();
+  const { resetFriend } = useFriendState();
+  const { toast } = useToast();
+  useEffect(() => {
+    if (router.query.authorized) {
+      resetUser();
+      resetFriend();
+      deleteAccessToken();
+      toast.alert("다른 컴퓨터에서 로그인 되었습니다.");
+    }
+  }, []);
 
-  const handleSignUpClick = () => {
-    router.push("/sign-up");
-  };
   return (
     <LoginWrapper>
       <LoginContainer>
-        <h1>VOG</h1>
-        <LoginForm>
-          <InputContainer>
-            <Input register={register("email")} placeholder="이메일" />
-          </InputContainer>
-          <InputContainer>
-            <Input
-              register={register("password")}
-              type="password"
-              placeholder="비밀번호"
-            />
-          </InputContainer>
-          <Button type="submit">로그인</Button>
-        </LoginForm>
-        <Or>or</Or>
+        <LoginTitle>VOG 로그인</LoginTitle>
         <OAuthLogin />
-        <SignUpButtonContainer>
-          <SignUpText>계정이 없으신가요?</SignUpText>
-          <Button width={120} onClick={handleSignUpClick}>
-            회원가입
-          </Button>
-        </SignUpButtonContainer>
       </LoginContainer>
     </LoginWrapper>
   );
@@ -45,22 +34,14 @@ const Login = () => {
 export default Login;
 
 const LoginWrapper = tw.section`
-relative flex items-center justify-center h-full text-black bg-[url("./image/valorant.jpg")] bg-cover
-after:absolute after:inset-0 after:bg-black after:opacity-20
+relative flex items-center justify-center h-full bg-[url("./image/valorant.jpg")] bg-cover
+after:(absolute inset-0 bg-black/50)
 `;
 
-const LoginContainer = tw.div`py-4 w-96 rounded drop-shadow bg-white z-10`;
-
-const LoginForm = tw.form`flex flex-col px-10`;
-
-const InputContainer = tw.div`relative flex flex-col my-4 border-b border-black`;
-
-const Or = tw.div`
-  relative w-full text-center
-  before:absolute before:top-3 before:left-5 before:w-2/5 before:h-px before:bg-black
-  after:absolute after:top-3 after:right-5 after:w-2/5 after:h-px after:bg-black
+const LoginContainer = tw.div`
+  py-10 px-20 w-[28rem] rounded drop-shadow bg-black/80 z-10
 `;
 
-const SignUpButtonContainer = tw.div`flex m-auto w-80 items-center justify-around`;
-
-const SignUpText = tw.span`block`;
+const LoginTitle = tw.h2`
+  w-full mb-4 text-3xl font-bold text-center
+`;

@@ -1,18 +1,43 @@
 import tw from "twin.macro";
 import { getIcons } from "@/components/icons";
+import { Content } from "@/types/community";
+import timeDifference from "@/utils/timeDifference";
 
-const Contents = () => {
+interface ContentsProps {
+  contents: Content[];
+  handleContentClick: (postId: number) => void;
+}
+
+const Contents = ({ contents, handleContentClick }: ContentsProps) => {
   return (
     <ContentsContainer>
-      <Content>
-        <ContentGame>LOL</ContentGame>
-        <ContentTitle>
-          랭겜 <CommentCount>[0]</CommentCount>
-        </ContentTitle>
-        <ContentAuthor>사부로</ContentAuthor>
-        <ContentHit>{getIcons("eye", 18)}29</ContentHit>
-        <ContentTime>{getIcons("time", 18)}1시간전</ContentTime>
-      </Content>
+      {contents.map((content) => {
+        return (
+          <ContentContainer
+            key={content.id}
+            onClick={() => handleContentClick(content.id)}
+          >
+            <ContentLikeCount>
+              {getIcons("thumb", 18)}
+              {content.likeCount}
+            </ContentLikeCount>
+            <ContentGame>발로란트</ContentGame>
+            <ContentTitle>
+              {content.title}
+              <CommentCount>[0]</CommentCount>
+            </ContentTitle>
+            <ContentAuthor>{content.user.nickname}</ContentAuthor>
+            <ContentHit>
+              {getIcons("eye", 14)}
+              {content.view}
+            </ContentHit>
+            <ContentTime>
+              {getIcons("time", 18)}
+              {timeDifference(content.createdAt)}
+            </ContentTime>
+          </ContentContainer>
+        );
+      })}
     </ContentsContainer>
   );
 };
@@ -23,28 +48,32 @@ const ContentsContainer = tw.section`
   border-y-2 border-neutral-700 divide-y divide-neutral-700
 `;
 
-const Content = tw.div`
-  flex items-center w-full h-20 px-4 text-center
+const ContentContainer = tw.div`
+  flex items-center w-full h-12 px-4 text-center
 `;
 
-const ContentGame = tw.div`
+const ContentGame = tw.span`
   w-1/12
 `;
 
-const ContentTitle = tw.div`
-  w-8/12 text-left
+const ContentTitle = tw.span`
+  grow text-left
 `;
 
 const CommentCount = tw.span`
   text-primary 
 `;
 
-const ContentAuthor = tw.div`
+const ContentAuthor = tw.span`
   w-1/12
 `;
 
-const ContentHit = tw.div`
-  flex justify-center items-center w-1/12
+const ContentLikeCount = tw.span`
+  flex w-[5%] justify-center items-center px-2
+`;
+
+const ContentHit = tw.span`
+  flex w-[8%] justify-center items-center gap-1 px-2
 `;
 
 const ContentTime = tw.div`

@@ -1,43 +1,82 @@
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
+import useUserState from "@/hooks/useUserState";
+import useToast from "@/hooks/useToast";
 import Input from "../common/Input";
 import Button from "../common/Button";
+import ErrorMessage from "../common/ErrorMessage";
+import { signUpRequest } from "@/apis/user";
+import { SignUpValue } from "@/types/auth";
+import { setAccessToken } from "@/utils/tokenManager";
 
 const SignUp = () => {
-  const { register } = useSignUpForm();
+  const { watchNickname, nicknameError, register, handleSubmit } =
+    useSignUpForm();
+  const { user, setUser } = useUserState();
+  const { toast } = useToast();
+  const router = useRouter();
+  const oauthId = user.oauthId;
+  const provider = user.provider;
+  const handleSignUp = async ({ nickname, gender }: SignUpValue) => {
+    const res = await signUpRequest(oauthId, provider, nickname, gender);
+    if (res.success) {
+      const id = res.result.id;
+      const nickname = res.result.nickname;
+      const profileUrl = res.result.profileUrl;
+      const sex = res.result.sex;
+      const accessToken = res.result.jwtAccessToken;
+      setAccessToken(accessToken);
+      setUser((prev) => {
+        return {
+          ...prev,
+          id: id,
+          profileUrl: profileUrl,
+          nickname: nickname,
+          sex: sex,
+        };
+      });
+      router.replace("/");
+    } else {
+      toast.alert(res.error);
+    }
+  };
   return (
     <SignUpWrapper>
       <SignUpContainer>
-        <h1>회원가입</h1>
-        <SignUpForm>
-          <InputContainer>
-            <Input register={register("email")} placeholder="이메일" />
-          </InputContainer>
-          <InputContainer>
+        <SignUpForm onSubmit={handleSubmit(handleSignUp)}>
+          <SignUpTitle>회원가입</SignUpTitle>
+          <SignUpInputContainer>
             <Input
               register={register("nickname")}
               placeholder="닉네임 (2~10자)"
+              height={3}
+              bgColor="gray"
             />
-          </InputContainer>
-          <InputContainer>
+            {watchNickname && nicknameError && (
+              <ErrorMessage>닉네임은 2~10자 사이로 적어주세요.</ErrorMessage>
+            )}
+          </SignUpInputContainer>
+          <RadioContainer>
             <Input
-              register={register("password")}
-              type="password"
-              placeholder="비밀번호 입력"
+              register={register("gender")}
+              type="radio"
+              value="남"
+              width={1.25}
             />
-          </InputContainer>
-          <InputContainer>
+            남자
             <Input
-              register={register("confirmPassword")}
-              type="password"
-              placeholder="비밀번호 재입력"
+              register={register("gender")}
+              type="radio"
+              value="여"
+              width={1.25}
             />
-          </InputContainer>
-          <SignUpText>
-            비밀번호는 8~16자리의 영문 소문자, 숫자, 특수문자를 조합하여 설정해
-            주세요.
-          </SignUpText>
-          <Button type="submit">회원가입</Button>
+            여자
+          </RadioContainer>
+          <SignUpText>닉네임은 2~10자리로 설정해 주세요.</SignUpText>
+          <Button type="submit" bgColor="secondary">
+            회원가입
+          </Button>
         </SignUpForm>
       </SignUpContainer>
     </SignUpWrapper>
@@ -47,14 +86,20 @@ const SignUp = () => {
 export default SignUp;
 
 const SignUpWrapper = tw.section`
-relative flex items-center justify-center h-full text-black bg-[url("./image/valorant.jpg")] bg-cover
-after:absolute after:inset-0 after:bg-black after:opacity-20
+relative flex items-center justify-center h-full bg-[url("./image/valorant.jpg")] bg-cover
+after:(absolute inset-0 bg-black/50)
 `;
 
-const SignUpContainer = tw.div`py-4 w-96 rounded drop-shadow bg-white z-10`;
+const SignUpContainer = tw.div`py-10 w-[28rem] rounded drop-shadow bg-black/80 z-10`;
 
-const SignUpForm = tw.form`flex flex-col px-10`;
+const SignUpForm = tw.form`flex flex-col px-16`;
 
-const InputContainer = tw.div`relative flex flex-col my-4 border-b border-black`;
+const SignUpTitle = tw.h2`
+  text-3xl font-bold
+`;
+
+const SignUpInputContainer = tw.div`relative flex flex-col my-4 border-b border-black`;
+
+const RadioContainer = tw.div`flex items-center justify-around m-auto w-40`;
 
 const SignUpText = tw.span`text-xs text-slate-400`;

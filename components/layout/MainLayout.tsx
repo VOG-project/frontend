@@ -1,6 +1,18 @@
 import { ReactNode } from "react";
+import dynamic from "next/dynamic";
 import tw from "twin.macro";
-import Sidebar from "../Sidebar";
+
+const DynamicSidebar = dynamic(() => import("../Sidebar"), {
+  ssr: false,
+});
+
+const DynamicFriend = dynamic(() => import("../Friend"), {
+  ssr: false,
+});
+
+const DynamicUserProfileModal = dynamic(() => import("../UserProfileModal"), {
+  ssr: false,
+});
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -9,8 +21,10 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <MainLayoutContainer>
-      <Sidebar />
+      <DynamicSidebar />
       {children}
+      <DynamicFriend />
+      <DynamicUserProfileModal />
     </MainLayoutContainer>
   );
 };
@@ -18,5 +32,5 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 export default MainLayout;
 
 const MainLayoutContainer = tw.div`
-  flex w-full h-full max-w-[120rem] m-auto
+  relative flex w-full h-full max-w-[120rem] m-auto overflow-x-hidden
 `;
