@@ -5,13 +5,20 @@ interface TextareaProps {
   placeholder: string;
   textareaRef: RefObject<HTMLTextAreaElement>;
   buttonRef: RefObject<HTMLButtonElement>;
+  handleTextChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const Textarea = ({ placeholder, textareaRef, buttonRef }: TextareaProps) => {
+const Textarea = ({
+  placeholder,
+  textareaRef,
+  buttonRef,
+  handleTextChange,
+}: TextareaProps) => {
   const handleTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = "auto";
     const scrollHeight = e.target.scrollHeight;
     e.target.style.height = scrollHeight + "px";
+    handleTextChange(e);
   };
 
   const handleTextAreaKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
