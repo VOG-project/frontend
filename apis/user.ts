@@ -34,9 +34,9 @@ const uploadProfilePicRequest = async (userId: number, profilePic: File) => {
   return res.data;
 };
 
-const changeNicknameRequest = async (userId: number, newNickname: string) => {
+const changeNicknameRequest = async (userId: number, nickname: string) => {
   const res = await customAxios.patch(`/users/${userId}/nickname`, {
-    newNickname,
+    nickname: nickname,
   });
 
   return res.data;
