@@ -1,5 +1,7 @@
-import tw from "twin.macro";
+import { useEffect } from "react";
+import tw, { styled } from "twin.macro";
 import useChatEditForm from "@/hooks/useChatEditForm";
+import useToast from "@/hooks/useToast";
 import Input from "@/components/common/Input";
 import Modal from "@/components/common/Modal";
 import Button from "@/components/common/Button";
@@ -10,7 +12,20 @@ const ChatEdit = ({
   handleModalClose,
   handleChatRoomCreate,
 }: ChatEditProps) => {
-  const { register, handleSubmit } = useChatEditForm();
+  const {
+    titleError,
+    descriptionError,
+    memberLengthError,
+    errors,
+    register,
+    handleSubmit,
+  } = useChatEditForm();
+  const { toast } = useToast();
+  useEffect(() => {
+    if (titleError?.message) toast.alert(titleError.message);
+    if (descriptionError?.message) toast.alert(descriptionError.message);
+    if (memberLengthError?.message) toast.alert(memberLengthError.message);
+  }, [errors]);
 
   return (
     <Modal
@@ -21,7 +36,7 @@ const ChatEdit = ({
       handleConfirm={handleModalClose}
     >
       <ChatEditForm onSubmit={handleSubmit(handleChatRoomCreate)}>
-        <ChatEditInput>
+        <ChatEditInput hasError={titleError ? true : false}>
           <ChatEditLabel>제목</ChatEditLabel>
           <Input
             register={register("title")}
@@ -30,7 +45,7 @@ const ChatEdit = ({
             placeholder="제목을 입력하세요"
           />
         </ChatEditInput>
-        <ChatEditInput>
+        <ChatEditInput hasError={descriptionError ? true : false}>
           <ChatEditLabel>설명</ChatEditLabel>
           <Input
             register={register("description")}
@@ -39,7 +54,7 @@ const ChatEdit = ({
             placeholder="설명을 입력하세요"
           />
         </ChatEditInput>
-        <ChatEditInput>
+        <ChatEditInput hasError={memberLengthError ? true : false}>
           <ChatEditLabel>최대 인원수</ChatEditLabel>
           <Input
             type="number"
@@ -79,8 +94,9 @@ const ChatEditButtonContainer = tw.div`
   flex justify-end px-8 space-x-4
 `;
 
-const ChatEditInput = tw.div`
-  flex flex-col w-full p-4
-`;
+const ChatEditInput = styled.div<{ hasError: boolean }>(({ hasError }) => [
+  tw`flex flex-col w-full p-4`,
+  hasError && tw`[& input]:(border border-red-700)`,
+]);
 
 const ChatEditLabel = tw.label``;
