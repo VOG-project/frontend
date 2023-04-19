@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
@@ -87,6 +87,16 @@ const Edit = () => {
     }
   };
 
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value.trim();
+
+    if (title.length > 50)
+      return toast.alert("제목은 최대 50자까지 입력할 수 있습니다.");
+    setPost((prev) => {
+      return { ...prev, title: title };
+    });
+  };
+
   return (
     <MainLayout>
       <EditWrapper>
@@ -112,11 +122,7 @@ const Edit = () => {
             width={32}
             placeholder="제목을 입력하세요"
             value={post.title}
-            onChange={(e) => {
-              return setPost((prev) => {
-                return { ...prev, title: e.target.value };
-              });
-            }}
+            onChange={handleTitleChange}
           ></EditTitle>
           <Editor>
             <ReactQuill
