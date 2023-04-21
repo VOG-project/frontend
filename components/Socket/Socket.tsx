@@ -16,7 +16,7 @@ const Socket = () => {
   const [isChatRoom, setIsChatRoom] = useState(false);
   const router = useRouter();
   const { chat, setChat, resetChat } = useChatState();
-  const { userId, user } = useUserState();
+  const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
   const {
     peerConnectionsRef,
@@ -62,7 +62,7 @@ const Socket = () => {
     if (!userId) return;
 
     socketClient.connect();
-    enterRoomEmit(userId, user.nickname, roomId);
+    enterRoomEmit(userId, roomId);
   };
 
   const handleChatRoomLeave = () => {

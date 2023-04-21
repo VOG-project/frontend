@@ -25,14 +25,9 @@ export const leaveRoomEmit = (userId: number, roomId: string) => {
   });
 };
 
-export const enterRoomEmit = (
-  userId: number,
-  nickname: string,
-  roomId: string
-) => {
+export const enterRoomEmit = (userId: number, roomId: string) => {
   socketClient.emit("enterChatRoom", {
     userId,
-    nickname,
     roomId,
   });
 };
