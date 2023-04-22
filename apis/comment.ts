@@ -42,11 +42,13 @@ const editCommentRequest = async (commentId: number, content: string) => {
 const createReplyRequest = async (
   userId: number,
   commentId: number,
+  postId: number,
   content: string
 ) => {
   const res = await customAxios.post("/replies", {
     writerId: userId,
     commentId,
+    postId,
     content,
   });
 
