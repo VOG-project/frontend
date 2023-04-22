@@ -141,7 +141,7 @@ const Detail = () => {
 
     const postId = Number(query.id);
     const res = commentId
-      ? await createReplyRequest(userId, commentId, content)
+      ? await createReplyRequest(userId, commentId, postId, content)
       : await createCommentRequest(userId, postId, content);
     if (res.success) {
       updateComments(curPage);
