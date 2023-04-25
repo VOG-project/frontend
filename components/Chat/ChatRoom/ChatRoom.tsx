@@ -58,6 +58,7 @@ const ChatRoom = () => {
           {
             content: message,
             roomId: roomId,
+            profileUrl: user.profileUrl,
             nickname: user.nickname,
             isSender: true,
           },
