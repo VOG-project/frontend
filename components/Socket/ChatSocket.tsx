@@ -111,9 +111,16 @@ const ChatSocket = ({
 
     socketClient.on("inputChat", (data) => {
       setChat((prev) => {
+        const user = chat.chatParticipant.find((participant) => {
+          const nickname = participant.user.nickname;
+          return nickname === data.nickname;
+        });
         return {
           ...prev,
-          messages: [...prev.messages, { ...data, isSender: false }],
+          messages: [
+            ...prev.messages,
+            { ...data, profileUrl: user?.user.profileUrl, isSender: false },
+          ],
         };
       });
     });
