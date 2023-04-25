@@ -14,14 +14,17 @@ interface ChatParticipant {
   user: { nickname: string; profileUrl: string; sex: string };
 }
 
+interface Message {
+  content: string;
+  nickname: string;
+  profileUrl: string;
+  roomId: string;
+  isSender: boolean;
+}
+
 export interface ChatState {
   chatParticipant: ChatParticipant[];
-  messages: {
-    content: string;
-    nickname: string;
-    roomId: string;
-    isSender: boolean;
-  }[];
+  messages: Message[];
   title: string;
   roomId: string;
   streams: { socketId: string; stream: MediaStream }[];
@@ -41,12 +44,7 @@ export interface ChatEditProps {
 }
 
 export interface ChatMessageProps {
-  messages: {
-    content: string;
-    nickname: string;
-    roomId: string;
-    isSender: boolean;
-  }[];
+  messages: Message[];
 }
 
 export interface ChatRoom {
