@@ -72,14 +72,14 @@ const ChatSocket = ({
       }
     };
 
-    peerConnection.onnegotiationneeded = async (e) => {
-      console.log("onnegotiationneeded", e);
-      const offer = await peerConnection.createOffer({
-        offerToReceiveAudio: true,
-      });
-      peerConnection.setLocalDescription(offer);
-      socketClient.emit("offer", { targetId: socketId, offer: offer });
-    };
+    // peerConnection.onnegotiationneeded = async (e) => {
+    //   console.log("onnegotiationneeded", e);
+    //   const offer = await peerConnection.createOffer({
+    //     offerToReceiveAudio: true,
+    //   });
+    //   peerConnection.setLocalDescription(offer);
+    //   socketClient.emit("offer", { targetId: socketId, offer: offer });
+    // };
 
     peerConnection.oniceconnectionstatechange = (e) => {
       console.log(e);
