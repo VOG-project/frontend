@@ -10,7 +10,7 @@ const ChatMessage = ({ messages }: ChatMessageProps) => {
           <ChatMessageContainer key={index} isSender={message.isSender}>
             <ChatProfilePic>
               <ProfilePic
-                src="/image/valorant_jett.jpg"
+                src={message.profileUrl || "/image/blank_profile.png"}
                 alt="profilePic"
                 width={64}
                 height={64}
