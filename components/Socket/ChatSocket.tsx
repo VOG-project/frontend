@@ -162,7 +162,7 @@ const ChatSocket = ({
       const iceCandidate = new RTCIceCandidate(data.iceCandidate);
       const peerConnection = peerConnectionsRef.current[socketId];
       console.log("getCandidate", socketId, iceCandidate, peerConnection);
-      if (peerConnection.remoteDescription == null) {
+      if (!peerConnection || peerConnection.remoteDescription == null) {
         if (!iceCandidateRef.current[socketId]) {
           iceCandidateRef.current[socketId] = [iceCandidate];
         } else {
