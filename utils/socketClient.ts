@@ -9,12 +9,14 @@ export const socketClient = io(`${process.env.NEXT_PUBLIC_SOCKET}/chat`, {
 export const sendMessageEmit = (
   content: string,
   roomId: string,
-  nickname: string
+  nickname: string,
+  profileUrl: string
 ) => {
   socketClient.emit("inputChat", {
     content,
     roomId,
     nickname,
+    profileUrl,
   });
 };
 

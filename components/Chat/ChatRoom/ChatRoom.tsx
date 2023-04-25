@@ -65,7 +65,7 @@ const ChatRoom = () => {
         ],
       };
     });
-    sendMessageEmit(message, roomId, user.nickname);
+    sendMessageEmit(message, roomId, user.nickname, user.profileUrl);
     if (textareaRef.current) {
       textareaRef.current.value = "";
     }
